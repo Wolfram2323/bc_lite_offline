@@ -1,89 +1,157 @@
 package com.bftcom.dbtools.creation;
 
-import com.bftcom.dbtools.entity.*;
+
+import com.bftcom.dbtools.annotations.OnLineColumnInfo;
+import com.bftcom.dbtools.annotations.OnLineJoin;
+import com.bftcom.dbtools.utils.HibernateUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.derby.jdbc.EmbeddedDriver;
+import org.hibernate.HibernateException;
+import org.hibernate.QueryException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+
+import org.hibernate.Transaction;
+import org.hibernate.procedure.ProcedureCall;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
+
+import javax.persistence.*;
+import java.io.File;
+import java.lang.reflect.Field;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
+
 
 /**
  * Created by k.nikitin on 22.09.2016.
  */
 public class DBCreation {
 
-    Logger log = LoggerFactory.getLogger(DBCreation.class);
+    private static final Logger log = LoggerFactory.getLogger(DBCreation.class);
 
-    private static final String DERBY_DRIVER_CLASS = "org.apache.derby.jdbc.EmbeddedDriver";
-    public static final String DERBY_HIBER_DIALECT = "org.hibernate.dialect.DerbyTenSixDialect";
-    public static final String DERBY_DB_URL = "jdbc:derby:bcOffLineDB";
-    public static final String DERBY_USER_NAME = "bc";
-    public static final String DERBY_PSWD = "sysdba";
 
-    private Configuration cfg;
-
-    static{
-        System.setProperty("derby.system.home","./derby");
-    }
-
-    private void init() {
+    private static EmbeddedDriver initJdbcDriver() {
         try{
-            Class.forName(DERBY_DRIVER_CLASS).newInstance();
-        } catch (ClassNotFoundException | IllegalAccessException |InstantiationException e){
-            log.error("Не найден драйвер для подключение к базе данных");
+            log.info("Derby driver initialization!");
+            EmbeddedDriver driver = (EmbeddedDriver)Class.forName(HibernateUtils.DERBY_DRIVER_CLASS).newInstance();
+            DriverManager.registerDriver(driver);
+            return  driver;
+        } catch (ClassNotFoundException | IllegalAccessException |InstantiationException |SQLException e){
+            log.error("Derby jdbc driver not found or there was error during initialization!");
             throw new RuntimeException(e);
         }
-        cfg = new Configuration();
-        cfg.setProperty("hibernate.dialect",DERBY_HIBER_DIALECT);
-        cfg.setProperty("hibernate.connection.driver_class",DERBY_DRIVER_CLASS);
-        cfg.setProperty("hibernate.connection.url",DERBY_DB_URL);
-        cfg.setProperty("hibernate.connection.username", DERBY_USER_NAME);
-        cfg.setProperty("hibernate.connection.password", DERBY_PSWD);
-        cfg.setProperty("hibernate.hbm2ddl.auto","update");
-        cfg.addAnnotatedClass(ActResultsAuditDoc.class);
-        cfg.addAnnotatedClass(Appointment.class);
-        cfg.addAnnotatedClass(BrokenNPA.class);
-        cfg.addAnnotatedClass(Employee.class);
-        cfg.addAnnotatedClass(EmployeeGroup.class);
-        cfg.addAnnotatedClass(KBKDetail.class);
-        cfg.addAnnotatedClass(Questions.class);
-        cfg.addAnnotatedClass(SysUser.class);
-        cfg.addAnnotatedClass(Violation.class);
-        cfg.addAnnotatedClass(ViolationGroup.class);
-        cfg.addAnnotatedClass(ViolationGroupKBK.class);
-        cfg.addAnnotatedClass(ViolationType.class);
-
-
     }
 
-    public static DBCreation newInstance(){
-        DBCreation dbCreation = new DBCreation();
-        dbCreation.init();
-        return dbCreation;
-    }
 
-    public void createDB(){
+    public static void createDB(){
+        EmbeddedDriver driver = initJdbcDriver();
         try {
-            DriverManager.getConnection(DERBY_DB_URL+";create=true;user="+DERBY_USER_NAME+";password="+DERBY_PSWD);
-            SessionFactory sessionFactory = cfg.buildSessionFactory();
-            Session session = sessionFactory.openSession();
+            log.info("DataBase creation started!");
+            driver.connect(HibernateUtils.DERBY_DB_URL+";create=true;user="+HibernateUtils.DERBY_USER_NAME
+                    +";password="+HibernateUtils.DERBY_PSWD, new Properties());
+            log.info("Data base schema creation started!");
+             Session session = HibernateUtils.getSession(true);
             session.close();
-            DriverManager.getConnection(DERBY_DB_URL+"; shutdown=true");
-        } catch (SQLException e){
-            if(e.getSQLState().equals("08006")){
-                log.info("Подключение к базе данных разорвано");
-            } else {
-                log.error("Не удалось создать базу данных");
-                throw new RuntimeException(e);
-            }
+
+            log.info("DataBase successfully created!");
+
+        } catch (SQLException | HibernateException e){
+            log.error("DabaBase creation failed! See stack trace for more information!");
+            e.printStackTrace();
+
+        } finally {
+           try{
+               driver.connect(HibernateUtils.DERBY_DB_URL+"; shutdown=true", new Properties());
+           } catch (SQLException e){
+               if(e.getSQLState().equals("08006")){
+                   log.info("DataBase connection is shutdown");
+               } else {
+                   log.error("DabaBase creation failed! See stack trace for more information!");
+               }
+
+           }
         }
     }
 
+    public static Map<String,String> getUploadSql(){
+        Map<String,String> result = new ConcurrentHashMap<>();
+        List<Class> annotatedClasses = HibernateUtils.getAnnotatedClasses();
+        annotatedClasses.stream().filter(entity-> !((Table)entity.getAnnotation(Table.class)).name().equals("SYSUSER")).parallel().forEach(entity->{
+            String tableName = ((Table)entity.getAnnotation(Table.class)).name();
+            OnLineJoin onLineJoin = (OnLineJoin) entity.getAnnotation(OnLineJoin.class);
+            Field[] fields = entity.getDeclaredFields();
+            StringBuilder select = new StringBuilder("select ");
+            StringBuilder from = new StringBuilder();
+            from.append(" from ").append(tableName);
+            for(Field field: fields){
+                OnLineColumnInfo onlineColInfo = field.getAnnotation(OnLineColumnInfo.class);
+                if(onlineColInfo == null){
+                    continue;
+                }
+                if(onlineColInfo.columnName().isEmpty()){
+                    if(onlineColInfo.joinAlias().isEmpty()){
+                        select.append(tableName).append('.').append(field.getAnnotation(Column.class).name());
+                    } else {
+                        select.append(onlineColInfo.joinAlias()).append('.').append(field.getAnnotation(Column.class).name());
+                    }
+                } else if(onlineColInfo.joinAlias().isEmpty()){
+                    select.append(tableName).append('.').append(onlineColInfo.columnName());
+                } else {
+                    select.append(onlineColInfo.joinAlias()).append('.').append(onlineColInfo.columnName());
+                }
+                select.append(',');
+            }
+            select.delete(select.lastIndexOf(","), select.length());
+            if(onLineJoin!=null && !onLineJoin.sqlExpression().isEmpty()){
+                from.append(((OnLineJoin)entity.getAnnotation(OnLineJoin.class)).sqlExpression());
+            }
+            result.put(tableName,select.append(from).toString());
+
+        });
+        return result;
+    }
+
+    public static void importCsvDataFiles(File csvFilesDir){
+        Session session = HibernateUtils.getSession(true);
+        log.warn("Obtain session");
+        ProcedureCall procedure = session.createStoredProcedureCall("SYSCS_UTIL.SYSCS_IMPORT_TABLE");
+        log.warn("Create procedure");
+        procedure.registerParameter("SCHEMANAME",String.class, ParameterMode.IN);
+        procedure.registerParameter("TABLENAME",String.class, ParameterMode.IN);
+        procedure.registerParameter("FILENAME",String.class, ParameterMode.IN);
+        procedure.registerParameter("COLUMNDELIMITER",Character.class, ParameterMode.IN);
+        procedure.registerParameter("CHARACTERDELIMITER",Character.class, ParameterMode.IN);
+        procedure.registerParameter("CODESET",String.class, ParameterMode.IN);
+        procedure.registerParameter("REPLACE",Short.class, ParameterMode.IN);
+
+        log.warn("Set parametrs to procedure");
+        procedure.setParameter("SCHEMANAME", HibernateUtils.DERBY_USER_NAME.toUpperCase());
+        procedure.setParameter("COLUMNDELIMITER",';');
+        procedure.setParameter("CHARACTERDELIMITER",'#');
+        procedure.setParameter("CODESET","UTF-8");
+        procedure.setParameter("REPLACE",new Short("0"));
+
+
+        List<File> csvFiles = (List<File>) FileUtils.listFiles(csvFilesDir, new String[] {"csv"}, false);
+        csvFiles.forEach(csvFile->{
+            String tableName = FilenameUtils.removeExtension(csvFile.getName());
+            procedure.setParameter("TABLENAME",tableName);
+            procedure.setParameter("FILENAME",csvFile.getAbsolutePath());
+            Transaction transaction = session.beginTransaction();
+            try {
+                procedure.execute();
+                transaction.commit();
+            } catch (PersistenceException e){
+                transaction.rollback();
+            }
+        });
+    }
 
 }

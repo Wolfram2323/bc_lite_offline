@@ -1,5 +1,7 @@
 package com.bftcom.dbtools.entity;
 
+import com.bftcom.dbtools.annotations.OnLineColumnInfo;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,13 +12,15 @@ import java.math.BigInteger;
  * Created by k.nikitin on 22.09.2016.
  */
 @Entity
-@Table(name="APPOINMENT")
+@Table(name="APPOINTMENT")
 public class Appointment {
     @Id
     @Column(name="ID", nullable=false, precision = 15, scale = 0)
+    @OnLineColumnInfo
     private BigInteger id;
 
     @Column(name="CAPTION", length = 255)
+    @OnLineColumnInfo
     private String caption;
 
     public void setId(BigInteger id){

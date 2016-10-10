@@ -1,5 +1,8 @@
 package com.bftcom.dbtools.entity;
 
+import com.bftcom.dbtools.annotations.OnLineColumnInfo;
+import com.bftcom.dbtools.annotations.OnLineJoin;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,25 +14,34 @@ import java.math.BigInteger;
  * Created by k.nikitin on 23.09.2016.
  */
 @Entity
-@Table(name="KBKDETAIL")
+@Table(name="ACTRESULTSAUDITDOCKBK")
+@OnLineJoin(sqlExpression = " inner join kbkdetail kbk on kbk.id = ACTRESULTSAUDITDOCKBK.kbkdetail_id" +
+        " inner join budget budg on budg.id = kbk.budget_id" +
+        " where ACTRESULTSAUDITDOCKBK.ARAUDITDOC_ID = ?")
 public class KBKDetail {
     @Id
-    @Column(name="ID", nullable = false, precision = 15, scale = 0) //todo свзяи с чем либо: акт, вопрос, инспектор
+    @Column(name="ID", nullable = false, precision = 15, scale = 0)
+    @OnLineColumnInfo
     private BigInteger id;
 
     @Column(name="BUDGET", length = 500)
+    @OnLineColumnInfo(columnName = "CAPTION", joinAlias = "BUDG")
     private String budget;
 
     @Column(name="FINYEAR", precision = 4, scale = 0)
+    @OnLineColumnInfo(columnName = "FINYEAR", joinAlias = "BUDG")
     private  BigInteger finyear;
 
     @Column(name="FSR_ID")
+    @OnLineColumnInfo(joinAlias = "KBK")
     private Short fsr_id;
 
     @Column(name="FINANCEAMT", precision = 15, scale = 2)
+    @OnLineColumnInfo(joinAlias = "KBK")
     private BigDecimal financeamt;
 
     @Column(name="AUDITEDAMOUNT", precision = 15, scale = 2)
+    @OnLineColumnInfo
     private BigDecimal auditedamount;
 
     public BigInteger getId() {

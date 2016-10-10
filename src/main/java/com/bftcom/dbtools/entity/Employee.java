@@ -1,5 +1,8 @@
 package com.bftcom.dbtools.entity;
 
+import com.bftcom.dbtools.annotations.OnLineColumnInfo;
+import com.bftcom.dbtools.annotations.OnLineJoin;
+
 import javax.persistence.*;
 import java.math.BigInteger;
 
@@ -8,22 +11,29 @@ import java.math.BigInteger;
  */
 @Entity
 @Table(name="EMPLOYEE")
+@OnLineJoin(sqlExpression = " inner join person p on p.id = EMPLOYEE.person_id " +
+        " inner join org on org.id = EMPLOYEE.org_id")
 public class Employee {
     @Id
     @Column(name="ID", nullable=false, precision = 15, scale = 0)
+    @OnLineColumnInfo
     private BigInteger id;
 
     @Column(name="PERSON_FIO", length = 255)
+    @OnLineColumnInfo(columnName = "FIO", joinAlias = "P")
     private String person_fio;
 
     @Column(name="ORG_CAPTION", length = 255)
+    @OnLineColumnInfo(columnName = "CAPTION", joinAlias = "ORG")
     private String org_caption;
 
     @Column(name="ORG_DESCRIPTION", length = 500)
+    @OnLineColumnInfo(columnName = "DESCRIPTION", joinAlias = "ORG")
     private  String org_description;
 
     @OneToOne
     @JoinColumn(name="APPOINTMENT_ID")
+    @OnLineColumnInfo(columnName = "APPOINTMENT_ID")
     private Appointment appointment;
 
     public BigInteger getId() {

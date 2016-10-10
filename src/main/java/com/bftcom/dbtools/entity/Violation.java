@@ -1,9 +1,9 @@
 package com.bftcom.dbtools.entity;
 
+import com.bftcom.dbtools.annotations.OnLineColumnInfo;
+
 import javax.persistence.*;
-import javax.persistence.metamodel.ListAttribute;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,20 +15,25 @@ import java.util.List;
 public class Violation {
     @Id
     @Column(name = "ID", nullable = false, precision = 15, scale = 0)
+    @OnLineColumnInfo
     private BigInteger id;
 
     @Column(name = "CAPTION", length = 2000)
+    @OnLineColumnInfo
     private String caption;
 
     @Column(name="CODE", length = 100)
+    @OnLineColumnInfo
     private String code;
 
     @Column(name="DESCRIPTION", length = 2000)
+    @OnLineColumnInfo
     private String description;
 
 
     @OneToMany
     @JoinColumn(name="PARENT_ID", foreignKey = @ForeignKey(name="FK_VIOLATION_VIOLATION"))
+    @OnLineColumnInfo(columnName = "PARENT_ID")
     private List<Violation> violation = new LinkedList<>();
 
     public BigInteger getId() {

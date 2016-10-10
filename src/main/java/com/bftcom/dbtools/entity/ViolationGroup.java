@@ -1,5 +1,8 @@
 package com.bftcom.dbtools.entity;
 
+import com.bftcom.dbtools.annotations.OnLineColumnInfo;
+import com.bftcom.dbtools.annotations.OnLineJoin;
+
 import javax.persistence.*;
 import java.math.BigInteger;
 import java.sql.Clob;
@@ -11,32 +14,42 @@ import java.util.List;
  */
 @Entity
 @Table(name="VIOLATIONGROUP")
+@OnLineJoin(sqlExpression = " inner join actresultsauditdoc arad on arad.document_id = VIOLATIONGROUP.link_document_id" +
+        " where arad.id = ?")
 public class ViolationGroup {
     @Id
     @Column(name="ID", nullable = false, precision = 15, scale = 0)
+    @OnLineColumnInfo
     private BigInteger id;
 
     @Column(name="VIOLATIONDESCRIPTION")
+    @OnLineColumnInfo
     private Clob violationDescription;
 
     @Column(name="VIOLATIONDESCRIPTION_SHORT")
+    @OnLineColumnInfo
     private Clob violationDescription_short;
 
     @Column(name="NONEEDCORRECTION", nullable = false)
+    @OnLineColumnInfo
     private Boolean noneedcorrection;
 
     @Column(name="NONEEDCORRECTIONBASIS")
+    @OnLineColumnInfo
     private Clob noneedcorrectionBasis;
 
     @Column(name="SUPDOCUMENTS_DETAIL", length = 1000)
+    @OnLineColumnInfo
     private String supdocuments_detaill;
 
     @OneToOne
     @JoinColumn(name="BROKENNPA_ID")    //todo bnpa ручное заполнение
+    @OnLineColumnInfo(columnName = "BROKEN_NPA")
     private BrokenNPA brokenNPA;
 
     @OneToOne
     @JoinColumn(name="VIOLATION_ID")
+    @OnLineColumnInfo(columnName = "VIOLATION_ID")
     private Violation violation;
 
 

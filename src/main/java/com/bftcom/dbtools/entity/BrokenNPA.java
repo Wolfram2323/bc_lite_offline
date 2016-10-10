@@ -1,5 +1,7 @@
 package com.bftcom.dbtools.entity;
 
+import com.bftcom.dbtools.annotations.OnLineColumnInfo;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,33 +17,43 @@ import java.sql.Date;
 public class BrokenNPA {
     @Id
     @Column(name="ID", nullable=false, precision = 15, scale = 0)
+    @OnLineColumnInfo
     private BigInteger id;
 
     @Column(name="CAPTION", length = 500)
+    @OnLineColumnInfo
     private String caption;
 
     @Column(name="LOOK", length = 500)
+    @OnLineColumnInfo
     private String look;
 
     @Column(name="NUM", length = 500)
+    @OnLineColumnInfo
     private String num;
 
-    @Column(name="DATE_NPA", length = 500)
+    @Column(name="DATE_BNPA", length = 500)
+    @OnLineColumnInfo
     private Date date_npa;
 
     @Column(name="CHAPTER", length = 500)
+    @OnLineColumnInfo
     private String chapter;
 
     @Column(name="CLAUSE", length = 500)
+    @OnLineColumnInfo
     private String clause;
 
     @Column(name="PARAGRAPH", length = 500)
+    @OnLineColumnInfo
     private String paragraph;
 
     @Column(name="SUBPARAGRAPH", length = 500)
+    @OnLineColumnInfo
     private String subparagraph;
 
     @Column(name="RUBRIC", length = 500)
+    @OnLineColumnInfo
     private String rubric;
 
     public BigInteger getId() {

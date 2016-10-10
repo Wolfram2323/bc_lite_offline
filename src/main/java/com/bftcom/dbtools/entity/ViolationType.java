@@ -1,5 +1,7 @@
 package com.bftcom.dbtools.entity;
 
+import com.bftcom.dbtools.annotations.OnLineColumnInfo;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,12 +16,15 @@ import java.math.BigInteger;
 public class ViolationType {
     @Id
     @Column(name="ID", nullable=false, precision = 15, scale = 0)
+    @OnLineColumnInfo
     private BigInteger id;
 
     @Column(name="CAPTION", length = 255)
+    @OnLineColumnInfo
     private String caption;
 
     @Column(name="DESCRIPTION", length = 500)
+    @OnLineColumnInfo
     private String description;
 
     public void setId(BigInteger id){

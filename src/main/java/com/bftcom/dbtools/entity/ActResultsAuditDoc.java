@@ -1,5 +1,8 @@
 package com.bftcom.dbtools.entity;
 
+import com.bftcom.dbtools.annotations.OnLineColumnInfo;
+import com.bftcom.dbtools.annotations.OnLineJoin;
+
 import javax.persistence.*;
 import java.math.BigInteger;
 import java.sql.Clob;
@@ -13,106 +16,154 @@ import java.util.List;
  */
 @Entity
 @Table(name="ACTRESULTSAUDITDOC")
+@OnLineJoin(sqlExpression = " inner join controleventdoc ced on ced.id = ACTRESULTSAUDITDOC.maindoc_id" +
+        " inner join org orga on ced.auditorg_id = orga.id" +
+        " inner join org orgc on ced.controlorg_id = orgc.id" +
+        " inner join controlform cf on ced.controlform_id = cf.id" +
+        " inner join territory ter on ced.territory_id = ter.id" +
+        " inner join orderauditappointmentdoc oaad on ced.id = oaad.maindoc_id" +
+        " inner join employee emphead on emphead.id = ced.head_id" +
+        " inner join employee empdeputy on empdeputy.id = ced.deputy_head_id" +
+        " inner join person phead on phead.id = emphead.person_id" +
+        " inner join person pdeputy on pdeputy.id = empdeputy.person_id" +
+        " inner join appointment apphead on apphead.id = emphead.appointment_id" +
+        " inner join appointment appdeputy on appdeputy.id = empdeputy.appointment_id" +
+        " where ACTRESULTSAUDITDOC.ID = ?")
 public class ActResultsAuditDoc {
     @Id
     @Column(name="ID", nullable = false, precision = 15, scale = 0)
+    @OnLineColumnInfo
     private BigInteger id;
 
-    @Column(name="DOC_STATUS", nullable = false) //не будем ставит default значение - пока..
-    private Short doc_status;
-
     @Column(name="CASENUMBER", length = 200)  //todo остальные связки если есть
+    @OnLineColumnInfo
     private String casenumber;
 
     @Column(name="APPROVEDATE")
+    @OnLineColumnInfo
     private Date approvedate;
 
+    @Column(name="AUDITTHEME", length = 1000)
+    @OnLineColumnInfo(joinAlias = "CED")
+    private String auditTheme;
+
     @Column(name="AUDITORG_CAPTION", length = 255)
+    @OnLineColumnInfo(columnName = "CAPTION", joinAlias = "ORGA")
     private String auditOrg_caption;
 
     @Column(name="AUDITORG_DESCRIPTION", length = 2000)
+    @OnLineColumnInfo(columnName = "DESCRIPTION", joinAlias = "ORGA")
     private String auditOrg_description;
 
     @Column(name="CONTROLFORM",length = 255)
+    @OnLineColumnInfo(columnName = "CAPTION", joinAlias = "CF")
     private String controlform;
 
-    @Column(name="AUDITTHEME", length = 1000)
-    private String auditTheme;
 
     @Column(name="CONTROLORG_CAPTION", length = 255)
+    @OnLineColumnInfo(columnName = "CAPTION", joinAlias = "ORGC")
     private String controlOrg_caption;
 
     @Column(name="CONTROLORG_DESCRIPTION", length = 2000)
+    @OnLineColumnInfo(columnName = "DESCRIPTION", joinAlias = "ORGC")
     private String controlOrg_description;
 
     @Column(name="TERRITORY", length = 100)
+    @OnLineColumnInfo(columnName = "CAPTION",joinAlias = "TER")
     private String territory;
 
     @Column(name="AUDITFROM")
+    @OnLineColumnInfo(joinAlias = "CED")
     private Date auditFrom;
 
     @Column(name="AUDITTO")
+    @OnLineColumnInfo(joinAlias = "CED")
     private Date auditTo;
 
     @Column(name="ACTUALEXECFROM")
+    @OnLineColumnInfo(joinAlias = "CED")
     private Date actualExecFrom;
 
     @Column(name="ACTUALEXECTO")
+    @OnLineColumnInfo(joinAlias = "CED")
     private Date actualExecTo;
 
-    @Column(name="OBJECTINFO")
+    @Column(name="OBJECTINFO", columnDefinition = "clob")
+    @Lob
+    @OnLineColumnInfo
     private Clob objectInfo;
 
-    @Column(name="OBSTACLE")
+    @Column(name="OBSTACLE", columnDefinition = "clob")
+    @Lob
+    @OnLineColumnInfo
     private Clob obstacle;
 
     @Column(name="WRITEPLACE", length = 100)
+    @OnLineColumnInfo
     private String writePlace;
 
     @Column(name="AUDITBASIS", length = 4000)
+    @OnLineColumnInfo(joinAlias = "CED")
     private String auditBasis;
 
     @Column(name="AUDITBASIS_TYPE", length = 100)
+    @OnLineColumnInfo(joinAlias = "CED")
     private String auditBasis_type;
 
     @Column(name="AUDITBASIS_NUMBER", length = 20)
+    @OnLineColumnInfo(joinAlias = "CED")
     private  String auditBasis_number;
 
     @Column(name="AUDITBASIS_DATE")
+    @OnLineColumnInfo(joinAlias = "CED")
     private Date aiditBasis_date;
 
     @Column(name="INSP_HEAD_FIO", length = 255)
+    @OnLineColumnInfo(columnName = "FIO", joinAlias = "PHEAD")
     private String insp_head_fio;
 
     @Column(name="INSP_HEAD_APPOINTMENT", length = 255)
+    @OnLineColumnInfo(columnName = "CAPTION", joinAlias = "APPHEAD")
     private String insp_head_appointment;
 
     @Column(name="DEPUTY_HEAD_FIO", length = 255)
+    @OnLineColumnInfo(columnName = "FIO", joinAlias = "PDEPUTY")
     private String deputy_head_fio;
 
     @Column(name="DEPUTY_HEAD_APPOINTMENT", length = 255)
+    @OnLineColumnInfo(columnName = "CAPTION", joinAlias = "APPDEPUTY")
     private String deputy_head_appointment;
 
     @Column(name="AUDOTORG_HEAD_FIO", length = 255)
+    @OnLineColumnInfo(columnName = "HEADFIO")
     private String auditorg_head_fio;
 
     @Column(name="AUDOTORG_HEAD_APP", length = 255)
+    @OnLineColumnInfo(columnName = "HEADAPPOINTMENTCAPTION")
     private String auditorg_head_app;
 
     @Column(name="ACCOUNTANTFIO", length = 255)
+    @OnLineColumnInfo
     private String accountantfio;
 
     @Column(name="ACCOUNTANTAPP", length = 255)
+    @OnLineColumnInfo(columnName = "ACCAPPOINTMENTCAPTION")
     private String accountantapp;
 
     @Column(name="ORDERAUDIT_NUMBER", length = 80)
+    @OnLineColumnInfo(columnName = "DOC_NUMBER", joinAlias = "OAAD")
     private String orderaudit_number;
 
     @Column(name="ORDERAUDIT_APPROVEDATE")
+    @OnLineColumnInfo(columnName = "APPROVEDATE", joinAlias = "OAAD")
     private Date orderaudit_approvedate;
 
     @Column(name="AUDITSUBJECT", length = 1000)
+    @OnLineColumnInfo(joinAlias = "CED")
     private String auditSubject;
+
+    @Column(name="DOC_STATUS", nullable = false) //не будем ставит default значение - пока..
+    private Short doc_status;
 
     @OneToMany
     @JoinColumn(name="ARAD_ID", foreignKey = @ForeignKey(name="FK_QUESTIONS_ARAD"))

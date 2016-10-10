@@ -1,5 +1,8 @@
 package com.bftcom.dbtools.entity;
 
+import com.bftcom.dbtools.annotations.OnLineColumnInfo;
+import com.bftcom.dbtools.annotations.OnLineJoin;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -9,28 +12,39 @@ import java.math.BigInteger;
  */
 @Entity
 @Table(name="VIOLATIONGROUPKBK")
+@OnLineJoin(sqlExpression = " inner join violationgroup vg on vg.id = VIOLATIONGROUPKBK.violationgroup_id" +
+        " inner join actresultsauditdoc arad on arad.document_id = vg.link_document_id" +
+        " where arad.id = ?")
+
 public class ViolationGroupKBK {
     @Id
     @Column(name="ID", nullable=false, precision = 15, scale=0)
+    @OnLineColumnInfo
     private BigInteger id;
 
     @Column(name="AMOUNT")
+    @OnLineColumnInfo
     private BigDecimal amount;
 
     @Column(name="COMPENSATEDTOAUDITORGCASH")
+    @OnLineColumnInfo
     private BigDecimal compensatedToAuditOrgCash;
 
     @Column(name="COMPENSATEDTOAUDITORGACCOUNT")
+    @OnLineColumnInfo
     private BigDecimal compensatedToAuditOrgAccount;
 
     @Column(name="COMPENSATEDTOGRBSACCOUNT")
+    @OnLineColumnInfo
     private BigDecimal compensatedToGRBSAccount;
 
     @Column(name="COMPENSATEDTOBUDGET")
+    @OnLineColumnInfo
     private BigDecimal  compensatedToBudget;
 
     @OneToOne
     @JoinColumn(name="KBKDETAIL_ID")
+    @OnLineColumnInfo(columnName = "KBKDETAIL_ID")
     private KBKDetail kbkDetail;
 
 

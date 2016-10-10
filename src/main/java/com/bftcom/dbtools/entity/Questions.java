@@ -1,5 +1,8 @@
 package com.bftcom.dbtools.entity;
 
+import com.bftcom.dbtools.annotations.OnLineColumnInfo;
+import com.bftcom.dbtools.annotations.OnLineJoin;
+
 import javax.persistence.*;
 import java.math.BigInteger;
 import java.sql.Clob;
@@ -10,19 +13,26 @@ import java.util.List;
  * Created by k.nikitin on 23.09.2016.
  */
 @Entity
-@Table(name="QUESTIONS")
+@Table(name="QUESTRESULT")
+@OnLineJoin(sqlExpression = " inner join programsauditdocdetail pdet on pdet.id = QUESTRESULT.programsauditdocdetail_id" +
+        " inner join TYPICALQUEST tq on tq.id = pdet.TYPICALQUEST_ID" +
+        " where QUESTRESULT.actresultsauditdoc_id = ?")
 public class Questions {
     @Id
     @Column(name="ID", nullable=false, precision = 15, scale = 0)
+    @OnLineColumnInfo
     private BigInteger id;
 
     @Column(name="CAPTION", length = 800)  //todo связка с инспектором
+    @OnLineColumnInfo(joinAlias = "TQ")
     private String caption;
 
     @Column(name="RESULT")
+    @OnLineColumnInfo
     private Clob result;
 
     @Column(name="TYPICALQUEST_LINE_NUMBER", length = 16)
+    @OnLineColumnInfo(joinAlias = "PDET")
     private String typicalquest_line_number;
 
 
