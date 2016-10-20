@@ -20,7 +20,6 @@ import java.util.List;
 public class Questions {
     @Id
     @Column(name="ID", nullable=false, precision = 15, scale = 0)
-    @OnLineColumnInfo
     private BigInteger id;
 
     @Column(name="CAPTION", length = 800)  //todo связка с инспектором

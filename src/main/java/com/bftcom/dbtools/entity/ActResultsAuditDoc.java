@@ -32,10 +32,9 @@ import java.util.List;
 public class ActResultsAuditDoc {
     @Id
     @Column(name="ID", nullable = false, precision = 15, scale = 0)
-    @OnLineColumnInfo
     private BigInteger id;
 
-    @Column(name="CASENUMBER", length = 200)  //todo остальные связки если есть
+    @Column(name="CASENUMBER", length = 200)
     @OnLineColumnInfo
     private String casenumber;
 
@@ -162,8 +161,8 @@ public class ActResultsAuditDoc {
     @OnLineColumnInfo(joinAlias = "CED")
     private String auditSubject;
 
-    @Column(name="DOC_STATUS", nullable = false) //не будем ставит default значение - пока..
-    private Short doc_status;
+//    @Column(name="DOC_STATUS", nullable = false) //не будем ставит default значение - пока..
+//    private Short doc_status;
 
     @OneToMany
     @JoinColumn(name="ARAD_ID", foreignKey = @ForeignKey(name="FK_QUESTIONS_ARAD"))
@@ -181,13 +180,13 @@ public class ActResultsAuditDoc {
         this.id = id;
     }
 
-    public Short getDoc_status() {
-        return doc_status;
-    }
-
-    public void setDoc_status(Short doc_status) {
-        this.doc_status = doc_status;
-    }
+//    public Short getDoc_status() {
+//        return doc_status;
+//    }
+//
+//    public void setDoc_status(Short doc_status) {
+//        this.doc_status = doc_status;
+//    }
 
     public String getCasenumber() {
         return casenumber;

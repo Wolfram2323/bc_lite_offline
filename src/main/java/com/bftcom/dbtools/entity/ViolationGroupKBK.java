@@ -19,7 +19,6 @@ import java.math.BigInteger;
 public class ViolationGroupKBK {
     @Id
     @Column(name="ID", nullable=false, precision = 15, scale=0)
-    @OnLineColumnInfo
     private BigInteger id;
 
     @Column(name="AMOUNT")

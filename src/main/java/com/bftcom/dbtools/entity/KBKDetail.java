@@ -21,7 +21,6 @@ import java.math.BigInteger;
 public class KBKDetail {
     @Id
     @Column(name="ID", nullable = false, precision = 15, scale = 0)
-    @OnLineColumnInfo
     private BigInteger id;
 
     @Column(name="BUDGET", length = 500)

@@ -17,7 +17,6 @@ import java.sql.Date;
 public class BrokenNPA {
     @Id
     @Column(name="ID", nullable=false, precision = 15, scale = 0)
-    @OnLineColumnInfo
     private BigInteger id;
 
     @Column(name="CAPTION", length = 500)

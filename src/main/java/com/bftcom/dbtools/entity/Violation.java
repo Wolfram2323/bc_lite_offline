@@ -15,7 +15,6 @@ import java.util.List;
 public class Violation {
     @Id
     @Column(name = "ID", nullable = false, precision = 15, scale = 0)
-    @OnLineColumnInfo
     private BigInteger id;
 
     @Column(name = "CAPTION", length = 2000)

@@ -23,9 +23,7 @@ import java.lang.reflect.Field;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -88,27 +86,31 @@ public class DBCreation {
             OnLineJoin onLineJoin = (OnLineJoin) entity.getAnnotation(OnLineJoin.class);
             Field[] fields = entity.getDeclaredFields();
             StringBuilder select = new StringBuilder("select ");
+            select.append(tableName).append(".ID, ");
             StringBuilder from = new StringBuilder();
             from.append(" from ").append(tableName);
+            Map<String, String> columns = new TreeMap<>();
             for(Field field: fields){
+                if(field.getName().equals("id")){
+                    continue;
+                }
                 OnLineColumnInfo onlineColInfo = field.getAnnotation(OnLineColumnInfo.class);
                 if(onlineColInfo == null){
                     continue;
                 }
                 if(onlineColInfo.columnName().isEmpty()){
                     if(onlineColInfo.joinAlias().isEmpty()){
-                        select.append(tableName).append('.').append(field.getAnnotation(Column.class).name());
+                        columns.put(field.getAnnotation(Column.class).name(), tableName + '.' + field.getAnnotation(Column.class).name());
                     } else {
-                        select.append(onlineColInfo.joinAlias()).append('.').append(field.getAnnotation(Column.class).name());
+                        columns.put(field.getAnnotation(Column.class).name(), onlineColInfo.joinAlias() + '.' + field.getAnnotation(Column.class).name());
                     }
                 } else if(onlineColInfo.joinAlias().isEmpty()){
-                    select.append(tableName).append('.').append(onlineColInfo.columnName());
+                    columns.put(onlineColInfo.columnName(),tableName + '.' + onlineColInfo.columnName());
                 } else {
-                    select.append(onlineColInfo.joinAlias()).append('.').append(onlineColInfo.columnName());
+                    columns.put(onlineColInfo.columnName(), onlineColInfo.joinAlias() + '.' + onlineColInfo.columnName());
                 }
-                select.append(',');
             }
-            select.delete(select.lastIndexOf(","), select.length());
+            select.append(String.join(", ",columns.values()));
             if(onLineJoin!=null && !onLineJoin.sqlExpression().isEmpty()){
                 from.append(((OnLineJoin)entity.getAnnotation(OnLineJoin.class)).sqlExpression());
             }
@@ -153,5 +155,35 @@ public class DBCreation {
             }
         });
     }
+
+
+    public static void importCsvDataFilesTest(){
+        Session session = HibernateUtils.getSession(true);
+        log.warn("Obtain session");
+        ProcedureCall procedure = session.createStoredProcedureCall("SYSCS_UTIL.SYSCS_IMPORT_TABLE");
+        log.warn("Create procedure");
+        procedure.registerParameter("SCHEMANAME",String.class, ParameterMode.IN);
+        procedure.registerParameter("TABLENAME",String.class, ParameterMode.IN);
+        procedure.registerParameter("FILENAME",String.class, ParameterMode.IN);
+        procedure.registerParameter("COLUMNDELIMITER",Character.class, ParameterMode.IN);
+        procedure.registerParameter("CHARACTERDELIMITER",Character.class, ParameterMode.IN);
+        procedure.registerParameter("CODESET",String.class, ParameterMode.IN);
+        procedure.registerParameter("REPLACE",Short.class, ParameterMode.IN);
+
+        log.warn("Set parametrs to procedure");
+        procedure.setParameter("SCHEMANAME", HibernateUtils.DERBY_USER_NAME.toUpperCase());
+        procedure.setParameter("COLUMNDELIMITER",';');
+        procedure.setParameter("CHARACTERDELIMITER",'#');
+        procedure.setParameter("CODESET","UTF-8");
+        procedure.setParameter("REPLACE",new Short("0"));
+
+
+
+            procedure.setParameter("TABLENAME","ACTRESULTSAUDITDOC");
+            procedure.setParameter("FILENAME","D:\\Repositaries\\bc_lite_offline\\ACTRESULTSAUDITDOC.csv");
+                procedure.execute();
+
+    }
+
 
 }
