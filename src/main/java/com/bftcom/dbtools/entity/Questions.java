@@ -26,9 +26,10 @@ public class Questions {
     @OnLineColumnInfo(joinAlias = "TQ")
     private String caption;
 
-    @Column(name="RESULT")
+    @Column(name="RESULT", columnDefinition = "clob")
+    @Lob
     @OnLineColumnInfo
-    private Clob result;
+    private String result;
 
     @Column(name="TYPICALQUEST_LINE_NUMBER", length = 16)
     @OnLineColumnInfo(joinAlias = "PDET")
@@ -38,6 +39,11 @@ public class Questions {
     @OneToMany
     @JoinColumn(name="QUESTIONS_ID", foreignKey = @ForeignKey(name="FK_VG_QUESTIONS"))
     private List<ViolationGroup> violationGroup = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name="ARAD_ID", foreignKey = @ForeignKey(name="FK_QUESTIONS_ARAD"))
+    @OnLineColumnInfo(columnName = "ACTRESULTSAUDITDOC_ID")
+    private ActResultsAuditDoc actResultsAuditDoc;
 
     public BigInteger getId() {
         return id;
@@ -55,11 +61,11 @@ public class Questions {
         this.caption = caption;
     }
 
-    public Clob getResult() {
+    public String getResult() {
         return result;
     }
 
-    public void setResult(Clob result) {
+    public void setResult(String result) {
         this.result = result;
     }
 
@@ -78,5 +84,13 @@ public class Questions {
 
     public void setViolationGroup(List<ViolationGroup> violationGroup) {
         this.violationGroup = violationGroup;
+    }
+
+    public ActResultsAuditDoc getActResultsAuditDoc() {
+        return actResultsAuditDoc;
+    }
+
+    public void setActResultsAuditDoc(ActResultsAuditDoc actResultsAuditDoc) {
+        this.actResultsAuditDoc = actResultsAuditDoc;
     }
 }

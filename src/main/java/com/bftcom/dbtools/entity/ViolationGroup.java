@@ -21,28 +21,31 @@ public class ViolationGroup {
     @Column(name="ID", nullable = false, precision = 15, scale = 0)
     private BigInteger id;
 
-    @Column(name="VIOLATIONDESCRIPTION")
+    @Column(name="VIOLATIONDESCRIPTION", columnDefinition = "clob")
+    @Lob
     @OnLineColumnInfo
-    private Clob violationDescription;
+    private String violationDescription;
 
-    @Column(name="VIOLATIONDESCRIPTION_SHORT")
+    @Column(name="VIOLATIONDESCRIPTION_SHORT", columnDefinition = "clob")
+    @Lob
     @OnLineColumnInfo
-    private Clob violationDescription_short;
+    private String violationDescription_short;
 
     @Column(name="NONEEDCORRECTION", nullable = false)
     @OnLineColumnInfo
     private Boolean noneedcorrection;
 
-    @Column(name="NONEEDCORRECTIONBASIS")
+    @Column(name="NONEEDCORRECTIONBASIS", columnDefinition = "clob")
+    @Lob
     @OnLineColumnInfo
-    private Clob noneedcorrectionBasis;
+    private String noneedcorrectionBasis;
 
     @Column(name="SUPDOCUMENTS_DETAIL", length = 1000)
     @OnLineColumnInfo
     private String supdocuments_detaill;
 
     @OneToOne
-    @JoinColumn(name="BROKENNPA_ID")    //todo bnpa ручное заполнение
+    @JoinColumn(name="BROKENNPA_ID")
     @OnLineColumnInfo(columnName = "BROKEN_NPA")
     private BrokenNPA brokenNPA;
 
@@ -64,19 +67,19 @@ public class ViolationGroup {
         this.id = id;
     }
 
-    public Clob getViolationDescription() {
+    public String getViolationDescription() {
         return violationDescription;
     }
 
-    public void setViolationDescription(Clob violationDescription) {
+    public void setViolationDescription(String violationDescription) {
         this.violationDescription = violationDescription;
     }
 
-    public Clob getViolationDescription_short() {
+    public String getViolationDescription_short() {
         return violationDescription_short;
     }
 
-    public void setViolationDescription_short(Clob violationDescription_short) {
+    public void setViolationDescription_short(String violationDescription_short) {
         this.violationDescription_short = violationDescription_short;
     }
 
@@ -88,11 +91,11 @@ public class ViolationGroup {
         this.noneedcorrection = noneedcorrection;
     }
 
-    public Clob getNoneedcorrectionBasis() {
+    public String getNoneedcorrectionBasis() {
         return noneedcorrectionBasis;
     }
 
-    public void setNoneedcorrectionBasis(Clob noneedcorrectionBasis) {
+    public void setNoneedcorrectionBasis(String noneedcorrectionBasis) {
         this.noneedcorrectionBasis = noneedcorrectionBasis;
     }
 

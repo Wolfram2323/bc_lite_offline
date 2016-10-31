@@ -41,10 +41,10 @@ public class ViolationGroupKBK {
     @OnLineColumnInfo
     private BigDecimal  compensatedToBudget;
 
-    @OneToOne
-    @JoinColumn(name="KBKDETAIL_ID")
-    @OnLineColumnInfo(columnName = "KBKDETAIL_ID")
-    private KBKDetail kbkDetail;
+//    @OneToOne
+//    @JoinColumn(name="KBKDETAIL_ID")
+//    @OnLineColumnInfo(columnName = "KBKDETAIL_ID")
+//    private  kbkDetail;
 
 
     public BigInteger getId() {
@@ -95,12 +95,12 @@ public class ViolationGroupKBK {
         this.compensatedToBudget = compensatedToBudget;
     }
 
-    public KBKDetail getKbkDetail() {
-        return kbkDetail;
-    }
-
-    public void setKbkDetail(KBKDetail kbkDetail) {
-        this.kbkDetail = kbkDetail;
-    }
+//    public KBKDetail getKbkDetail() {
+//        return kbkDetail;
+//    }
+//
+//    public void setKbkDetail(KBKDetail kbkDetail) {
+//        this.kbkDetail = kbkDetail;
+//    }
 
 }

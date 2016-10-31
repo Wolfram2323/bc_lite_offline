@@ -5,13 +5,16 @@ import com.bftcom.dbtools.annotations.OnLineJoin;
 
 import javax.persistence.*;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by k.nikitin on 23.09.2016.
  */
 @Entity
 @Table(name="EMPLOYEEGROUP")
-@OnLineJoin(sqlExpression = " inner join actresultsauditdoc arad on arad.document_id = EMPLOYEEGROUP.link_document_id" +
+@OnLineJoin(sqlExpression = " inner join controleventdoc ced on ced.document_id = EMPLOYEEGROUP.link_document_id" +
+        " inner join actresultsauditdoc arad on arad.maindoc_id = ced.id" +
         " where arad.id = ?")
 public class EmployeeGroup {
     @Id
@@ -26,6 +29,11 @@ public class EmployeeGroup {
     @JoinColumn(name="EMPLOYEE_ID")
     @OnLineColumnInfo(columnName = "EMPLOYEE_ID")
     private Employee employee;
+
+    @OneToMany
+    @JoinColumn(name="EMPLOYEEGROUP_ID", foreignKey = @ForeignKey(name="FK_ARADINSP_EMPG"))
+    private List<ARADInspectors> aradInspectorses = new ArrayList<>();
+
 
 
     public BigInteger getId() {
@@ -52,4 +60,11 @@ public class EmployeeGroup {
         this.employee = employee;
     }
 
+    public List<ARADInspectors> getAradInspectorses() {
+        return aradInspectorses;
+    }
+
+    public void setAradInspectorses(List<ARADInspectors> aradInspectorses) {
+        this.aradInspectorses = aradInspectorses;
+    }
 }

@@ -5,7 +5,6 @@ import com.bftcom.dbtools.annotations.OnLineJoin;
 
 import javax.persistence.*;
 import java.math.BigInteger;
-import java.sql.Clob;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -90,12 +89,12 @@ public class ActResultsAuditDoc {
     @Column(name="OBJECTINFO", columnDefinition = "clob")
     @Lob
     @OnLineColumnInfo
-    private Clob objectInfo;
+    private String objectInfo;
 
     @Column(name="OBSTACLE", columnDefinition = "clob")
     @Lob
     @OnLineColumnInfo
-    private Clob obstacle;
+    private String obstacle;
 
     @Column(name="WRITEPLACE", length = 100)
     @OnLineColumnInfo
@@ -115,7 +114,7 @@ public class ActResultsAuditDoc {
 
     @Column(name="AUDITBASIS_DATE")
     @OnLineColumnInfo(joinAlias = "CED")
-    private Date aiditBasis_date;
+    private Date auditBasis_date;
 
     @Column(name="INSP_HEAD_FIO", length = 255)
     @OnLineColumnInfo(columnName = "FIO", joinAlias = "PHEAD")
@@ -161,16 +160,21 @@ public class ActResultsAuditDoc {
     @OnLineColumnInfo(joinAlias = "CED")
     private String auditSubject;
 
-//    @Column(name="DOC_STATUS", nullable = false) //не будем ставит default значение - пока..
-//    private Short doc_status;
+    @Column(name="DOC_STATUS",  nullable = false, precision = 15, scale = 0)
+    @OnLineColumnInfo(columnName = "DISPSTATUS_ID")
+    private BigInteger doc_status;
 
     @OneToMany
     @JoinColumn(name="ARAD_ID", foreignKey = @ForeignKey(name="FK_QUESTIONS_ARAD"))
     private List<Questions> questions = new LinkedList<>();
 
     @OneToMany
-    @JoinColumn(name="ARAD_ID", foreignKey = @ForeignKey(name="FK_EMPG_ARAD_ID"))
-    private List<EmployeeGroup> employeeGroup = new ArrayList<>();
+    @JoinColumn(name="ACTRESULTSAUDITDOC_ID", foreignKey = @ForeignKey(name="FK_ARADINSP_ARAD"))
+    private List<ARADInspectors> aradInspectorses = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name="ARAUDITDOC_ID", foreignKey = @ForeignKey(name="FK_ARADKBK_ARAD"))
+    private List<ARADkbk> araDkbks = new ArrayList<>();
 
     public BigInteger getId() {
         return id;
@@ -180,13 +184,13 @@ public class ActResultsAuditDoc {
         this.id = id;
     }
 
-//    public Short getDoc_status() {
-//        return doc_status;
-//    }
-//
-//    public void setDoc_status(Short doc_status) {
-//        this.doc_status = doc_status;
-//    }
+    public BigInteger getDoc_status() {
+        return doc_status;
+    }
+
+    public void setDoc_status(BigInteger doc_status) {
+        this.doc_status = doc_status;
+    }
 
     public String getCasenumber() {
         return casenumber;
@@ -292,19 +296,19 @@ public class ActResultsAuditDoc {
         this.actualExecTo = actualExecTo;
     }
 
-    public Clob getObjectInfo() {
+    public String getObjectInfo() {
         return objectInfo;
     }
 
-    public void setObjectInfo(Clob objectInfo) {
+    public void setObjectInfo(String objectInfo) {
         this.objectInfo = objectInfo;
     }
 
-    public Clob getObstacle() {
+    public String getObstacle() {
         return obstacle;
     }
 
-    public void setObstacle(Clob obstacle) {
+    public void setObstacle(String obstacle) {
         this.obstacle = obstacle;
     }
 
@@ -340,12 +344,12 @@ public class ActResultsAuditDoc {
         this.auditBasis_number = auditBasis_number;
     }
 
-    public Date getAiditBasis_date() {
-        return aiditBasis_date;
+    public Date getAuditBasis_date() {
+        return auditBasis_date;
     }
 
-    public void setAiditBasis_date(Date aiditBasis_date) {
-        this.aiditBasis_date = aiditBasis_date;
+    public void setAuditBasis_date(Date auditBasis_date) {
+        this.auditBasis_date = auditBasis_date;
     }
 
     public String getInsp_head_fio() {
@@ -444,11 +448,19 @@ public class ActResultsAuditDoc {
         this.questions = questions;
     }
 
-    public List<EmployeeGroup> getEmployeeGroup() {
-        return employeeGroup;
+    public List<ARADInspectors> getAradInspectorses() {
+        return aradInspectorses;
     }
 
-    public void setEmployeeGroup(List<EmployeeGroup> employeeGroup) {
-        this.employeeGroup = employeeGroup;
+    public void setAradInspectorses(List<ARADInspectors> aradInspectorses) {
+        this.aradInspectorses = aradInspectorses;
+    }
+
+    public List<ARADkbk> getAraDkbks() {
+        return araDkbks;
+    }
+
+    public void setAraDkbks(List<ARADkbk> araDkbks) {
+        this.araDkbks = araDkbks;
     }
 }
