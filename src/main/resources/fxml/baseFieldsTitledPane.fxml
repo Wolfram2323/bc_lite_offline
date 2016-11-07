@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<fx:root text="Основные поля документа" type="javafx.scene.control.TitledPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <content>
+        <ScrollPane fitToWidth="true">
+            <content>
+                <GridPane hgap="15.0" vgap="15.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="500.0" minWidth="10.0" prefWidth="250.0" />
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="756.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="300.0" prefHeight="300.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <TextField GridPane.columnIndex="1" />
+                        <TextField fx:id="casenumber_field" editable="false" styleClass="read-only" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="docNumber_field" editable="false" styleClass="read-only" GridPane.columnIndex="1" />
+                        <Label text="Номер документа:" />
+                        <Label text="Дата документа:" GridPane.rowIndex="1" />
+                        <Label text="Номер дела:" GridPane.rowIndex="2" />
+                        <Label text="Дата утверждения:" GridPane.rowIndex="3" />
+                        <DatePicker fx:id="approvedate_field" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+                        <DatePicker fx:id="docDate_field" disable="true" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                        <Label text="Подписание акта:" GridPane.rowIndex="4" />
+                        <TextField fx:id="actSigning_field" editable="false" styleClass="read-only" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="auditOrg_caption_field" editable="false" styleClass="read-only" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Label text="Объект контроля:" GridPane.rowIndex="5" />
+                        <Label text="Метод контроля:" GridPane.rowIndex="6" />
+                        <Label text="Тема проверки:" GridPane.rowIndex="7" />
+                        <TextField fx:id="controlform_field" editable="false" styleClass="read-only" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <TextField fx:id="auditTheme_field" editable="false" styleClass="read-only" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                        <TextField fx:id="controlOrg_caption_field" editable="false" styleClass="read-only" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                        <TextField fx:id="territory_field" editable="false" styleClass="read-only" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                        <Label text="Орган контроля:" GridPane.rowIndex="8" />
+                        <Label text="Территория:" GridPane.rowIndex="9" />
+                        <Label text="Проверяемый период:" GridPane.rowIndex="10" />
+                        <GridPane hgap="15.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.0" minWidth="30.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="388.0" prefWidth="388.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.0" minWidth="30.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="388.0" prefWidth="388.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label text="c" />
+                                <Label text="по" GridPane.columnIndex="2" />
+                                <DatePicker fx:id="auditFrom_field" disable="true" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                                <DatePicker fx:id="auditTo_field" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" />
+                            </children>
+                        </GridPane>
+                        <Label text="Срок проведения:" GridPane.rowIndex="11" />
+                        <GridPane hgap="15.0" GridPane.columnIndex="1" GridPane.rowIndex="11">
+                            <children>
+                                <Label text="c" />
+                                <Label text="по" GridPane.columnIndex="2" />
+                                <DatePicker fx:id="actualExecFrom_field" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                                <DatePicker fx:id="actualExecTo_field" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" />
+                            </children>
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.0" minWidth="30.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="388.0" prefWidth="388.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.0" minWidth="30.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="388.0" prefWidth="388.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                        </GridPane>
+                        <Label text="Препятствующие проверке условия:" GridPane.rowIndex="12" />
+                        <WebView fx:id="obstacle_field" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" left="4.0" right="4.0" top="10.0" />
+                    </padding>
+                </GridPane>
+            </content>
+        </ScrollPane>
+    </content>
+    <font>
+        <Font size="18.0" />
+    </font>
+</fx:root>

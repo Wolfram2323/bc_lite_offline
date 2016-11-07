@@ -1,0 +1,8 @@
+.validation-error {
+    -fx-background-color: #DBB1B1, #FFF0F0 ;
+}
+
+
+.read-only {
+    -fx-background-color: #a4a9a5, #ced1c8;
+}

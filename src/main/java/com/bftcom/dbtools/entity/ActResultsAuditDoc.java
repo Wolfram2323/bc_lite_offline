@@ -33,12 +33,20 @@ public class ActResultsAuditDoc {
     @Column(name="ID", nullable = false, precision = 15, scale = 0)
     private BigInteger id;
 
+    @Column(name="DOC_NUMBER")
+    @OnLineColumnInfo
+    private String docNumber;
+
+    @Column(name="DOC_DATE")
+    @OnLineColumnInfo
+    private Date docDate;
+
     @Column(name="CASENUMBER", length = 200)
     @OnLineColumnInfo
     private String casenumber;
 
     @Column(name="APPROVEDATE")
-    @OnLineColumnInfo
+    @OnLineColumnInfo(synch = true)
     private Date approvedate;
 
     @Column(name="AUDITTHEME", length = 1000)
@@ -56,6 +64,10 @@ public class ActResultsAuditDoc {
     @Column(name="CONTROLFORM",length = 255)
     @OnLineColumnInfo(columnName = "CAPTION", joinAlias = "CF")
     private String controlform;
+
+    @Column(name="ACTSIGNING", scale = 0, precision = 1)
+    @OnLineColumnInfo
+    private BigInteger actSigning;
 
 
     @Column(name="CONTROLORG_CAPTION", length = 255)
@@ -86,14 +98,14 @@ public class ActResultsAuditDoc {
     @OnLineColumnInfo(joinAlias = "CED")
     private Date actualExecTo;
 
-    @Column(name="OBJECTINFO", columnDefinition = "clob")
-    @Lob
-    @OnLineColumnInfo
-    private String objectInfo;
+//    @Column(name="OBJECTINFO", columnDefinition = "clob")
+//    @Lob
+//    @OnLineColumnInfo(synch = true)
+//    private String objectInfo;
 
     @Column(name="OBSTACLE", columnDefinition = "clob")
     @Lob
-    @OnLineColumnInfo
+    @OnLineColumnInfo(synch = true)
     private String obstacle;
 
     @Column(name="WRITEPLACE", length = 100)
@@ -165,7 +177,7 @@ public class ActResultsAuditDoc {
     private BigInteger doc_status;
 
     @OneToMany
-    @JoinColumn(name="ARAD_ID", foreignKey = @ForeignKey(name="FK_QUESTIONS_ARAD"))
+    @JoinColumn(name="ACTRESULTSAUDITDOC_ID", foreignKey = @ForeignKey(name="FK_QUESTIONS_ARAD"))
     private List<Questions> questions = new LinkedList<>();
 
     @OneToMany
@@ -296,13 +308,13 @@ public class ActResultsAuditDoc {
         this.actualExecTo = actualExecTo;
     }
 
-    public String getObjectInfo() {
-        return objectInfo;
-    }
-
-    public void setObjectInfo(String objectInfo) {
-        this.objectInfo = objectInfo;
-    }
+//    public String getObjectInfo() {
+//        return objectInfo;
+//    }
+//
+//    public void setObjectInfo(String objectInfo) {
+//        this.objectInfo = objectInfo;
+//    }
 
     public String getObstacle() {
         return obstacle;
@@ -462,5 +474,29 @@ public class ActResultsAuditDoc {
 
     public void setAraDkbks(List<ARADkbk> araDkbks) {
         this.araDkbks = araDkbks;
+    }
+
+    public String getDocNumber() {
+        return docNumber;
+    }
+
+    public void setDocNumber(String docNumber) {
+        this.docNumber = docNumber;
+    }
+
+    public Date getDocDate() {
+        return docDate;
+    }
+
+    public void setDocDate(Date docDate) {
+        this.docDate = docDate;
+    }
+
+    public BigInteger getActSigning() {
+        return actSigning;
+    }
+
+    public void setActSigning(BigInteger actSigning) {
+        this.actSigning = actSigning;
     }
 }

@@ -19,12 +19,12 @@ public class ARADInspectors {
 
     @ManyToOne
     @JoinColumn(name="ACTRESULTSAUDITDOC_ID", foreignKey = @ForeignKey(name="FK_ARADINSP_ARAD"),nullable = false)
-    @OnLineColumnInfo(columnName = "ACTRESULTSAUDITDOC_ID")
+    @OnLineColumnInfo(columnName = "ACTRESULTSAUDITDOC_ID", synch = true)
     private ActResultsAuditDoc actResultsAuditDoc;
 
     @ManyToOne
     @JoinColumn(name="EMPLOYEEGROUP_ID", foreignKey = @ForeignKey(name="FK_ARADINSP_EMPG"), nullable = false)
-    @OnLineColumnInfo(columnName = "EMPLOYEEGROUP_ID")
+    @OnLineColumnInfo(columnName = "EMPLOYEEGROUP_ID", synch = true)
     private EmployeeGroup employeeGroup;
 
     public BigInteger getId() {

@@ -28,7 +28,7 @@ public class Questions {
 
     @Column(name="RESULT", columnDefinition = "clob")
     @Lob
-    @OnLineColumnInfo
+    @OnLineColumnInfo(synch = true)
     private String result;
 
     @Column(name="TYPICALQUEST_LINE_NUMBER", length = 16)
@@ -41,8 +41,8 @@ public class Questions {
     private List<ViolationGroup> violationGroup = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name="ARAD_ID", foreignKey = @ForeignKey(name="FK_QUESTIONS_ARAD"))
-    @OnLineColumnInfo(columnName = "ACTRESULTSAUDITDOC_ID")
+    @JoinColumn(name="ACTRESULTSAUDITDOC_ID", foreignKey = @ForeignKey(name="FK_QUESTIONS_ARAD"))
+    @OnLineColumnInfo(columnName = "ACTRESULTSAUDITDOC_ID",  synch = true)
     private ActResultsAuditDoc actResultsAuditDoc;
 
     public BigInteger getId() {

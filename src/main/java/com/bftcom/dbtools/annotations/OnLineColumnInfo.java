@@ -13,4 +13,5 @@ import java.lang.annotation.Target;
 public @interface OnLineColumnInfo {
     String columnName() default "";
     String joinAlias() default "";
+    boolean synch() default false;
 }

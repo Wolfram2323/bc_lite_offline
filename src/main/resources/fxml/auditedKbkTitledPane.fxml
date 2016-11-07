@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+
+
+<fx:root type="javafx.scene.control.TitledPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" text="Проверенные данные">
+    <content>
+        <ScrollPane fitToWidth="true" prefViewportHeight="723.0" prefViewportWidth="1214.0">
+            <content>
+                <TableView fx:id="aradKbk_tbl" maxWidth="1.7976931348623157E308" prefHeight="200.0">
+                    <columns>
+                        <TableColumn editable="false" prefWidth="98.0" text="КВФО" />
+                        <TableColumn editable="false" prefWidth="211.0" text="Фиансирование (руб.)" />
+                        <TableColumn prefWidth="275.0" text="Объем проверенных средств" />
+                    </columns></TableView>
+            </content>
+        </ScrollPane>
+    </content>
+    <font>
+        <Font size="18.0" />
+    </font>
+</fx:root>

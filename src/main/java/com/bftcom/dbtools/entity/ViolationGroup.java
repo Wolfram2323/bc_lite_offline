@@ -23,35 +23,35 @@ public class ViolationGroup {
 
     @Column(name="VIOLATIONDESCRIPTION", columnDefinition = "clob")
     @Lob
-    @OnLineColumnInfo
+    @OnLineColumnInfo(synch = true)
     private String violationDescription;
 
     @Column(name="VIOLATIONDESCRIPTION_SHORT", columnDefinition = "clob")
     @Lob
-    @OnLineColumnInfo
+    @OnLineColumnInfo(synch = true)
     private String violationDescription_short;
 
     @Column(name="NONEEDCORRECTION", nullable = false)
-    @OnLineColumnInfo
+    @OnLineColumnInfo(synch = true)
     private Boolean noneedcorrection;
 
     @Column(name="NONEEDCORRECTIONBASIS", columnDefinition = "clob")
     @Lob
-    @OnLineColumnInfo
+    @OnLineColumnInfo(synch = true)
     private String noneedcorrectionBasis;
 
     @Column(name="SUPDOCUMENTS_DETAIL", length = 1000)
-    @OnLineColumnInfo
+    @OnLineColumnInfo(synch = true)
     private String supdocuments_detaill;
 
     @OneToOne
     @JoinColumn(name="BROKENNPA_ID")
-    @OnLineColumnInfo(columnName = "BROKEN_NPA")
+    @OnLineColumnInfo(columnName = "BROKEN_NPA", synch = true)
     private BrokenNPA brokenNPA;
 
     @OneToOne
     @JoinColumn(name="VIOLATION_ID")
-    @OnLineColumnInfo(columnName = "VIOLATION_ID")
+    @OnLineColumnInfo(columnName = "VIOLATION_ID", synch = true)
     private Violation violation;
 
 

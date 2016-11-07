@@ -107,7 +107,7 @@ public class DataUploader {
                         el.setAttribute(atrNameByAnnotation ? "ID" : field.getName(), strValue);
                     } else  if(atrNameByAnnotation){
                         OnLineColumnInfo onLineColumnInfo = field.getAnnotation(OnLineColumnInfo.class);
-                        if(onLineColumnInfo == null){
+                        if(onLineColumnInfo == null || !onLineColumnInfo.synch()){
                             continue;
                         }
                         if(onLineColumnInfo.columnName().isEmpty()){

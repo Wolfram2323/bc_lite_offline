@@ -1,5 +1,6 @@
 package com.bftcom.dbtools.utils;
 
+import com.bftcom.context.Context;
 import com.bftcom.dbtools.entity.*;
 
 import org.hibernate.HibernateException;
@@ -76,13 +77,31 @@ public class HibernateUtils {
         if(sessionFactory == null || url != null){
             sessionFactory = cfg.buildSessionFactory();
         }
-        return sessionFactory.openSession();
+        Context con = Context.getCurrentContext();
+        con.setSession(sessionFactory.openSession());
+        return con.getSession();
+    }
+
+    public static Session getCurrentSession(){
+        Context con = Context.getCurrentContext();
+        if(con.getSession()  == null ){
+            return getSession(null);
+        }
+        return con.getSession();
+    }
+
+    public static void closeSession(Session session){
+        session.close();
+        Context con = Context.getCurrentContext();
+        con.setSession(null);
     }
 
     public static void closeConnection(Session session){
         SessionFactory sf = session.getSessionFactory();
         session.close();
         sf.close();
+        Context con = Context.getCurrentContext();
+        con.setSession(null);
     }
 
     public static void saveEntity(Session session,Object entity ){

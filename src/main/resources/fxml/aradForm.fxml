@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="857.0" prefWidth="1216.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bftcom.gui.aradForm.ActResultsAuditDocFormController">
+   <bottom>
+      <GridPane hgap="15.0" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="219.0" minWidth="0.0" prefWidth="70.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="562.0" minWidth="10.0" prefWidth="170.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="308.0" minWidth="10.0" prefWidth="175.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="560.0" minWidth="10.0" prefWidth="120.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="532.0" minWidth="10.0" prefWidth="459.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="76.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="119.0" minWidth="10.0" prefWidth="58.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TextField fx:id="doc_status_field" alignment="CENTER" editable="false" styleClass="read-only" GridPane.columnIndex="1" />
+            <Label text="Статус:" textAlignment="CENTER" GridPane.halignment="CENTER">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Button mnemonicParsing="false" text="Завершить форматирование" GridPane.columnIndex="2" />
+            <Button fx:id="synchBtn" disable="true" mnemonicParsing="false" text="Выгрузить данные" GridPane.columnIndex="3" />
+            <Button mnemonicParsing="false" text="Сохранить" GridPane.columnIndex="5" />
+            <Button mnemonicParsing="false" onAction="#exitAction" text="Выход" GridPane.columnIndex="6" />
+         </children>
+      </GridPane>
+   </bottom>
+   <center>
+      <Accordion fx:id="mainAccordion" BorderPane.alignment="CENTER">
+
+      </Accordion>
+   </center>
+</BorderPane>

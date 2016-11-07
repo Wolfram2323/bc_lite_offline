@@ -82,14 +82,21 @@ public class DBCreation {
         }
     }
 
+    public static void shutDownCurConnection(){
+        HibernateUtils.closeConnection(HibernateUtils.getCurrentSession());
+    }
+
     public static Map<String,String> getUploadSql(){
         Map<String,String> result = new ConcurrentHashMap<>();
         List<Class> annotatedClasses = HibernateUtils.getAnnotatedClasses();
-        annotatedClasses.stream().filter(entity-> !((Table)entity.getAnnotation(Table.class)).name().matches("SYSUSER|VIOLATIONGROUP|VIOLATIONGROUPKBK")).parallel().forEach(entity->{
+        annotatedClasses.stream().filter(entity-> !((Table)entity.getAnnotation(Table.class)).name().matches("SYSUSER|VIOLATIONGROUP|VIOLATIONGROUPKBK")).forEach(entity->{
             String tableName = ((Table)entity.getAnnotation(Table.class)).name();
             OnLineJoin onLineJoin = (OnLineJoin) entity.getAnnotation(OnLineJoin.class);
             Field[] fields = entity.getDeclaredFields();
             StringBuilder select = new StringBuilder("select ");
+            if(tableName.equals("ACTRESULTSAUDITDOC")) {
+                select.append("distinct ");
+            }
             select.append(tableName).append(".ID");
             StringBuilder from = new StringBuilder();
             from.append(" from ").append(tableName);

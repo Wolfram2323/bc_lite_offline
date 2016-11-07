@@ -22,23 +22,23 @@ public class ViolationGroupKBK {
     private BigInteger id;
 
     @Column(name="AMOUNT")
-    @OnLineColumnInfo
+    @OnLineColumnInfo(synch = true)
     private BigDecimal amount;
 
     @Column(name="COMPENSATEDTOAUDITORGCASH")
-    @OnLineColumnInfo
+    @OnLineColumnInfo(synch = true)
     private BigDecimal compensatedToAuditOrgCash;
 
     @Column(name="COMPENSATEDTOAUDITORGACCOUNT")
-    @OnLineColumnInfo
+    @OnLineColumnInfo(synch = true)
     private BigDecimal compensatedToAuditOrgAccount;
 
     @Column(name="COMPENSATEDTOGRBSACCOUNT")
-    @OnLineColumnInfo
+    @OnLineColumnInfo(synch = true)
     private BigDecimal compensatedToGRBSAccount;
 
     @Column(name="COMPENSATEDTOBUDGET")
-    @OnLineColumnInfo
+    @OnLineColumnInfo(synch = true)
     private BigDecimal  compensatedToBudget;
 
 //    @OneToOne

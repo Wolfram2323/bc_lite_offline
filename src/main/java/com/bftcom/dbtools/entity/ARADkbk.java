@@ -19,17 +19,17 @@ public class ARADkbk {
     private BigInteger id;
 
     @Column(name="AUDITEDAMOUNT", precision = 15, scale = 2)
-    @OnLineColumnInfo
+    @OnLineColumnInfo(synch = true)
     private BigDecimal auditedamount;
 
     @ManyToOne
     @JoinColumn(name="ARAUDITDOC_ID", foreignKey = @ForeignKey(name="FK_ARADKBK_ARAD"), nullable = false)
-    @OnLineColumnInfo(columnName = "ARAUDITDOC_ID")
+    @OnLineColumnInfo(columnName = "ARAUDITDOC_ID",synch = true)
     private ActResultsAuditDoc actResultsAuditDoc;
 
     @ManyToOne
     @JoinColumn(name="KBKDETAIL_ID", foreignKey = @ForeignKey(name = "FK_ARADKBK_KBK"),nullable = false)
-    @OnLineColumnInfo(columnName = "KBKDETAIL_ID")
+    @OnLineColumnInfo(columnName = "KBKDETAIL_ID", synch = true)
     private KBKDetail kbkDetail;
 
     public ActResultsAuditDoc getActResultsAuditDoc() {
