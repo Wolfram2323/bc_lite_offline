@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+
+<fx:root text="Проверенные вопросы" type="javafx.scene.control.TitledPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <content>
+        <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="787.0" prefViewportWidth="1214.0">
+            <content>
+                <TabPane fx:id="question_TabPane" maxWidth="1.7976931348623157E308" rotateGraphic="true" side="LEFT" tabClosingPolicy="UNAVAILABLE">
+
+                </TabPane>
+            </content>
+        </ScrollPane>
+    </content>
+    <font>
+        <Font size="18.0" />
+    </font>
+</fx:root>
