@@ -14,6 +14,7 @@ import java.math.BigInteger;
 @OnLineJoin(sqlExpression = " where ACTRESULTSAUDITINSPECTORS.ACTRESULTSAUDITDOC_ID = ?")
 public class ARADInspectors {
     @Id
+    @GeneratedValue
     @Column(name="ID", nullable=false, precision = 15, scale = 0)
     private BigInteger id;
 

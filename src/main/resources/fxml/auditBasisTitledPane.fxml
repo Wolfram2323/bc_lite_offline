@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-
-<fx:root type="javafx.scene.control.TitledPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" text="Основание">
+<fx:root text="Основание" type="javafx.scene.control.TitledPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <font>
         <Font size="18.0" />
     </font>
@@ -33,10 +33,10 @@
                         <Label text="Наименование основания:" />
                         <Label text="Номер основания:" GridPane.rowIndex="2" />
                         <Label text="Дата основания:" GridPane.rowIndex="3" />
-                        <TextField editable="false" GridPane.columnIndex="1" />
-                        <TextField editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="auditBasis_field" editable="false" styleClass="read-only" GridPane.columnIndex="1" />
+                        <TextField fx:id="auditBasis_type_field" editable="false" styleClass="read-only" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="auditBasis_number_field" editable="false" styleClass="read-only" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <DatePicker fx:id="auditBasis_date_field" disable="true" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
                     </children>
                 </GridPane>
             </content>

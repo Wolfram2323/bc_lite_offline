@@ -18,6 +18,7 @@ import java.math.BigInteger;
 
 public class ViolationGroupKBK {
     @Id
+    @GeneratedValue
     @Column(name="ID", nullable=false, precision = 15, scale=0)
     private BigInteger id;
 
@@ -41,10 +42,10 @@ public class ViolationGroupKBK {
     @OnLineColumnInfo(synch = true)
     private BigDecimal  compensatedToBudget;
 
-//    @OneToOne
-//    @JoinColumn(name="KBKDETAIL_ID")
-//    @OnLineColumnInfo(columnName = "KBKDETAIL_ID")
-//    private  kbkDetail;
+    @OneToOne
+    @JoinColumn(name="KBKDETAIL_ID")
+    @OnLineColumnInfo(columnName = "KBKDETAIL_ID", synch = true)
+    private KBKDetail  kbkDetail;
 
 
     public BigInteger getId() {
@@ -95,12 +96,12 @@ public class ViolationGroupKBK {
         this.compensatedToBudget = compensatedToBudget;
     }
 
-//    public KBKDetail getKbkDetail() {
-//        return kbkDetail;
-//    }
-//
-//    public void setKbkDetail(KBKDetail kbkDetail) {
-//        this.kbkDetail = kbkDetail;
-//    }
+    public KBKDetail getKbkDetail() {
+        return kbkDetail;
+    }
+
+    public void setKbkDetail(KBKDetail kbkDetail) {
+        this.kbkDetail = kbkDetail;
+    }
 
 }

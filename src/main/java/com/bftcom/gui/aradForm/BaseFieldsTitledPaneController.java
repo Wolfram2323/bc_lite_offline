@@ -1,27 +1,32 @@
 package com.bftcom.gui.aradForm;
 
+import com.bftcom.context.Context;
 import com.bftcom.dbtools.entity.ActResultsAuditDoc;
 import com.bftcom.gui.exception.ExceptionMessage;
+import com.bftcom.gui.utils.GuiUtils;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
+
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
+
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.Date;
-import java.time.LocalDate;
+
+import java.util.Collections;
+import org.w3c.dom.Document;
+
 
 /**
  * Created by k.nikitin on 06.11.2016.
  */
-public class BaseFieldsTitledPaneController extends TitledPane {
+public class BaseFieldsTitledPaneController extends AbstractBftTitledPaneController {
 
     @FXML
     private TextField docNumber_field;
@@ -51,8 +56,10 @@ public class BaseFieldsTitledPaneController extends TitledPane {
     private DatePicker actualExecFrom_field;
     @FXML
     private DatePicker actualExecTo_field;
-//    @FXML
-//    private WebView obstacle_field;
+    @FXML
+    private WebView obstacle_field;
+
+    private WebEngine obstacle_engine;
 
     public BaseFieldsTitledPaneController(){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
@@ -68,38 +75,36 @@ public class BaseFieldsTitledPaneController extends TitledPane {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void initialize(ActResultsAuditDoc arad){
-        Field[] formFields = getClass().getDeclaredFields();
-        for(Field field : formFields){
-            try {
-                PropertyDescriptor pd = new PropertyDescriptor(field.getName().substring(0, field.getName().indexOf("_field")), arad.getClass());
-                Object value = pd.getReadMethod().invoke(arad);
-                Class fieldClass = field.getType();
-                String fieldClassName = fieldClass.getName().substring(fieldClass.getName().lastIndexOf(".") + 1);
-                Method method = null;
-                switch(fieldClassName){
-                    case "TextField":
-                        method = fieldClass.getSuperclass().getDeclaredMethod("setText",String.class);
-                        if(value == null){
-                            value="";
-                        }
-                        break;
-                    case  "DatePicker":
-                        method = fieldClass.getSuperclass().getDeclaredMethod("setValue",Object.class);
-                        if(value == null){
-                            continue;
-                        }
-                        value = ((Date)value).toLocalDate();
-                        break;
-                }
-                if(method != null){
-                    method.setAccessible(true);
-                    method.invoke(field.get(this),value);
-                }
-            } catch (IllegalAccessException|InvocationTargetException|IntrospectionException|NoSuchMethodException e) {
-                ExceptionMessage.throwExceptionForJavaFX(e,"Загрузка электронного документа завершилась с ошибкой",null,true);
-            }
+        GuiUtils.textAndDateFieldSetUp(arad, this, Collections.singletonList("actSigning_field"));
+        switch (arad.getActSigning()){
+            case 1: actSigning_field.setText("Подписан Объектом контроля");break;
+            case 2: actSigning_field.setText("Не подписан Объектом контроля"); break;
+            case 3: actSigning_field.setText("Подписан Объектом контроля с возражениями");break;
+            default: actSigning_field.setText("");break;
 
         }
+        obstacle_engine = obstacle_field.getEngine();
+        GuiUtils.loadCkEditorToWebView(obstacle_engine, "obstacle_field");
+        if(arad.getObstacle() != null){
+            obstacle_engine.documentProperty().addListener(new ChangeListener<Document>() {
+                @Override public void changed(ObservableValue<? extends Document> observableValue, Document document, Document newDoc) {
+                    if (newDoc != null) {
+                        obstacle_engine.documentProperty().removeListener(this);
+                        obstacle_engine.executeScript("getCkEditor().setData('" + arad.getObstacle() + "');");
+                    }
+                }
+            });
+        }
+        if(!Context.getCurrentContext().isAdmin()){
+            obstacle_field.setDisable(true);
+        }
+    }
+
+    @Override
+    public void submitData(ActResultsAuditDoc arad) {
+        Object value = obstacle_engine.executeScript("getCkEditor().getData();");
+        arad.setObstacle(value.toString());
     }
 }

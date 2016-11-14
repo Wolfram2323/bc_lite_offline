@@ -9,13 +9,14 @@
    <bottom>
       <GridPane hgap="15.0" BorderPane.alignment="CENTER">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="219.0" minWidth="0.0" prefWidth="70.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="562.0" minWidth="10.0" prefWidth="170.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="308.0" minWidth="10.0" prefWidth="175.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="560.0" minWidth="10.0" prefWidth="120.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="532.0" minWidth="10.0" prefWidth="459.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="76.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="119.0" minWidth="10.0" prefWidth="58.0" />
+          <ColumnConstraints hgrow="NEVER" maxWidth="219.0" minWidth="0.0" prefWidth="70.0" />
+            <ColumnConstraints hgrow="NEVER" maxWidth="562.0" minWidth="10.0" prefWidth="170.0" />
+            <ColumnConstraints hgrow="NEVER" maxWidth="308.0" minWidth="10.0" prefWidth="178.0" />
+            <ColumnConstraints hgrow="NEVER" maxWidth="560.0" minWidth="10.0" prefWidth="119.0" />
+            <ColumnConstraints hgrow="NEVER" maxWidth="560.0" minWidth="10.0" prefWidth="121.0" />
+          <ColumnConstraints hgrow="ALWAYS" maxWidth="532.0" minWidth="10.0" prefWidth="330.0" />
+            <ColumnConstraints hgrow="NEVER" maxWidth="142.0" minWidth="10.0" prefWidth="78.0" />
+            <ColumnConstraints hgrow="NEVER" maxWidth="119.0" minWidth="10.0" prefWidth="60.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -27,10 +28,11 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button mnemonicParsing="false" text="Завершить форматирование" GridPane.columnIndex="2" />
-            <Button fx:id="synchBtn" disable="true" mnemonicParsing="false" text="Выгрузить данные" GridPane.columnIndex="3" />
-            <Button mnemonicParsing="false" text="Сохранить" GridPane.columnIndex="5" />
-            <Button mnemonicParsing="false" onAction="#exitAction" text="Выход" GridPane.columnIndex="6" />
+            <Button fx:id="stopBtn" mnemonicParsing="false" onAction="#stopEdit" text="Завершить форматирование" GridPane.columnIndex="2" />
+            <Button fx:id="expBtn" disable="true" mnemonicParsing="false" onAction="#exportData" text="Выгрузить данные" GridPane.columnIndex="3" />
+            <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#submitData" text="Сохранить" GridPane.columnIndex="6" />
+            <Button mnemonicParsing="false" onAction="#exitAction" text="Выход" GridPane.columnIndex="7" />
+            <Button fx:id="impBtn" mnemonicParsing="false" onAction="#importData" prefHeight="25.0" prefWidth="123.0" text="Загрузить данные" GridPane.columnIndex="4" />
          </children>
       </GridPane>
    </bottom>

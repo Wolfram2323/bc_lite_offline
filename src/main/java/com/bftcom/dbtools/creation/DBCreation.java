@@ -94,9 +94,6 @@ public class DBCreation {
             OnLineJoin onLineJoin = (OnLineJoin) entity.getAnnotation(OnLineJoin.class);
             Field[] fields = entity.getDeclaredFields();
             StringBuilder select = new StringBuilder("select ");
-            if(tableName.equals("ACTRESULTSAUDITDOC")) {
-                select.append("distinct ");
-            }
             select.append(tableName).append(".ID");
             StringBuilder from = new StringBuilder();
             from.append(" from ").append(tableName);

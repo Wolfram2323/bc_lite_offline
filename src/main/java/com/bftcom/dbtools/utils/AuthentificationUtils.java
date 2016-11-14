@@ -1,6 +1,7 @@
 package com.bftcom.dbtools.utils;
 
 
+import com.bftcom.context.Context;
 import com.bftcom.dbtools.entity.SysUser;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -18,6 +19,7 @@ public class AuthentificationUtils {
             SysUser user = query.getSingleResult();
             String storedPswd = user.getPsswd();
             String version = PasswordUtils.getVersion(storedPswd);
+            Context.getCurrentContext().setIsAdmin(user.getIs_admin());
             storedPswd = storedPswd.substring(5,storedPswd.length());
             PasswordUtils.Algorithm algorithm = PasswordUtils.getAlgorithm(version);
             String pswdForCheck = algorithm.encodePassword(login,passwd);

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.web.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 
 <fx:root text="Основные поля документа" type="javafx.scene.control.TitledPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <content>
@@ -40,7 +38,7 @@
                         <Label text="Дата документа:" GridPane.rowIndex="1" />
                         <Label text="Номер дела:" GridPane.rowIndex="2" />
                         <Label text="Дата утверждения:" GridPane.rowIndex="3" />
-                        <DatePicker fx:id="approvedate_field" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+                        <DatePicker fx:id="approvedate_field" disable="true" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
                         <DatePicker fx:id="docDate_field" disable="true" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
                         <Label text="Подписание акта:" GridPane.rowIndex="4" />
                         <TextField fx:id="actSigning_field" editable="false" styleClass="read-only" GridPane.columnIndex="1" GridPane.rowIndex="4" />
@@ -69,7 +67,7 @@
                                 <Label text="c" />
                                 <Label text="по" GridPane.columnIndex="2" />
                                 <DatePicker fx:id="auditFrom_field" disable="true" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-                                <DatePicker fx:id="auditTo_field" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" />
+                                <DatePicker fx:id="auditTo_field" disable="true" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" />
                             </children>
                         </GridPane>
                         <Label text="Срок проведения:" GridPane.rowIndex="11" />
@@ -77,8 +75,8 @@
                             <children>
                                 <Label text="c" />
                                 <Label text="по" GridPane.columnIndex="2" />
-                                <DatePicker fx:id="actualExecFrom_field" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-                                <DatePicker fx:id="actualExecTo_field" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" />
+                                <DatePicker fx:id="actualExecFrom_field" disable="true" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                                <DatePicker fx:id="actualExecTo_field" disable="true" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" />
                             </children>
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.0" minWidth="30.0" />

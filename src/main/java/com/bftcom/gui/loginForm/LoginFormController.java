@@ -55,7 +55,6 @@ public class LoginFormController implements Initializable {
             Stage stage = new Stage();
             Scene scene = new Scene(parent);
             stage.setScene(scene);
-            stage.setResizable(false);
             stage.setTitle("Электронный документ Акт проверки");
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 public void handle(WindowEvent we) {

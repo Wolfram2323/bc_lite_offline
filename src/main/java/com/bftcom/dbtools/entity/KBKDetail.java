@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "KBKDETAIL")
 @OnLineJoin(sqlExpression = " inner join controleventdoc ced on ced.document_id = KBKDETAIL.link_document_id" +
-        " inner join budget budg on budg.id = KBKDETAIL.budget_id" +
+        " inner join finsource fsr on fsr.id = KBKDETAIL.fsr_id" +
         " inner join actresultsauditdoc arad on arad.maindoc_id = ced.id" +
         " where arad.id = ?")
 
@@ -24,13 +24,10 @@ public class KBKDetail {
     @Column(name="ID", nullable = false, precision = 15, scale = 0)
     private BigInteger id;
 
-    @Column(name="BUDGET", length = 500)
-    @OnLineColumnInfo(columnName = "CAPTION", joinAlias = "BUDG")
-    private String budget;
+    @Column(name="FSRCAPTION", length = 500)
+    @OnLineColumnInfo(columnName = "CAPTION", joinAlias = "FSR")
+    private String fsr_caption;
 
-    @Column(name="FINYEAR", precision = 4, scale = 0)
-    @OnLineColumnInfo(columnName = "FINYEAR", joinAlias = "BUDG")
-    private  BigInteger finyear;
 
     @Column(name="FSR_ID")
     @OnLineColumnInfo
@@ -52,24 +49,17 @@ public class KBKDetail {
         this.id = id;
     }
 
-    public String getBudget() {
-        return budget;
-    }
-
-    public void setBudget(String budget) {
-        this.budget = budget;
-    }
-
-    public BigInteger getFinyear() {
-        return finyear;
-    }
-
-    public void setFinyear(BigInteger finyear) {
-        this.finyear = finyear;
-    }
 
     public Short getFsr_id() {
         return fsr_id;
+    }
+
+    public String getFsr_caption() {
+        return fsr_caption;
+    }
+
+    public void setFsr_caption(String fsr_caption) {
+        this.fsr_caption = fsr_caption;
     }
 
     public void setFsr_id(Short fsr_id) {

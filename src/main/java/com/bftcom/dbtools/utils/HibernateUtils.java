@@ -90,10 +90,12 @@ public class HibernateUtils {
         return con.getSession();
     }
 
-    public static void closeSession(Session session){
-        session.close();
+    public static void closeSession(){
         Context con = Context.getCurrentContext();
-        con.setSession(null);
+        if(con.getSession() != null){
+            con.getSession().close();
+            con.setSession(null);
+        }
     }
 
     public static void closeConnection(Session session){

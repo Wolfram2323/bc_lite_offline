@@ -2,6 +2,7 @@ package com.bftcom.dbtools.entity;
 
 import com.bftcom.dbtools.annotations.OnLineColumnInfo;
 import com.bftcom.dbtools.annotations.OnLineJoin;
+import javafx.beans.property.SimpleLongProperty;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -15,6 +16,7 @@ import java.math.BigInteger;
 @OnLineJoin(sqlExpression = " where ACTRESULTSAUDITDOCKBK.ARAUDITDOC_ID = ?")
 public class ARADkbk {
     @Id
+    @GeneratedValue
     @Column(name="ID", nullable = false, precision = 15, scale = 0)
     private BigInteger id;
 
@@ -23,7 +25,7 @@ public class ARADkbk {
     private BigDecimal auditedamount;
 
     @ManyToOne
-    @JoinColumn(name="ARAUDITDOC_ID", foreignKey = @ForeignKey(name="FK_ARADKBK_ARAD"), nullable = false)
+    @JoinColumn(name="ARAUDITDOC_ID", foreignKey = @ForeignKey(name="FK_ARADKBK_ARAD"), nullable = false, updatable = false, insertable = false)
     @OnLineColumnInfo(columnName = "ARAUDITDOC_ID",synch = true)
     private ActResultsAuditDoc actResultsAuditDoc;
 
@@ -64,4 +66,5 @@ public class ARADkbk {
     public void setKbkDetail(KBKDetail kbkDetail) {
         this.kbkDetail = kbkDetail;
     }
+
 }

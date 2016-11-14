@@ -27,7 +27,7 @@ import java.util.List;
         " inner join person pdeputy on pdeputy.id = empdeputy.person_id" +
         " inner join appointment apphead on apphead.id = emphead.appointment_id" +
         " inner join appointment appdeputy on appdeputy.id = empdeputy.appointment_id" +
-        " where ACTRESULTSAUDITDOC.ID = ?")
+        " where ACTRESULTSAUDITDOC.ID = ? and rownum = 1")
 public class ActResultsAuditDoc {
     @Id
     @Column(name="ID", nullable = false, precision = 15, scale = 0)
@@ -65,9 +65,9 @@ public class ActResultsAuditDoc {
     @OnLineColumnInfo(columnName = "CAPTION", joinAlias = "CF")
     private String controlform;
 
-    @Column(name="ACTSIGNING", scale = 0, precision = 1)
+    @Column(name="ACTSIGNING")
     @OnLineColumnInfo
-    private BigInteger actSigning;
+    private Short actSigning;
 
 
     @Column(name="CONTROLORG_CAPTION", length = 255)
@@ -184,7 +184,7 @@ public class ActResultsAuditDoc {
     @JoinColumn(name="ACTRESULTSAUDITDOC_ID", foreignKey = @ForeignKey(name="FK_ARADINSP_ARAD"))
     private List<ARADInspectors> aradInspectorses = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="ARAUDITDOC_ID", foreignKey = @ForeignKey(name="FK_ARADKBK_ARAD"))
     private List<ARADkbk> araDkbks = new ArrayList<>();
 
@@ -492,11 +492,11 @@ public class ActResultsAuditDoc {
         this.docDate = docDate;
     }
 
-    public BigInteger getActSigning() {
+    public Short getActSigning() {
         return actSigning;
     }
 
-    public void setActSigning(BigInteger actSigning) {
+    public void setActSigning(Short actSigning) {
         this.actSigning = actSigning;
     }
 }

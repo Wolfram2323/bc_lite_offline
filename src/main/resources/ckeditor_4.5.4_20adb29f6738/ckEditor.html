@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="../debug/ckeditor.js"></script>
+    <script type="text/javascript">
+        <!--
+        function getCkEditor(){
+            return CKEDITOR.instances['editor'];
+        }
+        //-->
+
+    </script>
+
+</head>
+<body>
+<form>
+            <textarea name="editor" id="editor" rows="10" cols="80">
+
+            </textarea>
+    <script type="text/javascript">
+        var CKConfig =  {
+            baseFloatZIndex : 19900,
+            removePlugins : 'about,save,flash,forms,iframe,newpage,scayt,smiley,language,wsc,bidi,blockquote,div,forms,chart,footnotes',
+            defaultLanguage: 'ru',
+            disableNativeSpellChecker: false,
+            pasteFromWordRemoveFontStyles: false,
+            pasteFromWordRemoveStyles: false,
+            pasteFromWordPromptCleanup: true,
+            extraAllowedContent: '*{*}',
+            allowedContent: true,
+            pasteFilter: null,
+            fontSize_sizes: '8/8pt;9/9pt;10/10pt;11/11pt;12/12pt;14/14pt;16/16pt;18/18pt;20/20pt;22/22pt;24/24pt;26/26pt;28/28pt;36/36pt;48/48pt;72/72pt'
+        };
+        CKEDITOR.replace( 'editor', CKConfig);
+    </script>
+</form>
+</body>
+</html>

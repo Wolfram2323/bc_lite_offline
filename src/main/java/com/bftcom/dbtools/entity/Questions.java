@@ -35,6 +35,10 @@ public class Questions {
     @OnLineColumnInfo(joinAlias = "PDET")
     private String typicalquest_line_number;
 
+    @Column(name="RESOLVED")
+    @OnLineColumnInfo
+    private Boolean resolved;
+
 
     @OneToMany
     @JoinColumn(name="QUESTIONS_ID", foreignKey = @ForeignKey(name="FK_VG_QUESTIONS"))
@@ -92,5 +96,13 @@ public class Questions {
 
     public void setActResultsAuditDoc(ActResultsAuditDoc actResultsAuditDoc) {
         this.actResultsAuditDoc = actResultsAuditDoc;
+    }
+
+    public Boolean getResolved() {
+        return resolved;
+    }
+
+    public void setResolved(Boolean resolved) {
+        this.resolved = resolved;
     }
 }

@@ -44,8 +44,7 @@ public class DataSynchronizer {
         entityForSynchronize.put(ViolationGroupKBK.class.getAnnotation(Table.class).name().toUpperCase(), ViolationGroupKBK.class);
     }
 
-    public void synchronizeData(String xmlFileName){
-        File xmlFile = new File(xmlFileName);
+    public void synchronizeData(File xmlFile){
         if(!xmlFile.exists()){
             throw new RuntimeException("Xml file not found!");
         }

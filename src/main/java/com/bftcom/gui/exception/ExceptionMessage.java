@@ -1,6 +1,7 @@
 package com.bftcom.gui.exception;
 
 import com.bftcom.dbtools.utils.HibernateUtils;
+import com.bftcom.gui.utils.GuiUtils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -47,7 +48,9 @@ public class ExceptionMessage {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK && fatal){
+            HibernateUtils.getCurrentSession().getTransaction().rollback();
             HibernateUtils.closeConnection(HibernateUtils.getCurrentSession());
+            GuiUtils.cleanHtmlDir();
             System.exit(0);
         }
     }

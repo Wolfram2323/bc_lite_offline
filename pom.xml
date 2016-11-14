@@ -23,6 +23,11 @@
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>com.bftcom.gui.loginForm.LoginForm</mainClass>
+            </manifest>
+          </archive>
           <finalName>${project.build.finalName}_full</finalName>
           <appendAssemblyId>false</appendAssemblyId>
         </configuration>

@@ -9,10 +9,12 @@ public class Context {
 
     private Session session;
     private static Context instance;
+    private boolean isAdmin;
 
-    public static Context getCurrentContext() {
+
+    public static synchronized Context getCurrentContext() {
         if(instance == null) {
-            return new Context();
+            instance = new Context();
         }
         return instance;
     }
@@ -23,5 +25,13 @@ public class Context {
 
     public void setSession(Session session) {
         this.session = session;
+    }
+
+    public  boolean isAdmin(){
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin){
+        this.isAdmin = isAdmin;
     }
 }

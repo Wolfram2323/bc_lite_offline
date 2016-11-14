@@ -6,3 +6,25 @@
 .read-only {
     -fx-background-color: #a4a9a5, #ced1c8;
 }
+
+.date-picker:disabled, .date-picker:disabled > .text-field {
+    -fx-opacity: 0.9 ;
+}
+
+.rotateTab {
+    -fx-rotate: 90;
+}
+
+.vTabPane {
+    -fx-tab-min-width: 200;
+    -fx-tab-min-height: 150;
+    -fx-tab-max-width: 200;
+    -fx-tab-max-height: 150;
+}
+
+.addButton{
+    -fx-graphic: url("/img/add24.gif");
+}
+.deleteButton{
+    -fx-graphic: url("/img/delete24.gif");
+}
