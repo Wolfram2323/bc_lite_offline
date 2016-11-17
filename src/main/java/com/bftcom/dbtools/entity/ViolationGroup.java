@@ -63,7 +63,7 @@ public class ViolationGroup {
 
     @Column(name="BNPA_CAPTION" , length = 500)
     @OnLineColumnInfo(synch = true)
-    private Date bnpa_caption;
+    private String bnpa_caption;
 
     @Column(name="BNPA_DATE_BNPA", length = 500)
     @OnLineColumnInfo(synch = true)
@@ -209,11 +209,11 @@ public class ViolationGroup {
         this.disagreementaccepted = disagreementaccepted;
     }
 
-    public Date getBnpa_caption() {
+    public String getBnpa_caption() {
         return bnpa_caption;
     }
 
-    public void setBnpa_caption(Date bnpa_caption) {
+    public void setBnpa_caption(String bnpa_caption) {
         this.bnpa_caption = bnpa_caption;
     }
 

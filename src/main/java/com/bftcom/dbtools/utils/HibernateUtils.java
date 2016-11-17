@@ -103,7 +103,6 @@ public class HibernateUtils {
     }
 
     public static void closeConnection(Session session){
-        log.info("ShutDown connection for session " + session.toString());
         SessionFactory sf = session.getSessionFactory();
         session.close();
         sf.close();

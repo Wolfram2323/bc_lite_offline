@@ -87,9 +87,6 @@ public class DBCreation {
         }
     }
 
-    public static void shutDownCurConnection(){
-        HibernateUtils.closeConnection(HibernateUtils.getCurrentSession());
-    }
 
     public static Map<String,String> getUploadSql(){
         Map<String,String> result = new ConcurrentHashMap<>();
@@ -191,6 +188,7 @@ public class DBCreation {
                     throw new RuntimeException("Import " + tableName + " to offline faild!");
                 }
             });
+            session.close();
         }
     }
 
@@ -210,6 +208,7 @@ public class DBCreation {
             user.setLogin(login);
             user.setIs_admin(isAdmin);
             HibernateUtils.saveEntity(session,user);
+            session.close();
         }
     }
 
@@ -218,6 +217,9 @@ public class DBCreation {
             SysUser user = session.get(SysUser.class, id);
             user.setPsswd(pass);
             HibernateUtils.saveEntity(session,user);
+            HibernateUtils.closeConnection(session);
+            driver = initJdbcDriver();
+            shutDownByDriver(HibernateUtils.DERBY_DB_URL);
         }
     }
 
