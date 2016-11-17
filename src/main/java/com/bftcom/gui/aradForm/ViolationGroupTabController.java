@@ -288,13 +288,13 @@ public class ViolationGroupTabController extends AbstractBftTabController {
                 });
             }
             if(violation.getNoneedcorrection() != null){
-                noneedcorrection_cb.setSelected(violation.getNoneedcorrection());
+                noneedcorrection_cb.setSelected(GuiUtils.IntegerToBoolean(violation.getNoneedcorrection()));
             }
             if(violation.getHavedisagreements() != null){
-                hasDisAgr_cb.setSelected(violation.getHavedisagreements());
+                hasDisAgr_cb.setSelected(GuiUtils.IntegerToBoolean(violation.getHavedisagreements()));
             }
             if(violation.getDisagreementaccepted() != null){
-                disArgAccepted_cb.setSelected(violation.getDisagreementaccepted());
+                disArgAccepted_cb.setSelected(GuiUtils.IntegerToBoolean(violation.getDisagreementaccepted()));
             }
 
             ObservableList<ViolationKBKTVObject> violkbkData = FXCollections.observableArrayList();
@@ -328,9 +328,9 @@ public class ViolationGroupTabController extends AbstractBftTabController {
         }
         violation.setViolationDescription(violDesc_engine.executeScript("getCkEditor().getData();").toString());
         violation.setNoneedcorrectionBasis(noCorrect_engine.executeScript("getCkEditor().getData();").toString());
-        violation.setNoneedcorrection(noneedcorrection_cb.isSelected());
-        violation.setHavedisagreements(hasDisAgr_cb.isSelected());
-        violation.setDisagreementaccepted(disArgAccepted_cb.isSelected());
+        violation.setNoneedcorrection(GuiUtils.BooleanToInteger(noneedcorrection_cb.isSelected()));
+        violation.setHavedisagreements(GuiUtils.BooleanToInteger(hasDisAgr_cb.isSelected()));
+        violation.setDisagreementaccepted(GuiUtils.BooleanToInteger(disArgAccepted_cb.isSelected()));
         GuiUtils.textAndDateFieldGetUp(violation,this,Arrays.asList("violation_field", "violationCaption_field", "violationType_field"));
         submitKBK(violation);
 

@@ -6,7 +6,11 @@ import com.bftcom.dbtools.entity.*;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.c3p0.internal.C3P0ConnectionProvider;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.internal.SessionFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,11 +103,13 @@ public class HibernateUtils {
     }
 
     public static void closeConnection(Session session){
+        log.info("ShutDown connection for session " + session.toString());
         SessionFactory sf = session.getSessionFactory();
         session.close();
         sf.close();
         Context con = Context.getCurrentContext();
         con.setSession(null);
+        log.info("Connection stop.");
     }
 
     public static void saveEntity(Session session,Object entity ){

@@ -123,4 +123,16 @@ public  class GuiUtils {
             e.printStackTrace();
         }
     }
+
+    public static boolean IntegerToBoolean(Integer value){
+        return  value!= 0 ;
+    }
+
+    public static Integer BooleanToInteger(boolean value){
+        if(value){
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }

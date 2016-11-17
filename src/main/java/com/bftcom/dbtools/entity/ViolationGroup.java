@@ -5,7 +5,6 @@ import com.bftcom.dbtools.annotations.OnLineJoin;
 
 import javax.persistence.*;
 import java.math.BigInteger;
-import java.sql.Clob;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ public class ViolationGroup {
 
     @Column(name="NONEEDCORRECTION", nullable = false)
     @OnLineColumnInfo(synch = true)
-    private Boolean noneedcorrection;
+    private Integer noneedcorrection;
 
     @Column(name="NONEEDCORRECTIONBASIS", columnDefinition = "clob")
     @Lob
@@ -52,11 +51,11 @@ public class ViolationGroup {
 
     @Column(name = "HAVEDISAGREEMENTS")
     @OnLineColumnInfo(synch = true)
-    private Boolean havedisagreements;
+    private Integer havedisagreements;
 
     @Column(name = "DISAGREEMENTSACCEPTED")
     @OnLineColumnInfo(synch = true)
-    private Boolean disagreementaccepted;
+    private Integer disagreementaccepted;
 
     @OneToOne
     @JoinColumn(name="BROKENNPA_ID")
@@ -137,11 +136,11 @@ public class ViolationGroup {
         this.violationDescription_short = violationDescription_short;
     }
 
-    public Boolean getNoneedcorrection() {
+    public Integer getNoneedcorrection() {
         return noneedcorrection;
     }
 
-    public void setNoneedcorrection(Boolean noneedcorrection) {
+    public void setNoneedcorrection(Integer noneedcorrection) {
         this.noneedcorrection = noneedcorrection;
     }
 
@@ -194,19 +193,19 @@ public class ViolationGroup {
         this.actpagenumber = actpagenumber;
     }
 
-    public Boolean getHavedisagreements() {
+    public Integer getHavedisagreements() {
         return havedisagreements;
     }
 
-    public void setHavedisagreements(Boolean havedisagreements) {
+    public void setHavedisagreements(Integer havedisagreements) {
         this.havedisagreements = havedisagreements;
     }
 
-    public Boolean getDisagreementaccepted() {
+    public Integer getDisagreementaccepted() {
         return disagreementaccepted;
     }
 
-    public void setDisagreementaccepted(Boolean disagreementaccepted) {
+    public void setDisagreementaccepted(Integer disagreementaccepted) {
         this.disagreementaccepted = disagreementaccepted;
     }
 

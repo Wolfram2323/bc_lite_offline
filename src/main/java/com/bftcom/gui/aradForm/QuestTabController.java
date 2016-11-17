@@ -93,7 +93,7 @@ public class QuestTabController extends AbstractBftTabController {
         caption_field.setText(quest.getCaption());
 
         if(quest.getResolved() != null){
-            resolved_cb.setSelected(quest.getResolved());
+            resolved_cb.setSelected(GuiUtils.IntegerToBoolean(quest.getResolved()));
         }
 
         result_engine = result_field.getEngine();
@@ -126,7 +126,7 @@ public class QuestTabController extends AbstractBftTabController {
         Questions quest = session.get(Questions.class,quest_id);
         Object value = result_engine.executeScript("getCkEditor().getData();");
         quest.setResult(value.toString());
-        quest.setResolved(resolved_cb.isSelected());
+        quest.setResolved(GuiUtils.BooleanToInteger(resolved_cb.isSelected()));
         violGroup_tabs.getTabs().forEach(tab->((AbstractBftTabController)tab).submitData(arad));
         session.saveOrUpdate(quest);
     }

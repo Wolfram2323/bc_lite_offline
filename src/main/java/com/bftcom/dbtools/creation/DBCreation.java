@@ -69,16 +69,21 @@ public class DBCreation {
             e.printStackTrace();
 
         } finally {
-           try{
-               driver.connect(HibernateUtils.DERBY_DB_URL+"; shutdown=true", new Properties());
-           } catch (SQLException e){
-               if(e.getSQLState().equals("08006")){
-                   log.info("DataBase connection is shutdown");
-               } else {
-                   log.error("DabaBase creation failed! See stack trace for more information!");
-               }
+           shutDownByDriver(HibernateUtils.DERBY_DB_URL);
+        }
+    }
 
-           }
+    private static void shutDownByDriver(String url){
+        try{
+            log.info("Driver "+ driver);
+            driver.connect(url+"; shutdown=true", new Properties());
+        } catch (SQLException e){
+            if(e.getSQLState().equals("08006")){
+                log.info("DataBase connection is shutdown");
+            } else {
+                log.error("DabaBase creation failed! See stack trace for more information!");
+            }
+
         }
     }
 

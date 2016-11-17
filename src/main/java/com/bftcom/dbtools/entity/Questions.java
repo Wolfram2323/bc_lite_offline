@@ -37,7 +37,7 @@ public class Questions {
 
     @Column(name="RESOLVED")
     @OnLineColumnInfo
-    private Boolean resolved;
+    private Integer resolved;
 
 
     @OneToMany
@@ -98,11 +98,11 @@ public class Questions {
         this.actResultsAuditDoc = actResultsAuditDoc;
     }
 
-    public Boolean getResolved() {
+    public Integer getResolved() {
         return resolved;
     }
 
-    public void setResolved(Boolean resolved) {
+    public void setResolved(Integer resolved) {
         this.resolved = resolved;
     }
 }
