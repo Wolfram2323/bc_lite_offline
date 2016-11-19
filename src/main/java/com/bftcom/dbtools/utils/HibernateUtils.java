@@ -62,6 +62,7 @@ public class HibernateUtils {
                 .addAnnotatedClass(ARADkbk.class)
                 .addAnnotatedClass(KBKDetail.class)
                 .addAnnotatedClass(Questions.class)
+                .addAnnotatedClass(QuestInspectors.class)
                 .addAnnotatedClass(SysUser.class)
                 .addAnnotatedClass(Violation.class)
                 .addAnnotatedClass(ViolationGroup.class)
@@ -70,7 +71,7 @@ public class HibernateUtils {
     }
     static {
         annotatedClasses = Arrays.asList(Appointment.class, BrokenNPA.class, KBKDetail.class,  Violation.class, ViolationType.class,
-                 SysUser.class, Employee.class, EmployeeGroup.class, ActResultsAuditDoc.class, Questions.class, ARADInspectors.class, ARADkbk.class, ViolationGroup.class, ViolationGroupKBK.class);
+                 SysUser.class, Employee.class, EmployeeGroup.class, ActResultsAuditDoc.class, Questions.class, QuestInspectors.class, ARADInspectors.class, ARADkbk.class, ViolationGroup.class, ViolationGroupKBK.class);
     }
 
     public static Session getSession(String url){

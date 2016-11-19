@@ -98,7 +98,7 @@ public class ViolationGroupTabController extends AbstractBftTabController {
     @FXML
     private TableColumn budget_col;
 
-
+    private BigInteger quest_id;
     private BigInteger violationGroup_id;
 
     private BigInteger violation_id;
@@ -227,6 +227,7 @@ public class ViolationGroupTabController extends AbstractBftTabController {
     }
 
     public void initialize(ViolationGroup violation, BigInteger quest_id){
+        this.quest_id = quest_id;
         tabName = new Label();
         tabName.setText(violation == null ? "Нарушение" : violation.getViolation().getCaption());
         tabName.setWrapText(true);
@@ -236,7 +237,6 @@ public class ViolationGroupTabController extends AbstractBftTabController {
         stack.getChildren().add(tabName);
         tabName.prefWidthProperty().bind(stack.prefWidthProperty());
         violTab.setGraphic(stack);
-        violTab.getStyleClass().add("rotateTab");
 
         violDesc_engine = violDesc_web.getEngine();
         GuiUtils.loadCkEditorToWebView(violDesc_engine, violation == null ? "violatioDesc_" + UUID.randomUUID().toString() : "violatioDesc_" +violation.getId().toString());
@@ -264,8 +264,15 @@ public class ViolationGroupTabController extends AbstractBftTabController {
             GuiUtils.textAndDateFieldSetUp(violation,this, Arrays.asList("violation_field", "violationCaption_field", "violationType_field"));
 
             violation_field.setText(violation.getViolation().getCode() == null ? "" : violation.getViolation().getCode());
-            violationCaption_field.setText(violation.getViolation().getCaption() == null ? "" : violation.getViolation().getCaption());
-            violationType_field.setText(violation.getViolationType().getCaption() == null ? "" : violation.getViolationType().getCaption());
+            if(violation.getViolation() != null ){
+                violationCaption_field.setText(violation.getViolation().getCaption() == null ? "" : violation.getViolation().getCaption());
+                violation_id = violation.getViolation().getId();
+            }
+            if(violation.getViolationType() != null ){
+                violationType_field.setText(violation.getViolationType().getCaption() == null ? "" : violation.getViolationType().getCaption());
+                violationType_id = violation.getViolationType().getId();
+            }
+
 
             if(violation.getViolationDescription() != null){
                 violDesc_engine.documentProperty().addListener(new ChangeListener<Document>() {
@@ -299,6 +306,8 @@ public class ViolationGroupTabController extends AbstractBftTabController {
 
             ObservableList<ViolationKBKTVObject> violkbkData = FXCollections.observableArrayList();
             violation.getViolationGroupKBK().forEach(kbkRow->violkbkData.add(new ViolationKBKTVObject(kbkRow)));
+        } else {
+            violTab.getStyleClass().add("rotateTab"); //при заполненных полял крутит 2 раза
         }
     }
 
@@ -333,7 +342,9 @@ public class ViolationGroupTabController extends AbstractBftTabController {
         violation.setDisagreementaccepted(GuiUtils.BooleanToInteger(disArgAccepted_cb.isSelected()));
         GuiUtils.textAndDateFieldGetUp(violation,this,Arrays.asList("violation_field", "violationCaption_field", "violationType_field"));
         submitKBK(violation);
-
+        session.saveOrUpdate(violation);
+        Questions quest = session.get(Questions.class, quest_id);
+        quest.getViolationGroup().add(violation);
 
     }
 

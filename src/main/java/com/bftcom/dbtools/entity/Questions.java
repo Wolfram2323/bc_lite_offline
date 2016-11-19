@@ -7,7 +7,9 @@ import javax.persistence.*;
 import java.math.BigInteger;
 import java.sql.Clob;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by k.nikitin on 23.09.2016.
@@ -48,6 +50,10 @@ public class Questions {
     @JoinColumn(name="ACTRESULTSAUDITDOC_ID", foreignKey = @ForeignKey(name="FK_QUESTIONS_ARAD"))
     @OnLineColumnInfo(columnName = "ACTRESULTSAUDITDOC_ID",  synch = true)
     private ActResultsAuditDoc actResultsAuditDoc;
+
+    @OneToMany
+    @JoinColumn(name="QUEST_ID", foreignKey = @ForeignKey(name = "FK_QUESTINSP_QUEST"))
+    private Set<QuestInspectors> questInspectorsSet = new HashSet<>();
 
     public BigInteger getId() {
         return id;
@@ -104,5 +110,13 @@ public class Questions {
 
     public void setResolved(Integer resolved) {
         this.resolved = resolved;
+    }
+
+    public Set<QuestInspectors> getQuestInspectorsSet() {
+        return questInspectorsSet;
+    }
+
+    public void setQuestInspectorsSet(Set<QuestInspectors> questInspectorsSet) {
+        this.questInspectorsSet = questInspectorsSet;
     }
 }

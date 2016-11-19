@@ -38,11 +38,12 @@ public class DBCreation {
     static EmbeddedDriver driver;
 
 
-    private static EmbeddedDriver initJdbcDriver() {
+    public static EmbeddedDriver initJdbcDriver() {
         try{
             log.info("Derby driver initialization!");
-            EmbeddedDriver driver = (EmbeddedDriver)Class.forName(HibernateUtils.DERBY_DRIVER_CLASS).newInstance();
-            DriverManager.registerDriver(driver);
+            EmbeddedDriver driverInst = (EmbeddedDriver)Class.forName(HibernateUtils.DERBY_DRIVER_CLASS).newInstance();
+            DriverManager.registerDriver(driverInst);
+            driver = driverInst;
             return  driver;
         } catch (ClassNotFoundException | IllegalAccessException |InstantiationException |SQLException e){
             log.error("Derby jdbc driver not found or there was error during initialization!");
@@ -51,14 +52,13 @@ public class DBCreation {
     }
 
 
-    public static void createDB(){
-        driver = initJdbcDriver();
+    public static void createDB(String url){
         try {
             log.info("DataBase creation started!");
-            driver.connect(HibernateUtils.DERBY_DB_URL+";create=true;user="+HibernateUtils.DERBY_USER_NAME
+            driver.connect(url+";create=true;user="+HibernateUtils.DERBY_USER_NAME
                     +";password="+HibernateUtils.DERBY_PSWD, new Properties());
             log.info("Data base schema creation started!");
-            Session session = HibernateUtils.getSession(null);
+            Session session = HibernateUtils.getSession(url);
             HibernateUtils.closeConnection(session);
 
 
@@ -69,7 +69,7 @@ public class DBCreation {
             e.printStackTrace();
 
         } finally {
-           shutDownByDriver(HibernateUtils.DERBY_DB_URL);
+           shutDownByDriver(url);
         }
     }
 
@@ -81,7 +81,8 @@ public class DBCreation {
             if(e.getSQLState().equals("08006")){
                 log.info("DataBase connection is shutdown");
             } else {
-                log.error("DabaBase creation failed! See stack trace for more information!");
+                e.printStackTrace();
+                log.error("DabaBase shutdown failed! See stack trace for more information!");
             }
 
         }
@@ -218,8 +219,6 @@ public class DBCreation {
             user.setPsswd(pass);
             HibernateUtils.saveEntity(session,user);
             HibernateUtils.closeConnection(session);
-            driver = initJdbcDriver();
-            shutDownByDriver(HibernateUtils.DERBY_DB_URL);
         }
     }
 

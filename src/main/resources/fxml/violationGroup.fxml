@@ -40,7 +40,7 @@
                                       <Label text="Наименование нарушения:" GridPane.rowIndex="1" />
                                       <Accordion GridPane.columnSpan="2" GridPane.rowIndex="2">
                                           <panes>
-                                              <TitledPane animated="false" text="untitled 1">
+                                              <TitledPane animated="false" text="Нарушенные НПА">
                                                   <content>
                                                       <ScrollPane fitToWidth="true" prefViewportHeight="112.0" prefViewportWidth="1089.0">
                                                           <content>

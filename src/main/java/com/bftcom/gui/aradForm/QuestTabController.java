@@ -6,14 +6,18 @@ import com.bftcom.dbtools.entity.Questions;
 import com.bftcom.dbtools.entity.ViolationGroup;
 import com.bftcom.dbtools.utils.HibernateUtils;
 import com.bftcom.gui.exception.ExceptionMessage;
+import com.bftcom.gui.tableViewStoreObj.EmployeeGroupTVObject;
 import com.bftcom.gui.utils.GuiUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -38,6 +42,16 @@ public class QuestTabController extends AbstractBftTabController {
     private WebView result_field;
     @FXML
     private  TabPane violGroup_tabs;
+    @FXML
+    private TableView questInsp_tbl;
+    @FXML
+    private TableColumn id_col;
+    @FXML
+    private TableColumn fio_col;
+    @FXML
+    private TableColumn app_col;
+    @FXML
+    private TableColumn org_col;
 
     private WebEngine result_engine;
 
@@ -48,6 +62,7 @@ public class QuestTabController extends AbstractBftTabController {
         ViolationGroupTabController violationGroupController = new ViolationGroupTabController();
         violGroup_tabs.getTabs().add(violationGroupController);
         violationGroupController.initialize(null, quest_id);
+        violGroup_tabs.getSelectionModel().select(violationGroupController);
     }
     @FXML
     private void deleteViolation(ActionEvent event){
@@ -116,7 +131,13 @@ public class QuestTabController extends AbstractBftTabController {
             violGroup_tabs.getTabs().add(violationGroupController);
             violationGroupController.initialize(violation, quest_id);
         });
-
+        ObservableList<EmployeeGroupTVObject> qiList = FXCollections.observableArrayList();
+        id_col.setCellValueFactory(new PropertyValueFactory<EmployeeGroupTVObject,Long>("id"));
+        fio_col.setCellValueFactory(new PropertyValueFactory<EmployeeGroupTVObject, String>("person_fio"));
+        app_col.setCellValueFactory(new PropertyValueFactory<EmployeeGroupTVObject, String>("app_caption"));
+        org_col.setCellValueFactory(new PropertyValueFactory<EmployeeGroupTVObject,String>("org_caption"));
+        quest.getQuestInspectorsSet().forEach(qi->qiList.add(new EmployeeGroupTVObject(qi)));
+        questInsp_tbl.setItems(qiList);
 
     }
 

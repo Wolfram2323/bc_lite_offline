@@ -61,6 +61,25 @@
                                         <Font size="14.0" />
                                     </font>
                                 </TitledPane>
+                                <TitledPane animated="false" text="Ответственные исполнители">
+                                    <content>
+                                        <ScrollPane fitToWidth="true" prefViewportHeight="539.0" prefViewportWidth="1159.0">
+                                            <content>
+                                                <TableView fx:id="questInsp_tbl" prefHeight="200.0" prefWidth="200.0">
+                                                    <columns>
+                                                        <TableColumn fx:id="id_col" editable="false" prefWidth="75.0" text="ID" visible="false" />
+                                                        <TableColumn fx:id="fio_col" editable="false" prefWidth="161.0" text="ФИО члена комиссии" />
+                                                        <TableColumn fx:id="app_col" editable="false" minWidth="0.0" prefWidth="155.0" text="Должность члена комиссии" />
+                                                        <TableColumn fx:id="org_col" editable="false" prefWidth="136.0" text="Организация члена комиссии" />
+                                                    </columns>
+                                                </TableView>
+                                            </content>
+                                        </ScrollPane>
+                                    </content>
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </TitledPane>
                             </panes>
                         </Accordion>
                         <TextArea fx:id="caption_field" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" />

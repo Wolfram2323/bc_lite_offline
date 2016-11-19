@@ -28,7 +28,7 @@ public class LoginForm extends Application {
     }
 
     public void findDerby(OfflineVersion version){
-        File home = new File("./");
+        File home = new File("./offlineDataBase");
         File[] resultSearch = home.listFiles((pathname, fileName) -> {
             return fileName.startsWith("derby_");
         });

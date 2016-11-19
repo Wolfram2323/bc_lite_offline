@@ -1,6 +1,7 @@
 package com.bftcom.gui.tableViewStoreObj;
 
 import com.bftcom.dbtools.entity.EmployeeGroup;
+import com.bftcom.dbtools.entity.QuestInspectors;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TableColumn;
@@ -25,6 +26,14 @@ public class EmployeeGroupTVObject {
         this.app_caption = new SimpleStringProperty(empg.getEmployee().getAppointment().getCaption());
         this.org_caption = new SimpleStringProperty(empg.getEmployee().getOrg_caption());
         this.insp_status = new SimpleStringProperty(empg.getInsp_status());
+    }
+
+    public EmployeeGroupTVObject(QuestInspectors qi){
+        this.id = new SimpleLongProperty(qi.getId().longValue());
+        this.person_fio = new SimpleStringProperty(qi.getEmployeeGroup().getEmployee().getPerson_fio());
+        this.app_caption = new SimpleStringProperty(qi.getEmployeeGroup().getEmployee().getAppointment().getCaption());
+        this.org_caption = new SimpleStringProperty(qi.getEmployeeGroup().getEmployee().getOrg_caption());
+        this.insp_status = new SimpleStringProperty();
     }
 
     public long getId() {

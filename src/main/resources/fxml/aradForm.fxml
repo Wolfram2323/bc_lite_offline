@@ -14,7 +14,7 @@
             <ColumnConstraints hgrow="NEVER" maxWidth="308.0" minWidth="10.0" prefWidth="178.0" />
             <ColumnConstraints hgrow="NEVER" maxWidth="560.0" minWidth="10.0" prefWidth="119.0" />
             <ColumnConstraints hgrow="NEVER" maxWidth="560.0" minWidth="10.0" prefWidth="121.0" />
-          <ColumnConstraints hgrow="ALWAYS" maxWidth="532.0" minWidth="10.0" prefWidth="330.0" />
+          <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="330.0" />
             <ColumnConstraints hgrow="NEVER" maxWidth="142.0" minWidth="10.0" prefWidth="78.0" />
             <ColumnConstraints hgrow="NEVER" maxWidth="119.0" minWidth="10.0" prefWidth="60.0" />
         </columnConstraints>
