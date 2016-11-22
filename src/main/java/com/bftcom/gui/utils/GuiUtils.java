@@ -1,8 +1,6 @@
 package com.bftcom.gui.utils;
 
-import com.bftcom.gui.exception.ExceptionMessage;
 import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import org.apache.commons.io.FileUtils;
 
 import java.beans.IntrospectionException;
@@ -12,7 +10,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Date;
 import java.util.List;
@@ -61,7 +58,7 @@ public  class GuiUtils {
                     method.invoke(field.get(control),value);
                 }
             } catch (IllegalAccessException|InvocationTargetException |IntrospectionException |NoSuchMethodException e) {
-                ExceptionMessage.throwExceptionForJavaFX(e,"Загрузка электронного документа завершилась с ошибкой",null,true);
+                Message.throwExceptionForJavaFX(e,"Загрузка электронного документа завершилась с ошибкой",null,true);
             }
 
         }
@@ -97,7 +94,7 @@ public  class GuiUtils {
                     pd.getWriteMethod().invoke(entity,value);
                 }
             } catch (IllegalAccessException|InvocationTargetException |IntrospectionException |NoSuchMethodException e) {
-                ExceptionMessage.throwExceptionForJavaFX(e,"Загрузка электронного документа завершилась с ошибкой",null,true);
+                Message.throwExceptionForJavaFX(e,"Загрузка электронного документа завершилась с ошибкой",null,true);
             }
 
         }
@@ -111,7 +108,7 @@ public  class GuiUtils {
             engine.load(html.toURI().toURL().toExternalForm());
         } catch (IOException e) {
             e.printStackTrace();
-            ExceptionMessage.throwExceptionForJavaFX(e, "Ошибка при загрузке редактора текста", null, true);
+            Message.throwExceptionForJavaFX(e, "Ошибка при загрузке редактора текста", null, true);
         }
 
     }

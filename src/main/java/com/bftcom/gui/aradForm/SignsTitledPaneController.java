@@ -3,10 +3,9 @@ package com.bftcom.gui.aradForm;
 import com.bftcom.context.Context;
 import com.bftcom.dbtools.entity.ARADInspectors;
 import com.bftcom.dbtools.entity.ActResultsAuditDoc;
-import com.bftcom.dbtools.entity.Employee;
 import com.bftcom.dbtools.entity.EmployeeGroup;
 import com.bftcom.dbtools.utils.HibernateUtils;
-import com.bftcom.gui.exception.ExceptionMessage;
+import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.referenceList.ReferenceListController;
 import com.bftcom.gui.tableViewStoreObj.AradInspectorsTVbject;
 import com.bftcom.gui.tableViewStoreObj.AradKbkTVObject;
@@ -83,7 +82,7 @@ public class SignsTitledPaneController extends AbstractBftTitledPaneController {
         try {
             fxmlLoader.load();
         } catch (IOException e) {
-            ExceptionMessage.throwExceptionForJavaFX(e,null,null,true);
+            Message.throwExceptionForJavaFX(e,null,null,true);
         }
     }
 

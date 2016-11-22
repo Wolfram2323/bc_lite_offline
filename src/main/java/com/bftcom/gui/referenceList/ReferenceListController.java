@@ -1,6 +1,6 @@
 package com.bftcom.gui.referenceList;
 
-import com.bftcom.gui.exception.ExceptionMessage;
+import com.bftcom.gui.utils.Message;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -48,7 +48,7 @@ public class ReferenceListController implements Initializable {
                     table.getItems().add(constructor.newInstance(entity));
                 } catch (NoSuchMethodException|IllegalAccessException|InstantiationException|InvocationTargetException e) {
                     e.printStackTrace();
-                    ExceptionMessage.throwExceptionForJavaFX(e,"Произошла ошибка загрузки справочника", null,false);
+                    Message.throwExceptionForJavaFX(e,"Произошла ошибка загрузки справочника", null,false);
                 }
 
             });

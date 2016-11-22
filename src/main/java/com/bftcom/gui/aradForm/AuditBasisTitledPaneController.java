@@ -1,13 +1,12 @@
 package com.bftcom.gui.aradForm;
 
 import com.bftcom.dbtools.entity.ActResultsAuditDoc;
-import com.bftcom.gui.exception.ExceptionMessage;
+import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.utils.GuiUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class AuditBasisTitledPaneController extends AbstractBftTitledPaneControl
         try {
             fxmlLoader.load();
         } catch (IOException e) {
-            ExceptionMessage.throwExceptionForJavaFX(e,null,null,true);
+            Message.throwExceptionForJavaFX(e,null,null,true);
         }
     }
 

@@ -1,7 +1,8 @@
 package com.bftcom.gui.loginForm;
 
 import com.bftcom.context.OfflineVersion;
-import com.bftcom.gui.exception.ExceptionMessage;
+import com.bftcom.dbtools.creation.DBCreation;
+import com.bftcom.gui.utils.Message;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -32,10 +33,10 @@ public class LoginForm extends Application {
         File[] resultSearch = home.listFiles((pathname, fileName) -> {
             return fileName.startsWith("derby_");
         });
-        if(resultSearch.length == 0){
+        if(resultSearch == null || resultSearch.length == 0){
             RuntimeException e = new RuntimeException("База данных не найдена!");
             e.printStackTrace();
-            ExceptionMessage.throwExceptionForJavaFX(e, "Не удалось найти базу данных для подключения", "Скопируйтее базу данных, полученную с онлайн клиента " +
+            Message.throwExceptionForJavaFX(e, "Не удалось найти базу данных для подключения", "Скопируйтее базу данных, полученную с онлайн клиента " +
                     "в корневую директорию оффлайн клиента", true);
 
         }
@@ -48,7 +49,7 @@ public class LoginForm extends Application {
         }
             RuntimeException e = new RuntimeException("База данных не найдена!");
             e.printStackTrace();
-            ExceptionMessage.throwExceptionForJavaFX(e, "Не удалось найти базу данных для подключения требуемой версии", "Скопируйтее базу данных версии " + version.toString()
+            Message.throwExceptionForJavaFX(e, "Не удалось найти базу данных для подключения требуемой версии", "Скопируйтее базу данных версии " + version.toString()
                     + ", полученную с онлайн клиента в корневую директорию оффлайн клиента", true);
     }
 

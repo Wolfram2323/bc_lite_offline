@@ -5,20 +5,31 @@ import com.bftcom.dbtools.entity.ActResultsAuditDoc;
 import com.bftcom.dbtools.utils.DataSynchronizer;
 import com.bftcom.dbtools.utils.DataUploader;
 import com.bftcom.dbtools.utils.HibernateUtils;
-import com.bftcom.gui.exception.ExceptionMessage;
+import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.utils.GuiUtils;
+import com.bftcom.report.BirtReport;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
 import org.hibernate.query.Query;
 
+import java.awt.*;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.URL;
+import java.sql.Connection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -36,6 +47,8 @@ public class ActResultsAuditDocFormController implements Initializable {
     private Button impBtn;
     @FXML
     private Button stopBtn;
+    @FXML
+    private Button print_btn;
 
     @FXML
     private Button saveBtn;
@@ -87,7 +100,7 @@ public class ActResultsAuditDocFormController implements Initializable {
 
         } catch (Throwable e){
             e.printStackTrace();
-            ExceptionMessage.throwExceptionForJavaFX(e,"Произошла ошибка", null, false);
+            Message.throwExceptionForJavaFX(e,"Произошла ошибка", null, false);
         }
 
 
@@ -101,7 +114,10 @@ public class ActResultsAuditDocFormController implements Initializable {
         try{
             session.saveOrUpdate(arad);
             session.getTransaction().commit();
-        } finally {
+            Message.showInfoMessage("Сохранение завершено", "Сохранение успешно.");
+        }catch (Throwable e){
+            Message.throwExceptionForJavaFX(e,"Сохранение завершено с ошибкой","Сохранение невозможно. Смотрите описание ошибки ниже", false);
+        }finally {
             HibernateUtils.closeSession();
             HibernateUtils.getCurrentSession().beginTransaction();
         }
@@ -158,6 +174,7 @@ public class ActResultsAuditDocFormController implements Initializable {
         } else {
             dataUploader.exportForOtherOffline();
         }
+        Message.showInfoMessage("Завершение выгрузки данных", "Процесс выгрузки данных завершен.");
 
     }
     @FXML
@@ -169,6 +186,37 @@ public class ActResultsAuditDocFormController implements Initializable {
             DataSynchronizer dataSynchronizer = new DataSynchronizer();
             dataSynchronizer.synchronizeData(file);
         }
+        Message.showInfoMessage("Завершение загрузки данных", "Процесс загрузки данных в систему завершен.");
 
     }
+    @FXML
+    private void printDoc(ActionEvent event){
+        try{
+            print_btn.setDisable(true);
+            Session session = HibernateUtils.getSession(null);
+            Connection conection = ((SessionImpl)session).connection();
+            String outputFormat = "doc";
+            Map<String,Object> params = new HashMap<>();
+            params.put("ID",arad_id);
+            try {
+                File report = File.createTempFile("birt","." + outputFormat);
+                InputStream template = getClass().getResourceAsStream("/reportTemplates/actResultControlEvent.rptdesign");
+                FileOutputStream reportStream = new FileOutputStream(report);
+//                BirtReport.generate(outputFormat, template,reportStream ,params,conection);
+                template.close();
+                reportStream.close();
+                Desktop.getDesktop().open(report);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Message.throwExceptionForJavaFX(e,"Ошибка генерации отчета","", false);
+            }
+        } finally {
+            print_btn.setDisable(false);
+        }
+
+
+
+    }
+
+
 }

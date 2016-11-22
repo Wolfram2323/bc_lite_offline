@@ -1,4 +1,4 @@
-package com.bftcom.gui.exception;
+package com.bftcom.gui.utils;
 
 import com.bftcom.context.Context;
 import com.bftcom.dbtools.utils.HibernateUtils;
@@ -17,7 +17,7 @@ import java.util.Optional;
 /**
  * Created by k.nikitin on 07.11.2016.
  */
-public class ExceptionMessage {
+public class Message {
     public static void  throwExceptionForJavaFX(Throwable e,String headerText, String contentText, boolean fatal ){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Произошла ошибка");
@@ -56,5 +56,14 @@ public class ExceptionMessage {
             GuiUtils.cleanHtmlDir();
             System.exit(0);
         }
+    }
+
+    public static void showInfoMessage(String title, String content){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+
+        alert.showAndWait();
     }
 }

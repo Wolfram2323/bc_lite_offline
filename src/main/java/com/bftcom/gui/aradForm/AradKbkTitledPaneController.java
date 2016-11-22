@@ -5,7 +5,7 @@ import com.bftcom.dbtools.entity.ARADkbk;
 import com.bftcom.dbtools.entity.ActResultsAuditDoc;
 import com.bftcom.dbtools.entity.KBKDetail;
 import com.bftcom.dbtools.utils.HibernateUtils;
-import com.bftcom.gui.exception.ExceptionMessage;
+import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.referenceList.ReferenceListController;
 import com.bftcom.gui.tableViewStoreObj.AradKbkTVObject;
 import com.bftcom.gui.tableViewStoreObj.DoubleStringConverter;
@@ -13,7 +13,6 @@ import com.bftcom.gui.tableViewStoreObj.KbkDetailTVObject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,7 +20,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
@@ -30,9 +28,7 @@ import org.hibernate.Session;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -65,7 +61,7 @@ public class AradKbkTitledPaneController extends AbstractBftTitledPaneController
         try {
             fxmlLoader.load();
         } catch (IOException e) {
-            ExceptionMessage.throwExceptionForJavaFX(e,null,null,true);
+            Message.throwExceptionForJavaFX(e,null,null,true);
         }
     }
 

@@ -5,14 +5,13 @@ import com.bftcom.dbtools.entity.ActResultsAuditDoc;
 import com.bftcom.dbtools.entity.Questions;
 import com.bftcom.dbtools.entity.ViolationGroup;
 import com.bftcom.dbtools.utils.HibernateUtils;
-import com.bftcom.gui.exception.ExceptionMessage;
+import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.tableViewStoreObj.EmployeeGroupTVObject;
 import com.bftcom.gui.utils.GuiUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +25,6 @@ import org.w3c.dom.Document;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.ArrayList;
 
 /**
  * Created by k.nikitin on 12.11.2016.
@@ -87,7 +85,7 @@ public class QuestTabController extends AbstractBftTabController {
         try {
             fxmlLoader.load();
         } catch (IOException e) {
-            ExceptionMessage.throwExceptionForJavaFX(e,null,null,true);
+            Message.throwExceptionForJavaFX(e,null,null,true);
         }
     }
 

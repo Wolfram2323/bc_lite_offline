@@ -2,7 +2,7 @@ package com.bftcom.gui.aradForm;
 
 import com.bftcom.dbtools.entity.*;
 import com.bftcom.dbtools.utils.HibernateUtils;
-import com.bftcom.gui.exception.ExceptionMessage;
+import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.referenceList.ReferenceListController;
 import com.bftcom.gui.referenceList.ViolationKbkNewFormController;
 import com.bftcom.gui.tableViewStoreObj.*;
@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -222,7 +221,7 @@ public class ViolationGroupTabController extends AbstractBftTabController {
         try {
             fxmlLoader.load();
         } catch (IOException e) {
-            ExceptionMessage.throwExceptionForJavaFX(e,null,null,true);
+            Message.throwExceptionForJavaFX(e,null,null,true);
         }
     }
 
@@ -316,7 +315,7 @@ public class ViolationGroupTabController extends AbstractBftTabController {
         if(violation_id == null){
             violation_field.getStyleClass().add("validation-error");
             RuntimeException e = new RuntimeException("Необходимо заполнить поле \"Номер по классификатору\"");
-            ExceptionMessage.throwExceptionForJavaFX(e,"Ошибка заполнения поля", null,false);
+            Message.throwExceptionForJavaFX(e,"Ошибка заполнения поля", null,false);
             throw e;
         }
         Session session = HibernateUtils.getCurrentSession();

@@ -1,7 +1,7 @@
 package com.bftcom.gui.aradForm;
 
 import com.bftcom.dbtools.entity.ActResultsAuditDoc;
-import com.bftcom.gui.exception.ExceptionMessage;
+import com.bftcom.gui.utils.Message;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TabPane;
@@ -24,7 +24,7 @@ public class QuestionsTitledPaneController extends AbstractBftTitledPaneControll
         try {
             fxmlLoader.load();
         } catch (IOException e) {
-            ExceptionMessage.throwExceptionForJavaFX(e,null,null,true);
+            Message.throwExceptionForJavaFX(e,null,null,true);
         }
     }
 

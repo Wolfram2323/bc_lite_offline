@@ -2,7 +2,7 @@ package com.bftcom.gui.aradForm;
 
 import com.bftcom.context.Context;
 import com.bftcom.dbtools.entity.ActResultsAuditDoc;
-import com.bftcom.gui.exception.ExceptionMessage;
+import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.utils.GuiUtils;
 
 import javafx.beans.value.ChangeListener;
@@ -70,7 +70,7 @@ public class BaseFieldsTitledPaneController extends AbstractBftTitledPaneControl
         try {
             fxmlLoader.load();
         } catch (IOException e) {
-            ExceptionMessage.throwExceptionForJavaFX(e,null,null,true);
+            Message.throwExceptionForJavaFX(e,null,null,true);
         }
     }
 
