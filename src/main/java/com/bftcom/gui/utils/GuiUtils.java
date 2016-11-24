@@ -12,6 +12,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.sql.Date;
+
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -90,11 +92,14 @@ public  class GuiUtils {
                     method.setAccessible(true);
                     field.setAccessible(true);
                     Object value = method.invoke(field.get(control));
+                    if(fieldClassName.equals("DatePicker")){
+                        value = Date.valueOf((LocalDate) value);
+                    }
                     PropertyDescriptor pd = new PropertyDescriptor(field.getName().substring(0, field.getName().indexOf("_field")), entity.getClass());
                     pd.getWriteMethod().invoke(entity,value);
                 }
-            } catch (IllegalAccessException|InvocationTargetException |IntrospectionException |NoSuchMethodException e) {
-                Message.throwExceptionForJavaFX(e,"Загрузка электронного документа завершилась с ошибкой",null,true);
+            } catch (Exception e) {
+                Message.throwExceptionForJavaFX(e,"Сохранение электронного документа завершилась с ошибкой",null,true);
             }
 
         }

@@ -19,7 +19,12 @@ public class DoubleStringConverter extends StringConverter<Double> {
         if(string == null || string.isEmpty()){
             return null;
         }
-        return Double.parseDouble(string);
+        try{
+            return Double.parseDouble(string);
+        } catch (NumberFormatException e){
+            return Double.NaN;
+        }
+
     }
 
 }

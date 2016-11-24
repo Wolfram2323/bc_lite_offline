@@ -23,6 +23,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -159,7 +160,9 @@ public class SignsTitledPaneController extends AbstractBftTitledPaneController {
                 }
             }
             if(needToDelete){
-                session.delete(dbRow);
+                Query query = session.createQuery("delete ARADInspectors where id = :id");
+                query.setParameter("id", dbRow.getId());
+                query.executeUpdate();
                 dbIter.remove();
             }
         }

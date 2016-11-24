@@ -305,8 +305,9 @@ public class ViolationGroupTabController extends AbstractBftTabController {
 
             ObservableList<ViolationKBKTVObject> violkbkData = FXCollections.observableArrayList();
             violation.getViolationGroupKBK().forEach(kbkRow->violkbkData.add(new ViolationKBKTVObject(kbkRow)));
+            violKbK_tbl.setItems(violkbkData);
         } else {
-            violTab.getStyleClass().add("rotateTab"); //при заполненных полял крутит 2 раза
+            violTab.getStyleClass().add("rotateTab"); //при заполненных поля крутит 2 раза
         }
     }
 

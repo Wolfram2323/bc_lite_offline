@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="857.0" prefWidth="1216.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bftcom.gui.aradForm.ActResultsAuditDocFormController">
+<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1216.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bftcom.gui.aradForm.ActResultsAuditDocFormController">
    <bottom>
       <GridPane hgap="15.0" BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -33,7 +33,7 @@
             <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#submitData" text="Сохранить" GridPane.columnIndex="6" />
             <Button mnemonicParsing="false" onAction="#exitAction" text="Выход" GridPane.columnIndex="7" />
             <Button fx:id="impBtn" mnemonicParsing="false" onAction="#importData" prefHeight="25.0" prefWidth="123.0" text="Загрузить данные" GridPane.columnIndex="4" />
-            <Button mnemonicParsing="false" onAction="#printDoc" text="Печать" GridPane.columnIndex="5" />
+            <Button fx:id="print_btn" mnemonicParsing="false" onAction="#printDoc" text="Печать" GridPane.columnIndex="5" />
          </children>
       </GridPane>
    </bottom>

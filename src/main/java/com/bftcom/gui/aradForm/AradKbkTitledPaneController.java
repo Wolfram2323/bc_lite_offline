@@ -5,6 +5,7 @@ import com.bftcom.dbtools.entity.ARADkbk;
 import com.bftcom.dbtools.entity.ActResultsAuditDoc;
 import com.bftcom.dbtools.entity.KBKDetail;
 import com.bftcom.dbtools.utils.HibernateUtils;
+import com.bftcom.gui.custom.cell.NumberTextFieldTableCell;
 import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.referenceList.ReferenceListController;
 import com.bftcom.gui.tableViewStoreObj.AradKbkTVObject;
@@ -13,6 +14,7 @@ import com.bftcom.gui.tableViewStoreObj.KbkDetailTVObject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,9 +23,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -98,8 +100,19 @@ public class AradKbkTitledPaneController extends AbstractBftTitledPaneController
         kbkdetail_id_col.setCellValueFactory(new PropertyValueFactory<AradKbkTVObject,Long>("kbkdetail_id"));
         fsr_caption_col.setCellValueFactory(new PropertyValueFactory<AradKbkTVObject,String>("fsr_caption"));
         financeamt_col.setCellValueFactory(new PropertyValueFactory<AradKbkTVObject, Double>("financeamt"));
-        auditedamount_col.setCellValueFactory(new PropertyValueFactory<AradKbkTVObject, Double>("auditedamount"));
-        auditedamount_col.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+        auditedamount_col.setCellValueFactory(new PropertyValueFactory<AradKbkTVObject, String>("auditedamount"));
+        auditedamount_col.setCellFactory(param -> new NumberTextFieldTableCell<AradKbkTVObject>());
+        auditedamount_col.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<AradKbkTVObject,String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<AradKbkTVObject,String> event) {
+                        AradKbkTVObject aradKbkTVObject = event.getTableView().getItems().get(event.getTablePosition().getRow());
+                        aradKbkTVObject.setAuditedamount(event.getNewValue());
+
+
+                    }
+                }
+        );
         arad.getAraDkbks().forEach(row->kbkData.add(new AradKbkTVObject(row)));
         aradKbk_tbl.setItems(kbkData);
         if(!Context.getCurrentContext().isAdmin()){
@@ -121,6 +134,7 @@ public class AradKbkTitledPaneController extends AbstractBftTitledPaneController
         ObservableList<AradKbkTVObject> forSynch = FXCollections.observableArrayList();
         List<ARADkbk> dbData = arad.getAraDkbks();
         Session session = HibernateUtils.getCurrentSession();
+        DoubleStringConverter converter = new DoubleStringConverter();
         for(Iterator<ARADkbk> dbIter = dbData.iterator(); dbIter.hasNext();){
             ARADkbk dbRow = dbIter.next();
             long dbId = dbRow.getId().longValue();
@@ -128,7 +142,7 @@ public class AradKbkTitledPaneController extends AbstractBftTitledPaneController
             for(Iterator<AradKbkTVObject> tblIter = tblData.iterator(); tblIter.hasNext();) {
                 AradKbkTVObject tblRow = tblIter.next();
                 if(tblRow.getId() == dbId){
-                    if (dbRow.getAuditedamount().doubleValue() != tblRow.getAuditedamount()){
+                    if (dbRow.getAuditedamount().doubleValue() != converter.fromString(tblRow.getAuditedamount())){
                         dbRow.setAuditedamount(new BigDecimal(tblRow.getAuditedamount()));
                     }
                     forSynch.add(tblRow);
@@ -138,18 +152,23 @@ public class AradKbkTitledPaneController extends AbstractBftTitledPaneController
                 }
             }
             if(needToDelete){
-                session.delete(dbRow);
+                Query query = session.createQuery("delete ARADkbk where id = :id");
+                query.setParameter("id", dbRow.getId());
+                query.executeUpdate();
                 dbIter.remove();
             }
         }
         if(tblData.size() > 0){
             tblData.forEach(tblRow -> {
                 ARADkbk dbRow = new ARADkbk();
-                dbRow.setAuditedamount(new BigDecimal(tblRow.getAuditedamount()));
-                dbRow.setKbkDetail(session.get(KBKDetail.class,BigInteger.valueOf(tblRow.getKbkdetail_id())));
-                dbRow.setActResultsAuditDoc(arad);
-                session.saveOrUpdate(dbRow);
-                dbData.add(dbRow);
+                BigInteger id = HibernateUtils.getNextIdForLinkTables(session,"ARADkbk",dbRow);
+                Query query = session.createNativeQuery("insert into ACTRESULTSAUDITDOCKBK (ID,AUDITEDAMOUNT,ARAUDITDOC_ID,KBKDETAIL_ID) " +
+                        "values (?,?,?,?)");
+                query.setParameter(1,id);
+                query.setParameter(2,new BigDecimal(tblRow.getAuditedamount()));
+                query.setParameter(3,arad.getId());
+                query.setParameter(4,tblRow.getKbkdetail_id());
+                query.executeUpdate();
             });
         }
         forSynch.addAll(tblData);

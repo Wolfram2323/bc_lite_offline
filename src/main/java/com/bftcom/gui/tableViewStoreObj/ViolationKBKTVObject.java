@@ -20,8 +20,8 @@ public class ViolationKBKTVObject {
 
     public ViolationKBKTVObject(ViolationGroupKBK violKBK){
         this.id = new SimpleLongProperty(violKBK.getId().longValue());
-        this.kbkdetail_id = new SimpleLongProperty(violKBK.getKbkDetail().getId().longValue());
-        this.fsr_caption = new SimpleStringProperty(violKBK.getKbkDetail().getFsr_caption());
+        this.kbkdetail_id = violKBK.getKbkDetail() != null ? new SimpleLongProperty(violKBK.getKbkDetail().getId().longValue()) : new SimpleLongProperty();
+        this.fsr_caption = violKBK.getKbkDetail() != null ? new SimpleStringProperty(violKBK.getKbkDetail().getFsr_caption()) : new SimpleStringProperty();
         this.amount = new SimpleDoubleProperty(violKBK.getAmount().doubleValue());
         this.cash = new SimpleDoubleProperty(violKBK.getCompensatedToAuditOrgCash().doubleValue());
         this.account = new SimpleDoubleProperty(violKBK.getCompensatedToAuditOrgAccount().doubleValue());
@@ -29,15 +29,15 @@ public class ViolationKBKTVObject {
         this.budget = new SimpleDoubleProperty(violKBK.getCompensatedToBudget().doubleValue());
     }
 
-    public ViolationKBKTVObject(Long kbkdetail_id, String fsr_caption, Double amout, Double cash, Double account, Double grbs, Double budget){
+    public ViolationKBKTVObject(Long kbkdetail_id, String fsr_caption, Double amount, Double cash, Double account, Double grbs, Double budget){
         this.id = new SimpleLongProperty();
-        this.kbkdetail_id = new SimpleLongProperty(kbkdetail_id);
-        this.fsr_caption = new SimpleStringProperty(fsr_caption);
-        this.amount = new SimpleDoubleProperty(amout);
-        this.cash = new SimpleDoubleProperty(cash);
-        this.account = new SimpleDoubleProperty(account);
-        this.grbs = new SimpleDoubleProperty(grbs);
-        this.budget = new SimpleDoubleProperty(budget);
+        this.kbkdetail_id = kbkdetail_id != null ? new SimpleLongProperty(kbkdetail_id) : new SimpleLongProperty();
+        this.fsr_caption = fsr_caption != null ? new SimpleStringProperty(fsr_caption) : new SimpleStringProperty();
+        this.amount =  amount != null ? new SimpleDoubleProperty(amount): new SimpleDoubleProperty();
+        this.cash = cash != null ? new SimpleDoubleProperty(cash) : new SimpleDoubleProperty();
+        this.account = account != null ? new SimpleDoubleProperty(account) :new SimpleDoubleProperty();
+        this.grbs = grbs != null ? new SimpleDoubleProperty(grbs) :new SimpleDoubleProperty();
+        this.budget =  budget != null ? new SimpleDoubleProperty(budget) :new SimpleDoubleProperty();
     }
 
     public long getId() {

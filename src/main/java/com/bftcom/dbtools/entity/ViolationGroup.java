@@ -65,7 +65,7 @@ public class ViolationGroup {
     @OnLineColumnInfo(synch = true)
     private String bnpa_caption;
 
-    @Column(name="BNPA_DATE_BNPA", length = 500)
+    @Column(name="BNPA_DATE_BNPA")
     @OnLineColumnInfo(synch = true)
     private Date bnpa_date;
 

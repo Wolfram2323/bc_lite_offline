@@ -10,10 +10,12 @@ import org.hibernate.c3p0.internal.C3P0ConnectionProvider;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.event.spi.EventSource;
 import org.hibernate.internal.SessionFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -126,6 +128,12 @@ public class HibernateUtils {
 
     public static List<Class> getAnnotatedClasses (){
         return annotatedClasses;
+    }
+
+    public static BigInteger getNextIdForLinkTables(Session session, String entityName,Object entity){
+        EventSource source = (EventSource)session;
+        Object id = source.getEntityPersister(entityName, entity).getIdentifierGenerator().generate((EventSource)session,entity);
+        return (BigInteger)id;
     }
 
 

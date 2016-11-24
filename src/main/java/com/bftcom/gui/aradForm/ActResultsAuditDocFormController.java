@@ -7,7 +7,7 @@ import com.bftcom.dbtools.utils.DataUploader;
 import com.bftcom.dbtools.utils.HibernateUtils;
 import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.utils.GuiUtils;
-import com.bftcom.report.BirtReport;
+//import com.bftcom.report.BirtReport;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

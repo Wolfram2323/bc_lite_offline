@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
+<?import com.bftcom.gui.custom.fields.NumberTextField?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="597.0" prefWidth="818.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bftcom.gui.referenceList.ViolationKbkNewFormController">
    <bottom>
@@ -51,11 +50,11 @@
                   <Label text="Возмещенно на л/с ГРБС (руб.):" GridPane.rowIndex="3" />
                   <Label text="Возмещенно в натуральном виде (руб.))" GridPane.rowIndex="4" />
                   <Label text="КВФО:" GridPane.rowIndex="5" />
-                  <TextField fx:id="cash_field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="amount_field" GridPane.columnIndex="1" />
-                  <TextField fx:id="account_field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField fx:id="grbs_field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <TextField fx:id="budget_field" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <NumberTextField fx:id="cash_field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <NumberTextField fx:id="amount_field" GridPane.columnIndex="1" />
+                  <NumberTextField fx:id="account_field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <NumberTextField fx:id="grbs_field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <NumberTextField fx:id="budget_field" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="5">
                      <children>
                         <TextField fx:id="fsr_caption_field" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="5" HBox.hgrow="ALWAYS" />

@@ -13,7 +13,7 @@ public class AradKbkTVObject {
     private final SimpleLongProperty kbkdetail_id;
     private final SimpleStringProperty fsr_caption;
     private final SimpleDoubleProperty financeamt;
-    private final SimpleDoubleProperty auditedamount;
+    private final SimpleStringProperty auditedamount;
 
 
     public  AradKbkTVObject(ARADkbk aradKbk){
@@ -21,7 +21,7 @@ public class AradKbkTVObject {
         this.kbkdetail_id = new SimpleLongProperty(aradKbk.getKbkDetail().getId().longValue());
         this.fsr_caption = new SimpleStringProperty(aradKbk.getKbkDetail().getFsr_caption());
         this.financeamt = new SimpleDoubleProperty(aradKbk.getKbkDetail().getFinanceamt().doubleValue());
-        this.auditedamount = new SimpleDoubleProperty(aradKbk.getAuditedamount().doubleValue());
+        this.auditedamount = new SimpleStringProperty(aradKbk.getAuditedamount().toString());
     }
 
     public AradKbkTVObject(KbkDetailTVObject kbkDetail){
@@ -29,7 +29,7 @@ public class AradKbkTVObject {
         this.kbkdetail_id = kbkDetail.idProperty();
         this.fsr_caption = kbkDetail.fsr_captionProperty();
         this.financeamt = kbkDetail.financeamtProperty();
-        this.auditedamount = new SimpleDoubleProperty();
+        this.auditedamount = new SimpleStringProperty("0.0");
 
     }
 
@@ -82,15 +82,15 @@ public class AradKbkTVObject {
         this.financeamt.set(financeamt);
     }
 
-    public double getAuditedamount() {
+    public String getAuditedamount() {
         return auditedamount.get();
     }
 
-    public SimpleDoubleProperty auditedamountProperty() {
+    public SimpleStringProperty auditedamountProperty() {
         return auditedamount;
     }
 
-    public void setAuditedamount(double auditedamount) {
+    public void setAuditedamount(String auditedamount) {
         this.auditedamount.set(auditedamount);
     }
 }
