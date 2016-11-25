@@ -53,7 +53,6 @@ public class Message {
                 HibernateUtils.getCurrentSession().getTransaction().rollback();
                 HibernateUtils.closeConnection(HibernateUtils.getCurrentSession());
             }
-            GuiUtils.cleanHtmlDir();
             System.exit(0);
         }
     }

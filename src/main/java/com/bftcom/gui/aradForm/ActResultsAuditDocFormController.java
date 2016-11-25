@@ -135,7 +135,6 @@ public class ActResultsAuditDocFormController implements Initializable {
         if (result.get() == ButtonType.OK){
             HibernateUtils.getCurrentSession().getTransaction().rollback();
             HibernateUtils.closeConnection(HibernateUtils.getCurrentSession());
-            GuiUtils.cleanHtmlDir();
             System.exit(0);
         }
     }

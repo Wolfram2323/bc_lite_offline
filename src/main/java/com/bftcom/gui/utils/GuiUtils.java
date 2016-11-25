@@ -2,6 +2,8 @@ package com.bftcom.gui.utils;
 
 import javafx.scene.web.WebEngine;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -20,6 +22,7 @@ import java.util.List;
  * Created by k.nikitin on 12.11.2016.
  */
 public  class GuiUtils {
+    private static final Logger log = LoggerFactory.getLogger(GuiUtils.class);
     private static final String HTML_PATH = "./src/main/resources/ckeditor_4.5.4_20adb29f6738/html";
     public static void textAndDateFieldSetUp(Object entity, Object control, List<String> excludeFields){
         Field[] formFields = control.getClass().getDeclaredFields();
@@ -106,25 +109,10 @@ public  class GuiUtils {
     }
 
     public static void loadCkEditorToWebView(WebEngine engine, String resourseName){
-        URL url = GuiUtils.class.getResource("/ckeditor_4.5.4_20adb29f6738/ckEditor.html");
-        File html = new File(HTML_PATH + "/" + resourseName + ".html");
-        try {
-            FileUtils.copyURLToFile(url, html);
-            engine.load(html.toURI().toURL().toExternalForm());
-        } catch (IOException e) {
-            e.printStackTrace();
-            Message.throwExceptionForJavaFX(e, "Ошибка при загрузке редактора текста", null, true);
-        }
-
+        URL url = GuiUtils.class.getResource("/ckeditor_4.5.4_20adb29f6738/debug/ckEditor.html");
+        engine.load(url.toExternalForm());
     }
 
-    public  static void cleanHtmlDir(){
-        try {
-            FileUtils.cleanDirectory(new File(HTML_PATH));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static boolean IntegerToBoolean(Integer value){
         return  value!= 0 ;
