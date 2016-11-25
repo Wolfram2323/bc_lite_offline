@@ -9,13 +9,19 @@ import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.utils.GuiUtils;
 //import com.bftcom.report.BirtReport;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.hibernate.Session;
 import org.hibernate.internal.SessionImpl;
 import org.hibernate.query.Query;
@@ -190,7 +196,12 @@ public class ActResultsAuditDocFormController implements Initializable {
 
     }
     @FXML
-    private void importData(ActionEvent event){
+    private void importData(ActionEvent event) throws IOException{
+        try{
+            HibernateUtils.getCurrentSession().getTransaction().rollback();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Выбор файла");
         File file = chooser.showOpenDialog(((Node)event.getSource()).getScene().getWindow());
@@ -199,6 +210,29 @@ public class ActResultsAuditDocFormController implements Initializable {
             dataSynchronizer.synchronizeData(file);
         }
         Message.showInfoMessage("Завершение загрузки данных", "Процесс загрузки данных в систему завершен.");
+
+        Parent parent = FXMLLoader.load(getClass().getResource("/fxml/aradForm.fxml"));
+        ((Node)event.getSource()).getScene().getWindow().hide();
+        parent.getStylesheets().add("/css/styles.css");
+        Stage stage = new Stage();
+        Scene scene = new Scene(parent);
+        stage.setScene(scene);
+        stage.setTitle("Электронный документ Акт проверки");
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Выход из системы");
+                alert.setHeaderText("Вы действительно хотите завершить работу с ситемой?");
+                alert.setContentText("В случае завершения работы, все несохраненные данные пропадут.");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.CANCEL){
+                    we.consume();
+                }
+                HibernateUtils.closeConnection(HibernateUtils.getCurrentSession());
+            }
+        });
+        stage.show();
 
     }
     @FXML

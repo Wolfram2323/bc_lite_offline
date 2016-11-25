@@ -58,18 +58,15 @@ public class DataSynchronizer {
         if(!dataBlock.getTagName().equals(dataElName)){
             throw new RuntimeException("Bad xml file. Data group tag name should be " + dataElName + "!");
         }
-        try(Session session = HibernateUtils.getSession(null)){
-            try{
-                session.beginTransaction();
-                fillEntityByElement(session, dataBlock);
-                session.getTransaction().commit();
-            } catch (HibernateException e){
-                session.getTransaction().rollback();
-            }
+        Session session = HibernateUtils.getSession(null);
+        try{
+            session.beginTransaction();
+            fillEntityByElement(session, dataBlock);
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            session.getTransaction().rollback();
         }
-
-
-
+        HibernateUtils.closeSession();
     }
 
     private Document parseXml (File xmlFile) {
@@ -102,12 +99,21 @@ public class DataSynchronizer {
                         boolean link = attr.getNodeName().endsWith("_links");
                         String fieldName = link ? attr.getNodeName().substring(0, attr.getNodeName().indexOf("_links")) : attr.getNodeName();
                         Field field =entity.getDeclaredField(fieldName);
+                        Class fieldClass = field.getType();
+                        String fieldClassName = fieldClass.getName().substring(fieldClass.getName().lastIndexOf(".") + 1);
                         PropertyDescriptor pd = new PropertyDescriptor(fieldName,entity);
+                        String attrValue = attr.getNodeValue();
                         if(link){
-                            Object linkValue = session.get(field.getType(),new BigInteger(attr.getNodeValue()));
+                            Object linkValue = session.get(field.getType(),new BigInteger(attrValue));
                             pd.getWriteMethod().invoke(record, linkValue);
                         } else {
-                            pd.getWriteMethod().invoke(record, attr.getNodeValue());
+                            switch (fieldClassName){
+                                case "Integer" :
+                                    pd.getWriteMethod().invoke(record, Integer.valueOf(attrValue)); break;
+                                default:
+                                    pd.getWriteMethod().invoke(record, attrValue); break;
+                            }
+
                         }
                         session.saveOrUpdate(record);
                     } catch (NoSuchFieldException e){

@@ -20,6 +20,7 @@ public class AuthentificationUtils {
             String storedPswd = user.getPsswd();
             String version = PasswordUtils.getVersion(storedPswd);
             Context.getCurrentContext().setIsAdmin(user.getIs_admin());
+            Context.getCurrentContext().setUser_id(user.getId());
             storedPswd = storedPswd.substring(5,storedPswd.length());
             PasswordUtils.Algorithm algorithm = PasswordUtils.getAlgorithm(version);
             String pswdForCheck = algorithm.encodePassword(login,passwd);

@@ -1,8 +1,11 @@
 package com.bftcom.dbtools.utils;
 
+import com.bftcom.context.Context;
 import com.bftcom.dbtools.annotations.OnLineColumnInfo;
 import com.bftcom.dbtools.entity.ActResultsAuditDoc;
 import com.bftcom.dbtools.entity.Questions;
+import com.bftcom.dbtools.entity.SysUser;
+import com.bftcom.gui.utils.Message;
 import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
@@ -61,8 +64,9 @@ public class DataUploader {
                 Element quest = createChildElement(questGroup, questElName);
                 fillElementByEntity(quest,row.getClass().getDeclaredFields(),row, false);
             });
-            File exportDir = createDirectory(".\\synchronize");
-            documentToFile(xml, new File(exportDir.getAbsolutePath()+"\\synchronizeQustion.xml"), "UTF-8");
+            SysUser sysUser = session.get(SysUser.class, Context.getCurrentContext().getUser_id());
+            File exportDir = createDirectory(".\\questions_" + sysUser.getLogin());
+            documentToFile(xml, new File(exportDir.getAbsolutePath()+"\\questions_" + sysUser.getLogin()+".xml"), "UTF-8");
         }
     }
 
@@ -86,6 +90,9 @@ public class DataUploader {
     private void fillElementByEntity( Element el,Field[] fields, Object currentObj, boolean atrNameByAnnotation) {
         for(Field field : fields){
             try{
+                if(field.getName().equals("questInspectorsSet")){
+                    continue;
+                }
                 PropertyDescriptor pd = new PropertyDescriptor(field.getName(), currentObj.getClass());
                 Object value = pd.getReadMethod().invoke(currentObj);
                 if(field.getType().equals(List.class)){
@@ -120,7 +127,8 @@ public class DataUploader {
                     }
                 }
             } catch (IllegalAccessException | IntrospectionException | InvocationTargetException | NoSuchMethodException e) {
-                throw new RuntimeException("Unable to convert data to xml!");
+                Message.throwExceptionForJavaFX(e,"Выгрузка данных завершилась с ошибкой", null, false);
+                e.printStackTrace();
             }
 
         }
@@ -134,14 +142,17 @@ public class DataUploader {
                     (DOMImplementationLS)registry.getDOMImplementation("LS");
             LSOutput lsOutput = impl.createLSOutput();
             lsOutput.setEncoding(encoding);
-            lsOutput.setByteStream(new FileOutputStream(xmlFile));
+            FileOutputStream fs = new FileOutputStream(xmlFile);
+            lsOutput.setByteStream(fs);
             LSSerializer writer = impl.createLSSerializer();
             writer.write(xml,lsOutput);
-
+            fs.close();
         } catch (FileNotFoundException e){
             throw new RuntimeException("Output xml file not found!");
         } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
            throw new RuntimeException("Unable to convert data to xml!");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
