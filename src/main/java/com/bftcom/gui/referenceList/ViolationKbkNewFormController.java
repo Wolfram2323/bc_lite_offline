@@ -6,6 +6,7 @@ import com.bftcom.gui.aradForm.ViolationGroupTabController;
 import com.bftcom.gui.tableViewStoreObj.DoubleStringConverter;
 import com.bftcom.gui.tableViewStoreObj.KbkDetailTVObject;
 import com.bftcom.gui.tableViewStoreObj.ViolationKBKTVObject;
+import com.bftcom.gui.utils.Message;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -71,8 +72,14 @@ public class ViolationKbkNewFormController implements Initializable {
     @FXML
     private void submitForm(ActionEvent event){
         DoubleStringConverter converter = new DoubleStringConverter();
-        ViolationKBKTVObject violKBKTV = new ViolationKBKTVObject(kbkdetail_id,fsr_caption_field.getText(), converter.fromString(amount_field.getText()),converter.fromString(cash_field.getText()),
-                converter.fromString(account_field.getText()),converter.fromString(grbs_field.getText()),converter.fromString(budget_field.getText()));
+        if(kbkdetail_id == null && amount_field.getText().isEmpty() && cash_field.getText().isEmpty() && account_field.getText().isEmpty()
+                && grbs_field.getText().isEmpty() && budget_field.getText().isEmpty()){
+            RuntimeException e = new RuntimeException("Необходимо заполнить хотя бы одно поле");
+            Message.throwExceptionForJavaFX(e,"Ошибка заполнения формы", "Необходимо заполнить хотя бы одно поле",false);
+            throw e;
+        }
+        ViolationKBKTVObject violKBKTV = new ViolationKBKTVObject(kbkdetail_id, fsr_caption_field.getText(), amount_field.getText(),cash_field.getText(),
+                account_field.getText(),grbs_field.getText(),budget_field.getText());
         controller.addNewViolKbk(violKBKTV);
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.close();

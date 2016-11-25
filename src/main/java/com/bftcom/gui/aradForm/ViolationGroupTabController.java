@@ -2,6 +2,9 @@ package com.bftcom.gui.aradForm;
 
 import com.bftcom.dbtools.entity.*;
 import com.bftcom.dbtools.utils.HibernateUtils;
+import com.bftcom.gui.custom.cell.KeyValueComboBoxTableCell;
+import com.bftcom.gui.custom.cell.NumberTextFieldTableCell;
+import com.bftcom.gui.custom.combobox.StoreObject;
 import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.referenceList.ReferenceListController;
 import com.bftcom.gui.referenceList.ViolationKbkNewFormController;
@@ -12,6 +15,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -225,6 +229,7 @@ public class ViolationGroupTabController extends AbstractBftTabController {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void initialize(ViolationGroup violation, BigInteger quest_id){
         this.quest_id = quest_id;
         tabName = new Label();
@@ -243,19 +248,69 @@ public class ViolationGroupTabController extends AbstractBftTabController {
         noCorrect_engine = noCorrect_web.getEngine();
         GuiUtils.loadCkEditorToWebView(noCorrect_engine, violation == null ? "noCorrect_" + UUID.randomUUID().toString() : "noCorrect_" +violation.getId().toString());
 
-       id_col.setCellValueFactory(new PropertyValueFactory<ViolationKBKTVObject,Long>("id"));
-       kbkDetail_id_col.setCellValueFactory(new PropertyValueFactory<ViolationKBKTVObject,Long>("kbkDetail_id"));
-       fsr_caption_col.setCellValueFactory(new PropertyValueFactory<ViolationKBKTVObject,String>("fsr_caption"));
-       amount_col.setCellValueFactory(new PropertyValueFactory<ViolationKBKTVObject,Double>("amount"));
-       amount_col.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-       cash_col.setCellValueFactory(new PropertyValueFactory<ViolationKBKTVObject,Double>("cash"));
-       cash_col.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-       grbs_col.setCellValueFactory(new PropertyValueFactory<ViolationKBKTVObject,Double>("grbs"));
-       grbs_col.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-       account_col.setCellValueFactory(new PropertyValueFactory<ViolationKBKTVObject,Double>("account"));
-       account_col.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-       budget_col.setCellValueFactory(new PropertyValueFactory<ViolationKBKTVObject,Double>("budget"));
-       budget_col.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+        id_col.setCellValueFactory(new PropertyValueFactory<ViolationKBKTVObject,Long>("id"));
+        kbkDetail_id_col.setCellValueFactory(new PropertyValueFactory<ViolationKBKTVObject,Long>("kbkDetail_id"));
+
+        fsr_caption_col.setCellValueFactory(new PropertyValueFactory<ViolationKBKTVObject,String>("fsr_caption"));
+        fsr_caption_col.setCellFactory(param -> new KeyValueComboBoxTableCell<KbkDetailTVObject>());
+        fsr_caption_col.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ViolationKBKTVObject,StoreObject>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<ViolationKBKTVObject,StoreObject> event) {
+                ViolationKBKTVObject violKbkTVobj = event.getTableView().getItems().get(event.getTablePosition().getRow());
+                violKbkTVobj.setFsr_caption(event.getNewValue());
+                violKbkTVobj.setKbkdetail_id(event.getNewValue().getId().longValue());
+            }
+        });
+
+        amount_col.setCellValueFactory(new PropertyValueFactory<ViolationKBKTVObject,Double>("amount"));
+        amount_col.setCellFactory(param -> new NumberTextFieldTableCell<ViolationKBKTVObject>());
+        amount_col.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ViolationKBKTVObject,String>>() {
+           @Override
+           public void handle(TableColumn.CellEditEvent<ViolationKBKTVObject,String> event) {
+               ViolationKBKTVObject violKbkTVobj = event.getTableView().getItems().get(event.getTablePosition().getRow());
+               violKbkTVobj.setAmount(event.getNewValue());
+
+           }
+       });
+        cash_col.setCellValueFactory(new PropertyValueFactory<ViolationKBKTVObject,Double>("cash"));
+        cash_col.setCellFactory(param -> new NumberTextFieldTableCell<ViolationKBKTVObject>());
+        cash_col.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ViolationKBKTVObject,String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<ViolationKBKTVObject,String> event) {
+                ViolationKBKTVObject violKbkTVobj = event.getTableView().getItems().get(event.getTablePosition().getRow());
+                violKbkTVobj.setCash(event.getNewValue());
+            }
+        });
+
+        grbs_col.setCellValueFactory(new PropertyValueFactory<ViolationKBKTVObject,Double>("grbs"));
+        grbs_col.setCellFactory(param -> new NumberTextFieldTableCell<ViolationKBKTVObject>());
+        grbs_col.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ViolationKBKTVObject,String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<ViolationKBKTVObject,String> event) {
+                ViolationKBKTVObject violKbkTVobj = event.getTableView().getItems().get(event.getTablePosition().getRow());
+                violKbkTVobj.setGrbs(event.getNewValue());
+            }
+        });
+
+        account_col.setCellValueFactory(new PropertyValueFactory<ViolationKBKTVObject,Double>("account"));
+        account_col.setCellFactory(param -> new NumberTextFieldTableCell<ViolationKBKTVObject>());
+        account_col.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ViolationKBKTVObject,String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<ViolationKBKTVObject,String> event) {
+                ViolationKBKTVObject violKbkTVobj = event.getTableView().getItems().get(event.getTablePosition().getRow());
+                violKbkTVobj.setAccount(event.getNewValue());
+            }
+        });
+
+        budget_col.setCellValueFactory(new PropertyValueFactory<ViolationKBKTVObject,Double>("budget"));
+        budget_col.setCellFactory(param -> new NumberTextFieldTableCell<ViolationKBKTVObject>());
+        budget_col.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ViolationKBKTVObject,String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<ViolationKBKTVObject,String> event) {
+                ViolationKBKTVObject violKbkTVobj = event.getTableView().getItems().get(event.getTablePosition().getRow());
+                violKbkTVobj.setBudget(event.getNewValue());
+            }
+        });
 
 
         if(violation != null){

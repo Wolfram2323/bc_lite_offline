@@ -1,9 +1,13 @@
 package com.bftcom.gui.tableViewStoreObj;
 
 import com.bftcom.dbtools.entity.ViolationGroupKBK;
+import com.bftcom.gui.custom.combobox.StoreObject;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+
+import java.math.BigInteger;
 
 /**
  * Created by k.nikitin on 14.11.2016.
@@ -11,33 +15,33 @@ import javafx.beans.property.SimpleStringProperty;
 public class ViolationKBKTVObject {
     private final SimpleLongProperty id;
     private final SimpleLongProperty kbkdetail_id;
-    private final SimpleStringProperty fsr_caption;
-    private final SimpleDoubleProperty amount;
-    private final SimpleDoubleProperty cash;
-    private final SimpleDoubleProperty account;
-    private final SimpleDoubleProperty grbs;
-    private final SimpleDoubleProperty budget;
+    private final SimpleObjectProperty fsr_caption;
+    private final SimpleStringProperty amount;
+    private final SimpleStringProperty cash;
+    private final SimpleStringProperty account;
+    private final SimpleStringProperty grbs;
+    private final SimpleStringProperty budget;
 
     public ViolationKBKTVObject(ViolationGroupKBK violKBK){
         this.id = new SimpleLongProperty(violKBK.getId().longValue());
         this.kbkdetail_id = violKBK.getKbkDetail() != null ? new SimpleLongProperty(violKBK.getKbkDetail().getId().longValue()) : new SimpleLongProperty();
-        this.fsr_caption = violKBK.getKbkDetail() != null ? new SimpleStringProperty(violKBK.getKbkDetail().getFsr_caption()) : new SimpleStringProperty();
-        this.amount = new SimpleDoubleProperty(violKBK.getAmount().doubleValue());
-        this.cash = new SimpleDoubleProperty(violKBK.getCompensatedToAuditOrgCash().doubleValue());
-        this.account = new SimpleDoubleProperty(violKBK.getCompensatedToAuditOrgAccount().doubleValue());
-        this.grbs = new SimpleDoubleProperty(violKBK.getCompensatedToGRBSAccount().doubleValue());
-        this.budget = new SimpleDoubleProperty(violKBK.getCompensatedToBudget().doubleValue());
+        this.fsr_caption = violKBK.getKbkDetail() != null ? new SimpleObjectProperty(new StoreObject(violKBK.getKbkDetail().getId(),violKBK.getKbkDetail().getFsr_caption())) : new SimpleObjectProperty(new StoreObject(null,""));
+        this.amount = new SimpleStringProperty(violKBK.getAmount().toString());
+        this.cash = new SimpleStringProperty(violKBK.getCompensatedToAuditOrgCash().toString());
+        this.account = new SimpleStringProperty(violKBK.getCompensatedToAuditOrgAccount().toString());
+        this.grbs = new SimpleStringProperty(violKBK.getCompensatedToGRBSAccount().toString());
+        this.budget = new SimpleStringProperty(violKBK.getCompensatedToBudget().toString());
     }
 
-    public ViolationKBKTVObject(Long kbkdetail_id, String fsr_caption, Double amount, Double cash, Double account, Double grbs, Double budget){
+    public ViolationKBKTVObject(Long kbkdetail_id, String fsr_caption, String amount, String cash, String account, String grbs, String budget){
         this.id = new SimpleLongProperty();
         this.kbkdetail_id = kbkdetail_id != null ? new SimpleLongProperty(kbkdetail_id) : new SimpleLongProperty();
-        this.fsr_caption = fsr_caption != null ? new SimpleStringProperty(fsr_caption) : new SimpleStringProperty();
-        this.amount =  amount != null ? new SimpleDoubleProperty(amount): new SimpleDoubleProperty();
-        this.cash = cash != null ? new SimpleDoubleProperty(cash) : new SimpleDoubleProperty();
-        this.account = account != null ? new SimpleDoubleProperty(account) :new SimpleDoubleProperty();
-        this.grbs = grbs != null ? new SimpleDoubleProperty(grbs) :new SimpleDoubleProperty();
-        this.budget =  budget != null ? new SimpleDoubleProperty(budget) :new SimpleDoubleProperty();
+        this.fsr_caption = fsr_caption != null ? new SimpleObjectProperty(new StoreObject(BigInteger.valueOf(kbkdetail_id),fsr_caption)) : new SimpleObjectProperty(new StoreObject(null,""));
+        this.amount =  amount == null || amount.isEmpty() ? new SimpleStringProperty("0.0") : new SimpleStringProperty(amount);
+        this.cash = cash == null || cash.isEmpty() ? new SimpleStringProperty("0.0") :  new SimpleStringProperty(cash);
+        this.account = account == null || account.isEmpty() ? new SimpleStringProperty("0.0") : new SimpleStringProperty(account);
+        this.grbs = grbs == null || grbs.isEmpty() ? new SimpleStringProperty("0.0") : new SimpleStringProperty(grbs);
+        this.budget =  budget == null || budget.isEmpty() ? new SimpleStringProperty("0.0") : new SimpleStringProperty(budget);
     }
 
     public long getId() {
@@ -64,75 +68,75 @@ public class ViolationKBKTVObject {
         this.kbkdetail_id.set(kbkdetail_id);
     }
 
-    public String getFsr_caption() {
+    public Object getFsr_caption() {
         return fsr_caption.get();
     }
 
-    public SimpleStringProperty fsr_captionProperty() {
+    public SimpleObjectProperty fsr_captionProperty() {
         return fsr_caption;
     }
 
-    public void setFsr_caption(String fsr_caption) {
+    public void setFsr_caption(Object fsr_caption) {
         this.fsr_caption.set(fsr_caption);
     }
 
-    public double getAmount() {
+    public String getAmount() {
         return amount.get();
     }
 
-    public SimpleDoubleProperty amountProperty() {
+    public SimpleStringProperty amountProperty() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(String amount) {
         this.amount.set(amount);
     }
 
-    public double getCash() {
+    public String getCash() {
         return cash.get();
     }
 
-    public SimpleDoubleProperty cashProperty() {
+    public SimpleStringProperty cashProperty() {
         return cash;
     }
 
-    public void setCash(double cash) {
+    public void setCash(String cash) {
         this.cash.set(cash);
     }
 
-    public double getAccount() {
+    public String getAccount() {
         return account.get();
     }
 
-    public SimpleDoubleProperty accountProperty() {
+    public SimpleStringProperty accountProperty() {
         return account;
     }
 
-    public void setAccount(double account) {
+    public void setAccount(String account) {
         this.account.set(account);
     }
 
-    public double getGrbs() {
+    public String getGrbs() {
         return grbs.get();
     }
 
-    public SimpleDoubleProperty grbsProperty() {
+    public SimpleStringProperty grbsProperty() {
         return grbs;
     }
 
-    public void setGrbs(double grbs) {
+    public void setGrbs(String grbs) {
         this.grbs.set(grbs);
     }
 
-    public double getBudget() {
+    public String getBudget() {
         return budget.get();
     }
 
-    public SimpleDoubleProperty budgetProperty() {
+    public SimpleStringProperty budgetProperty() {
         return budget;
     }
 
-    public void setBudget(double budget) {
+    public void setBudget(String budget) {
         this.budget.set(budget);
     }
 }
