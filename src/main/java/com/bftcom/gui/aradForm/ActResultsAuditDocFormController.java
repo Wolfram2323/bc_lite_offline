@@ -78,10 +78,10 @@ public class ActResultsAuditDocFormController implements Initializable {
             ActResultsAuditDoc arad = query.getSingleResult();
             arad_id = arad.getId();
             session.beginTransaction();
-            if(arad.getDoc_status().longValue() == 0) {
+            if(arad.getDoc_status().longValue() == 0 || arad.getDoc_status().longValue() == 28) {
                 doc_status_field.setText("Оффлайн - Черновик");
             } else {
-                doc_status_field.setText("Форматироние завершено");
+                doc_status_field.setText("Форматирование завершено");
 
                 expBtn.setDisable(false);
                 impBtn.setDisable(true);
@@ -133,8 +133,14 @@ public class ActResultsAuditDocFormController implements Initializable {
         }
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
-            HibernateUtils.getCurrentSession().getTransaction().rollback();
-            HibernateUtils.closeConnection(HibernateUtils.getCurrentSession());
+            try{
+                HibernateUtils.getCurrentSession().getTransaction().rollback();
+                HibernateUtils.closeConnection(HibernateUtils.getCurrentSession());
+            } catch (Exception e){
+                e.printStackTrace();
+                System.exit(0);
+            }
+
             System.exit(0);
         }
     }
@@ -148,18 +154,25 @@ public class ActResultsAuditDocFormController implements Initializable {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
-            Session session = HibernateUtils.getCurrentSession();
-            ActResultsAuditDoc arad = session.get(ActResultsAuditDoc.class,arad_id);
-//            arad.setDoc_status(new BigInteger("3"));
-            session.saveOrUpdate(arad);
-            session.getTransaction().commit();
-            HibernateUtils.getCurrentSession().beginTransaction();
-            doc_status_field.setText("Форматироние завершено");
-            expBtn.setDisable(false);
-            impBtn.setDisable(true);
-            saveBtn.setDisable(true);
-            stopBtn.setDisable(true);
-            readOnly = true;
+            try{
+                Session session = HibernateUtils.getCurrentSession();
+                session.getTransaction().rollback();
+                session.beginTransaction();
+                ActResultsAuditDoc arad = session.get(ActResultsAuditDoc.class,arad_id);
+                arad.setDoc_status(new BigInteger("3"));
+                session.saveOrUpdate(arad);
+                session.getTransaction().commit();
+                HibernateUtils.getCurrentSession().beginTransaction();
+                doc_status_field.setText("Форматирование завершено");
+                expBtn.setDisable(false);
+                impBtn.setDisable(true);
+                saveBtn.setDisable(true);
+                stopBtn.setDisable(true);
+                readOnly = true;
+            } catch (Exception e){
+                Message.throwExceptionForJavaFX(e,"Ошибка при процессе завершения форматирования", null, false);
+            }
+
 
         }
 

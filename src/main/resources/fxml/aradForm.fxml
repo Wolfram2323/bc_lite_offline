@@ -32,7 +32,7 @@
             <Button fx:id="expBtn" disable="true" mnemonicParsing="false" onAction="#exportData" text="Выгрузить данные" GridPane.columnIndex="3" />
             <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#submitData" text="Сохранить" GridPane.columnIndex="6" />
             <Button mnemonicParsing="false" onAction="#exitAction" text="Выход" GridPane.columnIndex="7" />
-            <Button fx:id="impBtn" mnemonicParsing="false" onAction="#importData" prefHeight="25.0" prefWidth="123.0" text="Загрузить данные" GridPane.columnIndex="4" />
+            <Button fx:id="impBtn" disable="true" mnemonicParsing="false" onAction="#importData" prefHeight="25.0" prefWidth="123.0" text="Загрузить данные" GridPane.columnIndex="4" />
             <Button fx:id="print_btn" mnemonicParsing="false" onAction="#printDoc" text="Печать" GridPane.columnIndex="5" />
          </children>
       </GridPane>

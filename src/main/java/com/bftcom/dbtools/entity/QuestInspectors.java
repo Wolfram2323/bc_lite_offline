@@ -11,8 +11,8 @@ import java.math.BigInteger;
  */
 @Entity
 @Table(name="QUESTIONSAUDITINSPECTORS")
-@OnLineJoin(sqlExpression = " inner join QUESTRESULT qr  on QUESTIONSAUDITINSPECTORS.PROGRAMSAUDITDOCDETAIL_ID = qr.PROGRAMSAUDITDOCDETAIL_ID" +
-        " where qr.actresultsauditdoc_id = ?")
+@OnLineJoin(sqlExpression = " inner join QUESTRESULT on QUESTIONSAUDITINSPECTORS.PROGRAMSAUDITDOCDETAIL_ID = QUESTRESULT.PROGRAMSAUDITDOCDETAIL_ID" +
+        " where QUESTRESULT.actresultsauditdoc_id = ?")
 public class QuestInspectors {
     @Id
     @Column(name="ID", nullable=false, precision = 15, scale = 0)
@@ -25,7 +25,7 @@ public class QuestInspectors {
 
     @ManyToOne
     @JoinColumn(name="QUEST_ID", foreignKey = @ForeignKey(name = "FK_QUESTINSP_QUEST"), nullable = false)
-    @OnLineColumnInfo(columnName = "ID", joinAlias = "QR")
+    @OnLineColumnInfo(columnName = "ID", joinAlias = "QUESTRESULT")
     private Questions  question;
 
     public BigInteger getId() {
