@@ -95,14 +95,14 @@ public  class GuiUtils {
                     method.setAccessible(true);
                     field.setAccessible(true);
                     Object value = method.invoke(field.get(control));
-                    if(fieldClassName.equals("DatePicker")){
+                    if(fieldClassName.equals("DatePicker") && value != null){
                         value = Date.valueOf((LocalDate) value);
                     }
                     PropertyDescriptor pd = new PropertyDescriptor(field.getName().substring(0, field.getName().indexOf("_field")), entity.getClass());
                     pd.getWriteMethod().invoke(entity,value);
                 }
             } catch (Exception e) {
-                Message.throwExceptionForJavaFX(e,"Сохранение электронного документа завершилась с ошибкой",null,true);
+                Message.throwExceptionForJavaFX(e,"Сохранение электронного документа завершилoсь с ошибкой",null,false);
             }
 
         }
