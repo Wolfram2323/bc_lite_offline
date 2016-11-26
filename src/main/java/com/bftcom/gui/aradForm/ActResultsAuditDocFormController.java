@@ -84,6 +84,9 @@ public class ActResultsAuditDocFormController implements Initializable {
             ActResultsAuditDoc arad = query.getSingleResult();
             arad_id = arad.getId();
             session.beginTransaction();
+            if(Context.getCurrentContext().isAdmin()){
+                impBtn.setDisable(false);
+            }
             if(arad.getDoc_status().longValue() == 0 || arad.getDoc_status().longValue() == 28) {
                 doc_status_field.setText("Оффлайн - Черновик");
             } else {
@@ -94,9 +97,6 @@ public class ActResultsAuditDocFormController implements Initializable {
                 saveBtn.setDisable(true);
                 stopBtn.setDisable(true);
                 readOnly = true;
-            }
-            if(Context.getCurrentContext().isAdmin()){
-                impBtn.setDisable(false);
             }
             baseFieldsController.initialize(arad);
             auditBasisController.initialize(arad);
@@ -166,6 +166,9 @@ public class ActResultsAuditDocFormController implements Initializable {
                 session.beginTransaction();
                 ActResultsAuditDoc arad = session.get(ActResultsAuditDoc.class,arad_id);
                 arad.setDoc_status(new BigInteger("3"));
+                if(Context.getCurrentContext().isAdmin()){
+                    arad.setApprovedate(((BaseFieldsTitledPaneController)mainAccordion.getPanes().get(0)).stopEdit());
+                }
                 session.saveOrUpdate(arad);
                 session.getTransaction().commit();
                 HibernateUtils.getCurrentSession().beginTransaction();
@@ -175,6 +178,7 @@ public class ActResultsAuditDocFormController implements Initializable {
                 saveBtn.setDisable(true);
                 stopBtn.setDisable(true);
                 readOnly = true;
+
             } catch (Exception e){
                 Message.throwExceptionForJavaFX(e,"Ошибка при процессе завершения форматирования", null, false);
             }

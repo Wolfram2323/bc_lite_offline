@@ -105,7 +105,7 @@ public class DataUploader {
                             fillElementByEntity(child,row.getClass().getDeclaredFields(), row, atrNameByAnnotation);
                         });
                     }
-                } else if (field.getAnnotation(JoinColumn.class)!= null){
+                } else if (field.getAnnotation(JoinColumn.class)!= null && value!=null){
                     el.setAttribute(atrNameByAnnotation ? field.getAnnotation(JoinColumn.class).name() : field.getName()+"_links"
                             ,value.getClass().getDeclaredMethod("getId").invoke(value).toString());
                 } else {

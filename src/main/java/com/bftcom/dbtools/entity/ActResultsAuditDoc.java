@@ -145,19 +145,19 @@ public class ActResultsAuditDoc {
     private String deputy_head_appointment;
 
     @Column(name="AUDOTORG_HEAD_FIO", length = 255)
-    @OnLineColumnInfo(columnName = "HEADFIO")
+    @OnLineColumnInfo(columnName = "HEADFIO", synch = true)
     private String auditorg_head_fio;
 
     @Column(name="AUDOTORG_HEAD_APP", length = 255)
-    @OnLineColumnInfo(columnName = "HEADAPPOINTMENTCAPTION")
+    @OnLineColumnInfo(columnName = "HEADAPPOINTMENTCAPTION", synch = true)
     private String auditorg_head_app;
 
     @Column(name="ACCOUNTANTFIO", length = 255)
-    @OnLineColumnInfo
+    @OnLineColumnInfo(synch = true)
     private String accountantfio;
 
     @Column(name="ACCOUNTANTAPP", length = 255)
-    @OnLineColumnInfo(columnName = "ACCAPPOINTMENTCAPTION")
+    @OnLineColumnInfo(columnName = "ACCAPPOINTMENTCAPTION", synch = true)
     private String accountantapp;
 
     @Column(name="ORDERAUDIT_NUMBER", length = 80)

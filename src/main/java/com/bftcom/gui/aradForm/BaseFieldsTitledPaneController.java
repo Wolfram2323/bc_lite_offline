@@ -19,6 +19,8 @@ import javafx.scene.web.WebView;
 
 import java.io.IOException;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collections;
 import org.w3c.dom.Document;
 
@@ -106,5 +108,11 @@ public class BaseFieldsTitledPaneController extends AbstractBftTitledPaneControl
     public void submitData(ActResultsAuditDoc arad) {
         Object value = obstacle_engine.executeScript("getCkEditor().getData();");
         arad.setObstacle(value.toString());
+    }
+
+    public Date stopEdit(){
+        LocalDate now = LocalDate.now();
+        approvedate_field.setValue(now);
+        return Date.valueOf(now);
     }
 }
