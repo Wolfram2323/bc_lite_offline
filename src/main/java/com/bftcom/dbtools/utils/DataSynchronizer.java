@@ -25,7 +25,11 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,7 +65,7 @@ public class DataSynchronizer {
         Session session = HibernateUtils.getSession(null);
         try{
             session.beginTransaction();
-            fillEntityByElement(session, dataBlock);
+            fillEntityByElement(session, dataBlock, null);
             session.getTransaction().commit();
         } catch (HibernateException e) {
             session.getTransaction().rollback();
@@ -79,7 +83,7 @@ public class DataSynchronizer {
         }
     }
 
-    private void fillEntityByElement(Session session, Element dataGroupEl){
+    private void fillEntityByElement(Session session, Element dataGroupEl, Object parent){
         NodeList nodeList = dataGroupEl.getChildNodes();
         for(int i = 0 ; i < nodeList.getLength(); i++){
             Element el = (Element) nodeList.item(i);
@@ -94,7 +98,7 @@ public class DataSynchronizer {
                     }
                     try{
                         if(record == null){
-                            record = record.getClass().newInstance();
+                            record = entity.newInstance();
                         }
                         boolean link = attr.getNodeName().endsWith("_links");
                         String fieldName = link ? attr.getNodeName().substring(0, attr.getNodeName().indexOf("_links")) : attr.getNodeName();
@@ -110,20 +114,38 @@ public class DataSynchronizer {
                             switch (fieldClassName){
                                 case "Integer" :
                                     pd.getWriteMethod().invoke(record, Integer.valueOf(attrValue)); break;
+                                case "Date" :
+                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                                    Date parsed = format.parse(attrValue);
+                                    java.sql.Date sql = new java.sql.Date(parsed.getTime());
+                                    pd.getWriteMethod().invoke(record, sql); break;
+                                case "BigDecimal":
+                                    pd.getWriteMethod().invoke(record, new BigDecimal(attrValue)); break;
                                 default:
                                     pd.getWriteMethod().invoke(record, attrValue); break;
                             }
-
                         }
-                        session.saveOrUpdate(record);
                     } catch (NoSuchFieldException e){
                         log.warn("Miss attribute " + attr.getNodeName() + ". Field with that name not found in dataBase entity!");
                     } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e){
                         log.warn("Miss attribute " + attr.getNodeName() + ". Setter for field with that name not found or not unavailable!");
                     } catch (InstantiationException e) {
                        log.warn("Entity object instance failed. Element has been passed.");
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
                 }
+                if(parent != null){
+                    switch (el.getTagName().toUpperCase()){
+                        case "VIOLATIONGROUP": ((Questions)parent).getViolationGroup().add((ViolationGroup) record); break;
+                        case "VIOLATIONGROUPKBK": ((ViolationGroup)parent).getViolationGroupKBK().add((ViolationGroupKBK) record); break;
+                    }
+                }
+                Element dataBlock = (Element)el.getFirstChild();
+                if(dataBlock != null){
+                    fillEntityByElement(session,dataBlock, record);
+                }
+                session.saveOrUpdate(record);
             } else {
                 log.warn("Element with tag " + el.getTagName() + "has been passed. Entity with that table name not found!" );
             }

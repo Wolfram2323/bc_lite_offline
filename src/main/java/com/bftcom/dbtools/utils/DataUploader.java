@@ -127,7 +127,7 @@ public class DataUploader {
                     }
                 }
             } catch (IllegalAccessException | IntrospectionException | InvocationTargetException | NoSuchMethodException e) {
-                Message.throwExceptionForJavaFX(e,"Выгрузка данных завершилась с ошибкой", null, false);
+                Message.throwExceptionForJavaFX(e,"Р’С‹РіСЂСѓР·РєР° РґР°РЅРЅС‹С… Р·Р°РІРµСЂС€РёР»Р°СЃСЊ СЃ РѕС€РёР±РєРѕР№", null, false);
                 e.printStackTrace();
             }
 
