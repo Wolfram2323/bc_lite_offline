@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1216.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bftcom.gui.aradForm.ActResultsAuditDocFormController">
+<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bftcom.gui.aradForm.ActResultsAuditDocFormController">
    <bottom>
       <GridPane hgap="15.0" BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -14,9 +14,9 @@
             <ColumnConstraints hgrow="NEVER" maxWidth="308.0" minWidth="10.0" prefWidth="178.0" />
             <ColumnConstraints hgrow="NEVER" maxWidth="560.0" minWidth="10.0" prefWidth="119.0" />
             <ColumnConstraints hgrow="NEVER" maxWidth="560.0" minWidth="10.0" prefWidth="121.0" />
-          <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="330.0" />
-            <ColumnConstraints hgrow="NEVER" maxWidth="142.0" minWidth="10.0" prefWidth="78.0" />
-            <ColumnConstraints hgrow="NEVER" maxWidth="119.0" minWidth="10.0" prefWidth="60.0" />
+          <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="183.0" />
+            <ColumnConstraints hgrow="NEVER" maxWidth="142.0" minWidth="10.0" prefWidth="86.0" />
+            <ColumnConstraints hgrow="NEVER" maxWidth="119.0" minWidth="10.0" prefWidth="67.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />

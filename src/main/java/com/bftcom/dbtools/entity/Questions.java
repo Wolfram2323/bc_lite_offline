@@ -38,7 +38,7 @@ public class Questions {
     private String typicalquest_line_number;
 
     @Column(name="RESOLVED")
-    @OnLineColumnInfo
+    @OnLineColumnInfo(synch = true)
     private Integer resolved;
 
 
