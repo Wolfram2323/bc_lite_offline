@@ -36,7 +36,7 @@ public class ViolationKBKTVObject {
     public ViolationKBKTVObject(Long kbkdetail_id, String fsr_caption, String amount, String cash, String account, String grbs, String budget){
         this.id = new SimpleLongProperty();
         this.kbkdetail_id = kbkdetail_id != null ? new SimpleLongProperty(kbkdetail_id) : new SimpleLongProperty();
-        this.fsr_caption = fsr_caption != null ? new SimpleObjectProperty(new StoreObject(BigInteger.valueOf(kbkdetail_id),fsr_caption)) : new SimpleObjectProperty(new StoreObject(null,""));
+        this.fsr_caption = kbkdetail_id != null ? new SimpleObjectProperty(new StoreObject(BigInteger.valueOf(kbkdetail_id),fsr_caption)) : new SimpleObjectProperty(new StoreObject(null,""));
         this.amount =  amount == null || amount.isEmpty() ? new SimpleStringProperty("0.0") : new SimpleStringProperty(amount);
         this.cash = cash == null || cash.isEmpty() ? new SimpleStringProperty("0.0") :  new SimpleStringProperty(cash);
         this.account = account == null || account.isEmpty() ? new SimpleStringProperty("0.0") : new SimpleStringProperty(account);
