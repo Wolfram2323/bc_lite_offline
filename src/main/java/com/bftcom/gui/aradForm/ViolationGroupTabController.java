@@ -398,6 +398,9 @@ public class ViolationGroupTabController extends AbstractBftTabController {
         GuiUtils.textAndDateFieldGetUp(violation,this,Arrays.asList("violation_field", "violationCaption_field", "violationType_field"));
         submitKBK(violation);
         session.saveOrUpdate(violation);
+        if(violationGroup_id == null){
+            violationGroup_id = violation.getId();
+        }
         Questions quest = session.get(Questions.class, quest_id);
         quest.getViolationGroup().add(violation);
 
