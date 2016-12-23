@@ -25,7 +25,7 @@
                         <TableColumn fx:id="id_col" editable="false" prefWidth="75.0" text="ID" visible="false" />
                         <TableColumn fx:id="kbkdetail_id_col" editable="false" prefWidth="75.0" text="KBK_ID" visible="false" />
                               <TableColumn fx:id="fsr_caption_col" editable="false" prefWidth="98.0" text="КВФО" />
-                              <TableColumn fx:id="financeamt_col" editable="false" prefWidth="211.0" text="Фиансирование (руб.)" />
+                              <TableColumn fx:id="financeamt_col" editable="false" prefWidth="211.0" text="Финансирование (руб.)" />
                               <TableColumn fx:id="auditedamount_col" prefWidth="275.0" text="Объем проверенных средств" />
                           </columns>
                   </TableView>

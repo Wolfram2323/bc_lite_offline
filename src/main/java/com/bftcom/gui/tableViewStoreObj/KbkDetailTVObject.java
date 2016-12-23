@@ -18,13 +18,13 @@ public class KbkDetailTVObject {
     private final SimpleLongProperty id;
     private final SimpleStringProperty fsr_caption;
     private final SimpleLongProperty fsr_id;
-    private final SimpleDoubleProperty financeamt;
+    private final SimpleStringProperty financeamt;
 
     public KbkDetailTVObject(KBKDetail kbkDetail){
         this.id = new SimpleLongProperty(kbkDetail.getId().longValue());
         this.fsr_caption =  new SimpleStringProperty(kbkDetail.getFsr_caption());
         this.fsr_id = new SimpleLongProperty(kbkDetail.getFsr_id());
-        this.financeamt = new SimpleDoubleProperty(kbkDetail.getFinanceamt().doubleValue());
+        this.financeamt = new SimpleStringProperty(kbkDetail.getFinanceamt().toString());
     }
 
     public long getId() {
@@ -51,15 +51,15 @@ public class KbkDetailTVObject {
         this.fsr_caption.set(fsr_caption);
     }
 
-    public double getFinanceamt() {
+    public String getFinanceamt() {
         return financeamt.get();
     }
 
-    public SimpleDoubleProperty financeamtProperty() {
+    public SimpleStringProperty financeamtProperty() {
         return financeamt;
     }
 
-    public void setFinanceamt(double financeamt) {
+    public void setFinanceamt(String financeamt) {
         this.financeamt.set(financeamt);
     }
 
@@ -92,7 +92,7 @@ public class KbkDetailTVObject {
         fsr_id.setVisible(false);
         result.add(fsr_id);
         TableColumn financeamt = new TableColumn("Фиансирование (руб.)");
-        financeamt.setCellValueFactory(new PropertyValueFactory<KbkDetailTVObject,Double>("financeamt"));
+        financeamt.setCellValueFactory(new PropertyValueFactory<KbkDetailTVObject,String>("financeamt"));
         financeamt.setEditable(false);
         result.add(financeamt);
         return result;

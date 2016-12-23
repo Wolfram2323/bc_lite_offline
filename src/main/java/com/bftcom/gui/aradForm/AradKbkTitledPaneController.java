@@ -100,7 +100,7 @@ public class AradKbkTitledPaneController extends AbstractBftTitledPaneController
         kbkdetail_id_col.setCellValueFactory(new PropertyValueFactory<AradKbkTVObject,Long>("kbkdetail_id"));
         fsr_caption_col.setCellValueFactory(new PropertyValueFactory<AradKbkTVObject,String>("fsr_caption"));
         financeamt_col.setCellValueFactory(new PropertyValueFactory<AradKbkTVObject, Double>("financeamt"));
-        auditedamount_col.setCellValueFactory(new PropertyValueFactory<AradKbkTVObject, String>("auditedamount"));
+        auditedamount_col.setCellValueFactory(new PropertyValueFactory<AradKbkTVObject, Double>("auditedamount"));
         auditedamount_col.setCellFactory(param -> new NumberTextFieldTableCell<AradKbkTVObject>());
         auditedamount_col.setOnEditCommit(
                 new EventHandler<TableColumn.CellEditEvent<AradKbkTVObject,String>>() {
