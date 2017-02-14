@@ -27,7 +27,7 @@ import java.util.List;
         " inner join person pdeputy on pdeputy.id = empdeputy.person_id" +
         " inner join appointment apphead on apphead.id = emphead.appointment_id" +
         " inner join appointment appdeputy on appdeputy.id = empdeputy.appointment_id" +
-        " where ACTRESULTSAUDITDOC.ID = ? and rownum = 1")
+        " where ACTRESULTSAUDITDOC.ID = ? ")
 public class ActResultsAuditDoc {
     @Id
     @Column(name="ID", nullable = false, precision = 15, scale = 0)

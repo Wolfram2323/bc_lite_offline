@@ -189,14 +189,19 @@ public class ActResultsAuditDocFormController implements Initializable {
     }
     @FXML
     private void exportData(ActionEvent event){
-        DataUploader dataUploader = new DataUploader();
-        Context con = Context.getCurrentContext();
-        if(con.isAdmin()){
-            dataUploader.fullExport(arad_id);
-        } else {
-            dataUploader.exportForOtherOffline();
+        try{
+            DataUploader dataUploader = new DataUploader();
+            Context con = Context.getCurrentContext();
+            if(con.isAdmin()){
+                dataUploader.fullExport(arad_id);
+            } else {
+                dataUploader.exportForOtherOffline();
+            }
+            Message.showInfoMessage("Завершение выгрузки данных", "Процесс выгрузки данных завершен.");
+        } catch (Exception e){
+            Message.throwExceptionForJavaFX(e,"Ошибка при выгрузке данных", null, false);
         }
-        Message.showInfoMessage("Завершение выгрузки данных", "Процесс выгрузки данных завершен.");
+
 
     }
     @FXML
