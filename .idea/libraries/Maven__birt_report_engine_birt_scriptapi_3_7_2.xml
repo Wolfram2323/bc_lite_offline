@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: birt-report-engine:birt-scriptapi:3.7.2">
+    <CLASSES>
+      <root url="jar://G:/apache-maven-3.3.9/repo/birt-report-engine/birt-scriptapi/3.7.2/birt-scriptapi-3.7.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://G:/apache-maven-3.3.9/repo/birt-report-engine/birt-scriptapi/3.7.2/birt-scriptapi-3.7.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://G:/apache-maven-3.3.9/repo/birt-report-engine/birt-scriptapi/3.7.2/birt-scriptapi-3.7.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
