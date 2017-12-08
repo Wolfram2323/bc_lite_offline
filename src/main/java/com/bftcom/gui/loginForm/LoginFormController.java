@@ -1,5 +1,8 @@
 package com.bftcom.gui.loginForm;
 
+import com.bftcom.context.Context;
+import com.bftcom.context.Customization;
+import com.bftcom.dbtools.entity.SystemParameters;
 import com.bftcom.dbtools.utils.AuthentificationUtils;
 import com.bftcom.dbtools.utils.HibernateUtils;
 import javafx.event.ActionEvent;
@@ -14,9 +17,11 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -38,6 +43,13 @@ public class LoginFormController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         session = HibernateUtils.getCurrentSession();
+        Query<SystemParameters> paramQuery = session.createQuery(" FROM SystemParameters where name = :name", SystemParameters.class).setParameter("name", "customization");
+        List<SystemParameters> params = paramQuery.getResultList();
+        if(params.isEmpty()){
+            Context.getCurrentContext().setCust(Customization.find(""));
+        } else {
+            Context.getCurrentContext().setCust(Customization.find(params.get(0).getValue()));
+        }
         loginBtn.setDefaultButton(true);
     }
 

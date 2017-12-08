@@ -1,13 +1,14 @@
 package com.bftcom.gui.aradForm;
 
 import com.bftcom.context.Context;
+import com.bftcom.context.Customization;
 import com.bftcom.dbtools.entity.ActResultsAuditDoc;
 import com.bftcom.dbtools.utils.DataSynchronizer;
 import com.bftcom.dbtools.utils.DataUploader;
 import com.bftcom.dbtools.utils.HibernateUtils;
+import com.bftcom.gui.CustomProperties;
 import com.bftcom.gui.utils.Message;
-import com.bftcom.gui.utils.GuiUtils;
-//import com.bftcom.report.BirtReport;
+import com.bftcom.report.BirtReport;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,6 +19,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -27,10 +29,7 @@ import org.hibernate.internal.SessionImpl;
 import org.hibernate.query.Query;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigInteger;
 import java.net.URL;
 import java.sql.Connection;
@@ -54,7 +53,7 @@ public class ActResultsAuditDocFormController implements Initializable {
     @FXML
     private Button stopBtn;
     @FXML
-    private Button print_btn;
+    private MenuButton print_btn;
 
     @FXML
     private Button saveBtn;
@@ -64,30 +63,33 @@ public class ActResultsAuditDocFormController implements Initializable {
     private boolean readOnly;
 
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try{
+        try {
+            setItemsToPrintBtn();
+            if(Context.getCurrentContext().getCust().equals(Customization.TYUMEN)){
+                impBtn.setVisible(false);
+            }
             BaseFieldsTitledPaneController baseFieldsController = new BaseFieldsTitledPaneController();
-            mainAccordion.getPanes().add(0,baseFieldsController);
+            mainAccordion.getPanes().add(0, baseFieldsController);
             AradKbkTitledPaneController aradKbkController = new AradKbkTitledPaneController();
-            mainAccordion.getPanes().add(1,aradKbkController);
+            mainAccordion.getPanes().add(1, aradKbkController);
             SignsTitledPaneController signsController = new SignsTitledPaneController();
-            mainAccordion.getPanes().add(2,signsController);
+            mainAccordion.getPanes().add(2, signsController);
             AuditBasisTitledPaneController auditBasisController = new AuditBasisTitledPaneController();
-            mainAccordion.getPanes().add(3,auditBasisController);
+            mainAccordion.getPanes().add(3, auditBasisController);
             QuestionsTitledPaneController questionsController = new QuestionsTitledPaneController();
-            mainAccordion.getPanes().add(4,questionsController);
+            mainAccordion.getPanes().add(4, questionsController);
 
             Session session = HibernateUtils.getCurrentSession();
             Query<ActResultsAuditDoc> query = session.createQuery("FROM ActResultsAuditDoc");
             ActResultsAuditDoc arad = query.getSingleResult();
             arad_id = arad.getId();
             session.beginTransaction();
-            if(Context.getCurrentContext().isAdmin()){
+            if (Context.getCurrentContext().isAdmin()) {
                 impBtn.setDisable(false);
             }
-            if(arad.getDoc_status().longValue() == 0 || arad.getDoc_status().longValue() == 28) {
+            if (arad.getDoc_status().longValue() == 0 || arad.getDoc_status().longValue() == 28) {
                 doc_status_field.setText("Оффлайн - Черновик");
             } else {
                 doc_status_field.setText("Форматирование завершено");
@@ -104,70 +106,69 @@ public class ActResultsAuditDocFormController implements Initializable {
             aradKbkController.initialize(arad);
             questionsController.initialize(arad);
 
-        } catch (Throwable e){
+        } catch (Throwable e) {
             e.printStackTrace();
-            Message.throwExceptionForJavaFX(e,"Произошла ошибка", null, false);
+            Message.throwExceptionForJavaFX(e, "Произошла ошибка", null, false);
         }
 
 
     }
 
     @FXML
-    private void submitData (ActionEvent event){
+    private void submitData(ActionEvent event) {
         Session session = HibernateUtils.getCurrentSession();
-        ActResultsAuditDoc arad = session.get(ActResultsAuditDoc.class,arad_id);
-        mainAccordion.getPanes().forEach(titledPane -> ((AbstractBftTitledPaneController)titledPane).submitData(arad));
-        try{
+        ActResultsAuditDoc arad = session.get(ActResultsAuditDoc.class, arad_id);
+        mainAccordion.getPanes().forEach(titledPane -> ((AbstractBftTitledPaneController) titledPane).submitData(arad));
+        try {
             session.saveOrUpdate(arad);
             session.getTransaction().commit();
             Message.showInfoMessage("Сохранение завершено", "Сохранение успешно.");
-        }catch (Throwable e){
-            Message.throwExceptionForJavaFX(e,"Сохранение завершено с ошибкой","Сохранение невозможно. Смотрите описание ошибки ниже", false);
-        }finally {
+        } catch (Throwable e) {
+            Message.throwExceptionForJavaFX(e, "Сохранение завершено с ошибкой", "Сохранение невозможно. Смотрите описание ошибки ниже", false);
+        } finally {
             HibernateUtils.closeSession();
             HibernateUtils.getCurrentSession().beginTransaction();
         }
     }
 
     @FXML
-    private void exitAction (ActionEvent event) {
+    private void exitAction(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Выход из системы");
         alert.setHeaderText("Вы действительно хотите завершить работу с ситемой?");
-        if(!readOnly){
+        if (!readOnly) {
             alert.setContentText("В случае завершения работы, все несохраненные данные пропадут.");
         }
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
-            try{
+        if (result.get() == ButtonType.OK) {
+            try {
                 HibernateUtils.getCurrentSession().getTransaction().rollback();
                 HibernateUtils.closeConnection(HibernateUtils.getCurrentSession());
-            } catch (Exception e){
+                System.exit(0);
+            } catch (Exception e) {
                 e.printStackTrace();
                 System.exit(0);
             }
-
-            System.exit(0);
         }
     }
 
     @FXML
-    private void stopEdit(ActionEvent event){
+    private void stopEdit(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Завершение форматирования");
         alert.setHeaderText("Вы действительно хотите завершить изменения в документе?");
         alert.setContentText("В случае завершения редактирования, вносить изменения в документ будет невозможно. Текущие изменения не сохрнятся");
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
-            try{
+        if (result.get() == ButtonType.OK) {
+            try {
                 Session session = HibernateUtils.getCurrentSession();
                 session.getTransaction().rollback();
                 session.beginTransaction();
-                ActResultsAuditDoc arad = session.get(ActResultsAuditDoc.class,arad_id);
+                ActResultsAuditDoc arad = session.get(ActResultsAuditDoc.class, arad_id);
                 arad.setDoc_status(new BigInteger("3"));
-                if(Context.getCurrentContext().isAdmin()){
-                    arad.setApprovedate(((BaseFieldsTitledPaneController)mainAccordion.getPanes().get(0)).stopEdit());
+                if (Context.getCurrentContext().isAdmin()) {
+                    arad.setApprovedate(((BaseFieldsTitledPaneController) mainAccordion.getPanes().get(0)).stopEdit());
                 }
                 session.saveOrUpdate(arad);
                 session.getTransaction().commit();
@@ -179,49 +180,51 @@ public class ActResultsAuditDocFormController implements Initializable {
                 stopBtn.setDisable(true);
                 readOnly = true;
 
-            } catch (Exception e){
-                Message.throwExceptionForJavaFX(e,"Ошибка при процессе завершения форматирования", null, false);
+            } catch (Exception e) {
+                Message.throwExceptionForJavaFX(e, "Ошибка при процессе завершения форматирования", null, false);
             }
 
 
         }
 
     }
+
     @FXML
-    private void exportData(ActionEvent event){
-        try{
+    private void exportData(ActionEvent event) {
+        try {
             DataUploader dataUploader = new DataUploader();
             Context con = Context.getCurrentContext();
-            if(con.isAdmin()){
+            if (con.isAdmin()) {
                 dataUploader.fullExport(arad_id);
             } else {
                 dataUploader.exportForOtherOffline();
             }
             Message.showInfoMessage("Завершение выгрузки данных", "Процесс выгрузки данных завершен.");
-        } catch (Exception e){
-            Message.throwExceptionForJavaFX(e,"Ошибка при выгрузке данных", null, false);
+        } catch (Exception e) {
+            Message.throwExceptionForJavaFX(e, "Ошибка при выгрузке данных", null, false);
         }
 
 
     }
+
     @FXML
-    private void importData(ActionEvent event) throws IOException{
-        try{
+    private void importData(ActionEvent event) throws IOException {
+        try {
             HibernateUtils.getCurrentSession().getTransaction().rollback();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Выбор файла");
-        File file = chooser.showOpenDialog(((Node)event.getSource()).getScene().getWindow());
-        if(file != null){
+        File file = chooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
+        if (file != null) {
             DataSynchronizer dataSynchronizer = new DataSynchronizer();
             dataSynchronizer.synchronizeData(file);
         }
         Message.showInfoMessage("Завершение загрузки данных", "Процесс загрузки данных в систему завершен.");
 
         Parent parent = FXMLLoader.load(getClass().getResource("/fxml/aradForm.fxml"));
-        ((Node)event.getSource()).getScene().getWindow().hide();
+        ((Node) event.getSource()).getScene().getWindow().hide();
         parent.getStylesheets().add("/css/styles.css");
         Stage stage = new Stage();
         Scene scene = new Scene(parent);
@@ -235,7 +238,7 @@ public class ActResultsAuditDocFormController implements Initializable {
                 alert.setContentText("В случае завершения работы, все несохраненные данные пропадут.");
 
                 Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.CANCEL){
+                if (result.get() == ButtonType.CANCEL) {
                     we.consume();
                 }
                 HibernateUtils.closeConnection(HibernateUtils.getCurrentSession());
@@ -244,33 +247,58 @@ public class ActResultsAuditDocFormController implements Initializable {
         stage.show();
 
     }
+
     @FXML
-    private void printDoc(ActionEvent event){
-        try{
+    private void printDoc(ActionEvent event) {
+        try {
             print_btn.setDisable(true);
             Session session = HibernateUtils.getSession(null);
-            Connection conection = ((SessionImpl)session).connection();
-            String outputFormat = "doc";
-            Map<String,Object> params = new HashMap<>();
-            params.put("ID",arad_id);
+            Connection conection = ((SessionImpl) session).connection();
+            String outputFormat = "odt";
+            Map<String, Object> params = new HashMap<>();
+            params.put("ID", arad_id);
             try {
-                File report = File.createTempFile("birt","." + outputFormat);
-                InputStream template = getClass().getResourceAsStream("/reportTemplates/actResultControlEvent.rptdesign");
+                File report = File.createTempFile("birt", "." + outputFormat);
+                String reportTemplateName = ((MenuItem)event.getTarget()).getProperties().get(CustomProperties.REPORT_TEMPLATE).toString();
+                InputStream template = getClass().getResourceAsStream(reportTemplateName);
                 FileOutputStream reportStream = new FileOutputStream(report);
-//                BirtReport.generate(outputFormat, template,reportStream ,params,conection);
+                BirtReport.generate(outputFormat, template, reportStream, params, conection);
                 template.close();
                 reportStream.close();
                 Desktop.getDesktop().open(report);
             } catch (IOException e) {
                 e.printStackTrace();
-                Message.throwExceptionForJavaFX(e,"Ошибка генерации отчета","", false);
+                Message.throwExceptionForJavaFX(e, "Ошибка генерации отчета", "", false);
             }
         } finally {
             print_btn.setDisable(false);
         }
 
 
+    }
 
+//    @FXML
+//    private void setPrintSettings (ActionEvent event) {
+//
+//
+//    }
+
+
+    public void setItemsToPrintBtn() {
+        switch (Context.getCurrentContext().getCust()) {
+            case TYUMEN:
+                MenuItem item = new MenuItem();
+                item.setText("Справка");
+                item.getProperties().put(CustomProperties.REPORT_TEMPLATE, "/reportTemplates/referenceAct.rptdesign");
+                item.setOnAction(this::printDoc);
+                print_btn.getItems().add(item);
+                item = new MenuItem();
+                item.setText("Акт встречной проверки");
+                item.getProperties().put(CustomProperties.REPORT_TEMPLATE, "/reportTemplates/counterAuditAct.rptdesign");
+                item.setOnAction(this::printDoc);
+                print_btn.getItems().add(item);
+                break;
+        }
     }
 
 

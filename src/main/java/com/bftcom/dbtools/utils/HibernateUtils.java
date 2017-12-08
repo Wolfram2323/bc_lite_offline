@@ -66,6 +66,7 @@ public class HibernateUtils {
                 .addAnnotatedClass(Questions.class)
                 .addAnnotatedClass(QuestInspectors.class)
                 .addAnnotatedClass(SysUser.class)
+                .addAnnotatedClass(SystemParameters.class)
                 .addAnnotatedClass(Violation.class)
                 .addAnnotatedClass(ViolationGroup.class)
                 .addAnnotatedClass(ViolationGroupKBK.class)

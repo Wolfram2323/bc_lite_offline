@@ -5,7 +5,7 @@ import com.bftcom.dbtools.annotations.OnLineJoin;
 
 import javax.persistence.*;
 import java.math.BigInteger;
-import java.sql.Clob;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,44 +15,64 @@ import java.util.Set;
  * Created by k.nikitin on 23.09.2016.
  */
 @Entity
-@Table(name="QUESTRESULT")
+@Table(name = "QUESTRESULT")
 @OnLineJoin(sqlExpression = " inner join programsauditdocdetail pdet on pdet.id = QUESTRESULT.programsauditdocdetail_id" +
         " inner join TYPICALQUEST tq on tq.id = pdet.TYPICALQUEST_ID" +
+        " inner join org orga on orga.id = QUESTRESULT.auditorg_id" +
         " where QUESTRESULT.actresultsauditdoc_id = ?")
 public class Questions {
     @Id
-    @Column(name="ID", nullable=false, precision = 15, scale = 0)
+    @Column(name = "ID", nullable = false, precision = 15, scale = 0)
     private BigInteger id;
 
-    @Column(name="CAPTION", length = 800)  //todo связка с инспектором
+    @Column(name = "CAPTION", length = 800)  //todo связка с инспектором
     @OnLineColumnInfo(joinAlias = "TQ")
     private String caption;
 
-    @Column(name="RESULT", columnDefinition = "clob")
+    @Column(name = "RESULT", columnDefinition = "clob")
     @Lob
     @OnLineColumnInfo(synch = true)
     private String result;
 
-    @Column(name="TYPICALQUEST_LINE_NUMBER", length = 16)
+    @Column(name = "TYPICALQUEST_LINE_NUMBER", length = 16)
     @OnLineColumnInfo(joinAlias = "PDET")
     private String typicalquest_line_number;
 
-    @Column(name="RESOLVED")
+    @Column(name = "RESOLVED")
     @OnLineColumnInfo(synch = true)
     private Integer resolved;
 
+    @Column(name="AUDITORG_CAPTION", length = 255)
+    @OnLineColumnInfo(columnName = "CAPTION", joinAlias = "ORGA")
+    private String auditOrg_caption;
+
+    @Column(name = "COUNTER_AUDIT")
+    @OnLineColumnInfo
+    private Integer counter_audit;
+
+    @Column(name = "AUDITTHEME")
+    @OnLineColumnInfo(synch = true)
+    private String auditTheme;
+
+    @Column(name = "AUDITFROM")
+    @OnLineColumnInfo(synch = true)
+    private Date auditFrom;
+
+    @Column(name = "AUDITTO")
+    @OnLineColumnInfo(synch = true)
+    private Date auditTo;
 
     @OneToMany
-    @JoinColumn(name="QUESTIONS_ID", foreignKey = @ForeignKey(name="FK_VG_QUESTIONS"))
+    @JoinColumn(name = "QUESTIONS_ID", foreignKey = @ForeignKey(name = "FK_VG_QUESTIONS"))
     private List<ViolationGroup> violationGroup = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name="ACTRESULTSAUDITDOC_ID", foreignKey = @ForeignKey(name="FK_QUESTIONS_ARAD"))
-    @OnLineColumnInfo(columnName = "ACTRESULTSAUDITDOC_ID",  synch = true)
+    @JoinColumn(name = "ACTRESULTSAUDITDOC_ID", foreignKey = @ForeignKey(name = "FK_QUESTIONS_ARAD"))
+    @OnLineColumnInfo(columnName = "ACTRESULTSAUDITDOC_ID", synch = true)
     private ActResultsAuditDoc actResultsAuditDoc;
 
     @OneToMany
-    @JoinColumn(name="QUEST_ID", foreignKey = @ForeignKey(name = "FK_QUESTINSP_QUEST"))
+    @JoinColumn(name = "QUEST_ID", foreignKey = @ForeignKey(name = "FK_QUESTINSP_QUEST"))
     private Set<QuestInspectors> questInspectorsSet = new HashSet<>();
 
     public BigInteger getId() {
@@ -118,5 +138,45 @@ public class Questions {
 
     public void setQuestInspectorsSet(Set<QuestInspectors> questInspectorsSet) {
         this.questInspectorsSet = questInspectorsSet;
+    }
+
+    public Integer getCounter_audit() {
+        return counter_audit;
+    }
+
+    public void setCounter_audit(Integer counter_audit) {
+        this.counter_audit = counter_audit;
+    }
+
+    public String getAuditTheme() {
+        return auditTheme;
+    }
+
+    public void setAuditTheme(String auditTheme) {
+        this.auditTheme = auditTheme;
+    }
+
+    public Date getAuditFrom() {
+        return auditFrom;
+    }
+
+    public void setAuditFrom(Date auditFrom) {
+        this.auditFrom = auditFrom;
+    }
+
+    public Date getAuditTo() {
+        return auditTo;
+    }
+
+    public void setAuditTo(Date auditTo) {
+        this.auditTo = auditTo;
+    }
+
+    public String getAuditOrg_caption() {
+        return auditOrg_caption;
+    }
+
+    public void setAuditOrg_caption(String auditOrg_caption) {
+        this.auditOrg_caption = auditOrg_caption;
     }
 }

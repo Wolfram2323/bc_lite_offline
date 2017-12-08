@@ -1,6 +1,9 @@
 package com.bftcom.context;
 
+import com.bftcom.dbtools.entity.SystemParameters;
+import com.bftcom.dbtools.utils.HibernateUtils;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.math.BigInteger;
 
@@ -10,16 +13,17 @@ import java.math.BigInteger;
 public class Context {
 
     private Session session;
-    private static Context instance;
     private boolean isAdmin;
+    private Customization cust;
     private BigInteger user_id;
 
 
+    private static class LazyHolder{
+        private static final Context INSTANCE = new Context();
+    }
+
     public static synchronized Context getCurrentContext() {
-        if(instance == null) {
-            instance = new Context();
-        }
-        return instance;
+        return LazyHolder.INSTANCE;
     }
 
     public Session getSession() {
@@ -44,5 +48,13 @@ public class Context {
 
     public void setUser_id(BigInteger user_id) {
         this.user_id = user_id;
+    }
+
+    public Customization getCust() {
+        return cust;
+    }
+
+    public void setCust(Customization cust) {
+        this.cust = cust;
     }
 }

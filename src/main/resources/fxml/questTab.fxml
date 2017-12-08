@@ -19,6 +19,8 @@
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="110.0" prefHeight="110.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="300.0" prefHeight="300.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="600.0" vgrow="ALWAYS" />
                     </rowConstraints>
@@ -27,11 +29,11 @@
                     </padding>
                     <children>
                         <Label text="Воспрос проверки:" />
-                        <Label text="Результат проверки вопроса:" GridPane.rowIndex="2" />
+                        <Label text="Результат проверки вопроса:" GridPane.rowIndex="4" />
                         <Label text="Вопрос решен:" GridPane.rowIndex="1" />
                         <CheckBox fx:id="resolved_cb" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <WebView fx:id="result_field" prefHeight="300.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Accordion GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS">
+                        <WebView fx:id="result_field" prefHeight="300.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Accordion GridPane.columnSpan="2" GridPane.rowIndex="5" GridPane.vgrow="ALWAYS">
                             <panes>
                                 <TitledPane animated="false" maxHeight="1.7976931348623157E308" text="Выявленные нарушения">
                                     <content>
@@ -83,6 +85,41 @@
                             </panes>
                         </Accordion>
                         <TextArea fx:id="caption_field" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" />
+                        <Accordion fx:id="counterInfo_accor" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                            <panes>
+                                <TitledPane animated="false" text="Информация о встречной проверке">
+                                    <content>
+                                        <GridPane hgap="15.0" vgap="15.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="20.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="160.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="160.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <padding>
+                                                <Insets bottom="10.0" left="4.0" right="4.0" top="10.0" />
+                                            </padding>
+                                            <children>
+                                                <Label text="Проверяемая организация:" />
+                                                <Label text="Проверяемый период с:" GridPane.rowIndex="1" />
+                                                <TextField fx:id="auditOrg_caption_field" editable="false" GridPane.columnIndex="1" />
+                                                <Label text="Тема проверки:" GridPane.columnIndex="2" />
+                                                <Label text="по:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                <TextField fx:id="auditTheme_field" GridPane.columnIndex="3" />
+                                                <DatePicker fx:id="auditFrom_field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <DatePicker fx:id="auditTo_field" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                            </children>
+                                        </GridPane>
+                                    </content>
+                                </TitledPane>
+                            </panes>
+                        </Accordion>
+                        <Label text="Встречная проверка:" GridPane.rowIndex="2" />
+                        <CheckBox fx:id="counter_audit_cb" disable="true" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                     </children>
                 </GridPane>
             </content>

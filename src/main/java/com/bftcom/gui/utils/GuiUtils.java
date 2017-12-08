@@ -27,7 +27,7 @@ public  class GuiUtils {
     public static void textAndDateFieldSetUp(Object entity, Object control, List<String> excludeFields){
         Field[] formFields = control.getClass().getDeclaredFields();
         for(Field field : formFields){
-            if(excludeFields.contains(field.getName())){
+            if( excludeFields != null && excludeFields.contains(field.getName())){
                 continue;
             }
             try {
@@ -72,7 +72,7 @@ public  class GuiUtils {
     public static void textAndDateFieldGetUp(Object entity, Object control, List<String> excludeFields){
         Field[] formFields = control.getClass().getDeclaredFields();
         for(Field field : formFields){
-            if(excludeFields.contains(field.getName())){
+            if(excludeFields != null && excludeFields.contains(field.getName())){
                 continue;
             }
             try {

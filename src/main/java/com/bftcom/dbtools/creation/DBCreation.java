@@ -4,6 +4,7 @@ package com.bftcom.dbtools.creation;
 import com.bftcom.dbtools.annotations.OnLineColumnInfo;
 import com.bftcom.dbtools.annotations.OnLineJoin;
 import com.bftcom.dbtools.entity.SysUser;
+import com.bftcom.dbtools.entity.SystemParameters;
 import com.bftcom.dbtools.utils.HibernateUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -65,13 +66,25 @@ public class DBCreation {
             log.info("DataBase successfully created!");
 
         } catch (SQLException | HibernateException e){
-            log.error("DabaBase creation failed! See stack trace for more information!");
+            log.error("DataBase creation failed! See stack trace for more information!");
             e.printStackTrace();
 
         } finally {
            shutDownByDriver(url);
         }
     }
+
+    public static void setCustomizationParam(String customName){
+        log.info("CUSTOMIZATION = "+customName);
+        try(Session session = HibernateUtils.getSession(null)){
+            SystemParameters param = new SystemParameters();
+            param.setName("customization");
+            param.setValue(customName);
+            HibernateUtils.saveEntity(session,param);
+            session.close();
+        }
+    }
+
 
     private static void shutDownByDriver(String url){
         try{

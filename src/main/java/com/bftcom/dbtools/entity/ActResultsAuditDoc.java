@@ -20,13 +20,13 @@ import java.util.List;
         " inner join org orgc on ced.controlorg_id = orgc.id" +
         " inner join controlform cf on ced.controlform_id = cf.id" +
         " inner join territory ter on ced.territory_id = ter.id" +
-        " inner join orderauditappointmentdoc oaad on ced.id = oaad.maindoc_id" +
+        " left  join orderauditappointmentdoc oaad on ced.id = oaad.maindoc_id" +
         " inner join employee emphead on emphead.id = ced.head_id" +
-        " inner join employee empdeputy on empdeputy.id = ced.deputy_head_id" +
+        " left  join employee empdeputy on empdeputy.id = ced.deputy_head_id" +
         " inner join person phead on phead.id = emphead.person_id" +
-        " inner join person pdeputy on pdeputy.id = empdeputy.person_id" +
+        " left  join person pdeputy on pdeputy.id = empdeputy.person_id" +
         " inner join appointment apphead on apphead.id = emphead.appointment_id" +
-        " inner join appointment appdeputy on appdeputy.id = empdeputy.appointment_id" +
+        " left  join appointment appdeputy on appdeputy.id = empdeputy.appointment_id" +
         " where ACTRESULTSAUDITDOC.ID = ? ")
 public class ActResultsAuditDoc {
     @Id

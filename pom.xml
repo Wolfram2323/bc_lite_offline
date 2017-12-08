@@ -4,7 +4,8 @@
 
   <groupId>bft.com</groupId>
   <artifactId>bc_lite_offline</artifactId>
-  <version>v.3.7.0.1</version>
+  <version>v.3.7.1.1</version>
+
   <build>
     <resources>
       <resource>
@@ -43,9 +44,6 @@
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
           <archive>
-            <!--<manifestEntries>-->
-              <!--<Class-Path> ${project.basedir}\birt-report-engine</Class-Path>-->
-            <!--</manifestEntries>-->
             <manifest>
               <mainClass>com.bftcom.gui.loginForm.LoginForm</mainClass>
               <addClasspath>true</addClasspath>
@@ -132,12 +130,50 @@
       <version>1.2.16</version>
     </dependency>
 
-    <!--<dependency>-->
-      <!--<groupId>org.eclipse.birt.runtime</groupId>-->
-      <!--<artifactId>org.eclipse.birt.runtime</artifactId>-->
-      <!--<version>3.7.2.v20120214-1408</version>-->
-      <!--<scope>provided</scope>-->
-    <!--</dependency>-->
+    <dependency>
+      <groupId>birt-report-engine</groupId>
+      <artifactId>birt-engineapi</artifactId>
+      <version>3.7.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>birt-report-engine</groupId>
+      <artifactId>birt-coreapi</artifactId>
+      <version>3.7.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>birt-report-engine</groupId>
+      <artifactId>birt-com.ibm.icu</artifactId>
+      <version>4.4.2</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>birt-report-engine</groupId>
+      <artifactId>birt-modelapi</artifactId>
+      <version>3.7.2</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>birt-report-engine</groupId>
+      <artifactId>birt-js</artifactId>
+      <version>3.7.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>birt-report-engine</groupId>
+      <artifactId>birt-scriptapi</artifactId>
+      <version>3.7.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.3</version>
+    </dependency>
+
 
 
   </dependencies>
