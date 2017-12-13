@@ -3,12 +3,15 @@ package com.bftcom.gui.aradForm;
 import com.bftcom.context.Context;
 import com.bftcom.context.Customization;
 import com.bftcom.dbtools.entity.ActResultsAuditDoc;
+import com.bftcom.dbtools.entity.SystemParameters;
 import com.bftcom.dbtools.utils.DataSynchronizer;
 import com.bftcom.dbtools.utils.DataUploader;
 import com.bftcom.dbtools.utils.HibernateUtils;
-import com.bftcom.gui.CustomProperties;
+import com.bftcom.gui.PropertiesAndParameters;
 import com.bftcom.gui.utils.Message;
-import com.bftcom.report.BirtReport;
+import com.bftcom.gui.utils.ReportGenerator;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -25,18 +28,14 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.hibernate.Session;
-import org.hibernate.internal.SessionImpl;
+
 import org.hibernate.query.Query;
 
-import java.awt.*;
+
 import java.io.*;
 import java.math.BigInteger;
 import java.net.URL;
-import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Created by k.nikitin on 06.11.2016.
@@ -54,6 +53,12 @@ public class ActResultsAuditDocFormController implements Initializable {
     private Button stopBtn;
     @FXML
     private MenuButton print_btn;
+    @FXML
+    private RadioMenuItem printOdt_rm;
+    @FXML
+    private RadioMenuItem printDoc_rm;
+    @FXML
+    private ProgressBar printDoc_prgBar;
 
     @FXML
     private Button saveBtn;
@@ -66,8 +71,8 @@ public class ActResultsAuditDocFormController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            setItemsToPrintBtn();
-            if(Context.getCurrentContext().getCust().equals(Customization.TYUMEN)){
+            setUpPrintBtn();
+            if (Context.getCurrentContext().getCust().equals(Customization.TYUMEN)) {
                 impBtn.setVisible(false);
             }
             BaseFieldsTitledPaneController baseFieldsController = new BaseFieldsTitledPaneController();
@@ -144,10 +149,10 @@ public class ActResultsAuditDocFormController implements Initializable {
             try {
                 HibernateUtils.getCurrentSession().getTransaction().rollback();
                 HibernateUtils.closeConnection(HibernateUtils.getCurrentSession());
-                System.exit(0);
+                Platform.exit();
             } catch (Exception e) {
                 e.printStackTrace();
-                System.exit(0);
+                Platform.exit();
             }
         }
     }
@@ -250,54 +255,68 @@ public class ActResultsAuditDocFormController implements Initializable {
 
     @FXML
     private void printDoc(ActionEvent event) {
-        try {
-            print_btn.setDisable(true);
-            Session session = HibernateUtils.getSession(null);
-            Connection conection = ((SessionImpl) session).connection();
-            String outputFormat = "odt";
-            Map<String, Object> params = new HashMap<>();
-            params.put("ID", arad_id);
-            try {
-                File report = File.createTempFile("birt", "." + outputFormat);
-                String reportTemplateName = ((MenuItem)event.getTarget()).getProperties().get(CustomProperties.REPORT_TEMPLATE).toString();
-                InputStream template = getClass().getResourceAsStream(reportTemplateName);
-                FileOutputStream reportStream = new FileOutputStream(report);
-                BirtReport.generate(outputFormat, template, reportStream, params, conection);
-                template.close();
-                reportStream.close();
-                Desktop.getDesktop().open(report);
-            } catch (IOException e) {
-                e.printStackTrace();
-                Message.throwExceptionForJavaFX(e, "Ошибка генерации отчета", "", false);
-            }
-        } finally {
-            print_btn.setDisable(false);
-        }
+        print_btn.setDisable(true);
+        Session session = HibernateUtils.getNewSession();
+        SystemParameters outputFormat = session.createQuery("FROM SystemParameters where name =:name", SystemParameters.class).
+                setParameter("name", PropertiesAndParameters.PRINT_FORMAT.toString()).uniqueResultOptional().orElse(new SystemParameters(PropertiesAndParameters.REPORT_TEMPLATE.toString(), "odt"));
+        session.close();
+        Map<String, Object> params = new HashMap<>();
+        params.put("ID", arad_id);
+        String reportTemplateName = ((MenuItem) event.getTarget()).getProperties().get(PropertiesAndParameters.REPORT_TEMPLATE).toString();
 
+        Task generateReport = new ReportGenerator(outputFormat.getValue(), reportTemplateName, params, HibernateUtils.DERBY_DB_URL);
+        printDoc_prgBar.progressProperty().bind(generateReport.progressProperty());
+        new Thread(generateReport).start();
 
+        print_btn.setDisable(false);
     }
 
-//    @FXML
-//    private void setPrintSettings (ActionEvent event) {
-//
-//
-//    }
+    @FXML
+    private void setPrintFormat(ActionEvent event) {
+        String format = ((RadioMenuItem) event.getTarget()).getText();
+        Session session = HibernateUtils.getNewSession();
+        session.beginTransaction();
+        SystemParameters printFormat = session.createQuery("FROM SystemParameters where name =:name", SystemParameters.class).setParameter("name", PropertiesAndParameters.PRINT_FORMAT.toString()).uniqueResult();
+        if (printFormat != null) {
+            printFormat.setValue(format);
+            session.saveOrUpdate(printFormat);
+        } else {
+            printFormat = new SystemParameters();
+            printFormat.setName(PropertiesAndParameters.PRINT_FORMAT.toString());
+            printFormat.setValue(format);
+            session.persist(printFormat);
+        }
+        session.getTransaction().commit();
+    }
 
 
-    public void setItemsToPrintBtn() {
+    public void setUpPrintBtn() {
         switch (Context.getCurrentContext().getCust()) {
             case TYUMEN:
                 MenuItem item = new MenuItem();
                 item.setText("Справка");
-                item.getProperties().put(CustomProperties.REPORT_TEMPLATE, "/reportTemplates/referenceAct.rptdesign");
+                item.getProperties().put(PropertiesAndParameters.REPORT_TEMPLATE, "/reportTemplates/referenceAct.rptdesign");
                 item.setOnAction(this::printDoc);
                 print_btn.getItems().add(item);
                 item = new MenuItem();
                 item.setText("Акт встречной проверки");
-                item.getProperties().put(CustomProperties.REPORT_TEMPLATE, "/reportTemplates/counterAuditAct.rptdesign");
+                item.getProperties().put(PropertiesAndParameters.REPORT_TEMPLATE, "/reportTemplates/counterAuditAct.rptdesign");
                 item.setOnAction(this::printDoc);
                 print_btn.getItems().add(item);
                 break;
+        }
+        Session session = HibernateUtils.getCurrentSession();
+        Query<SystemParameters> paramQuery = session.createQuery(" FROM SystemParameters where name = :name", SystemParameters.class).setParameter("name", PropertiesAndParameters.PRINT_FORMAT.toString());
+        java.util.List<SystemParameters> params = paramQuery.getResultList();
+        if (!params.isEmpty()) {
+            switch (params.get(0).getValue()) {
+                case "odt":
+                    printOdt_rm.setSelected(true);
+                    break;
+                case "doc":
+                    printDoc_rm.setSelected(true);
+                    break;
+            }
         }
     }
 

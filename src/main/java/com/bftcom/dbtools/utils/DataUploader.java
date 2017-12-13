@@ -38,7 +38,7 @@ import java.util.List;
 public class DataUploader {
 
     public void fullExport(BigInteger id){
-        try(Session session = HibernateUtils.getSession(null)){
+        try(Session session = HibernateUtils.getSessionByCfg(null)){
             ActResultsAuditDoc arad = session.get(ActResultsAuditDoc.class, id);
             Document xml = new DocumentImpl();
             Element offline = createElement(xml,"OFFLINE");
@@ -51,7 +51,7 @@ public class DataUploader {
     }
 
     public void exportForOtherOffline(){
-        try(Session session = HibernateUtils.getSession(null)){
+        try(Session session = HibernateUtils.getSessionByCfg(null)){
             CriteriaQuery<Questions> criteriaQuery = session.getCriteriaBuilder().createQuery(Questions.class);
             Root<Questions> root = criteriaQuery.from(Questions.class);
             criteriaQuery.select( root );

@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -62,7 +61,7 @@ public class DataSynchronizer {
         if(!dataBlock.getTagName().equals(dataElName)){
             throw new RuntimeException("Bad xml file. Data group tag name should be " + dataElName + "!");
         }
-        Session session = HibernateUtils.getSession(null);
+        Session session = HibernateUtils.getSessionByCfg(null);
         try{
             session.beginTransaction();
             fillEntityByElement(session, dataBlock, null);

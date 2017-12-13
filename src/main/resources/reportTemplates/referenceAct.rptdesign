@@ -64,6 +64,9 @@ bft.usr.cutLastDelimetr = function (str, delim){
             <property name="valueType">static</property>
             <property name="dataType">decimal</property>
             <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant">8000000351</value>
+            </simple-property-list>
             <list-property name="selectionList"/>
             <property name="paramType">simple</property>
             <property name="controlType">text-box</property>
@@ -91,7 +94,7 @@ bft.usr.cutLastDelimetr = function (str, delim){
                 </ex-property>
             </list-property>
             <property name="odaDriverClass">org.apache.derby.jdbc.EmbeddedDriver</property>
-            <property name="odaURL">jdbc:derby:[subsubprotocol:]DATABASE[;ATTRIBUTE=VALUE]*</property>
+            <property name="odaURL">jdbc:derby:G:\Repositaries\bc_lite_offline\offlineDataBase\derby_3.7.1.1\bcOffLineDB;user=bc;password=sysdba</property>
         </oda-data-source>
     </data-sources>
     <data-sets>
@@ -130,8 +133,100 @@ bft.usr.cutLastDelimetr = function (str, delim){
                     <property name="isOutput">false</property>
                 </structure>
             </list-property>
-            <structure name="cachedMetaData"/>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">DOC_NUMBER</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">OAD_DOC_NUMBER</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">APPROVEDATE</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">AUDITTHEME</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">5</property>
+                        <property name="name">AUDITORG</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">6</property>
+                        <property name="name">AUDITFROM</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">7</property>
+                        <property name="name">AUDITTO</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">8</property>
+                        <property name="name">COUNT_AUDITTHEME</property>
+                        <property name="dataType">integer</property>
+                    </structure>
+                    <structure>
+                        <property name="position">9</property>
+                        <property name="name">CONCATE_AUDITTHEME</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
             <property name="dataSource">Data Source</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">DOC_NUMBER</property>
+                    <property name="nativeName">DOC_NUMBER</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">OAD_DOC_NUMBER</property>
+                    <property name="nativeName">OAD_DOC_NUMBER</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">APPROVEDATE</property>
+                    <property name="nativeName">APPROVEDATE</property>
+                    <property name="dataType">date</property>
+                </structure>
+                <structure>
+                    <property name="position">4</property>
+                    <property name="name">AUDITTHEME</property>
+                    <property name="nativeName">AUDITTHEME</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">5</property>
+                    <property name="name">AUDITORG</property>
+                    <property name="nativeName">AUDITORG</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">6</property>
+                    <property name="name">AUDITFROM</property>
+                    <property name="nativeName">AUDITFROM</property>
+                    <property name="dataType">date</property>
+                </structure>
+                <structure>
+                    <property name="position">7</property>
+                    <property name="name">AUDITTO</property>
+                    <property name="nativeName">AUDITTO</property>
+                    <property name="dataType">date</property>
+                </structure>
+            </list-property>
             <xml-property name="queryText"><![CDATA[select arad.doc_number as "DOC_NUMBER",
 arad.ORDERAUDIT_NUMBER as "OAD_DOC_NUMBER",
 arad.ORDERAUDIT_APPROVEDATE as "APPROVEDATE",
@@ -147,6 +242,26 @@ where arad.id = ?
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="violation" id="424">
             <property name="nullsOrdering">nulls lowest</property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">RESULT</property>
+                    <property name="analysis">dimension</property>
+                    <text-property name="displayName">RESULT</text-property>
+                    <text-property name="heading">RESULT</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">ID</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">ID</text-property>
+                    <text-property name="heading">ID</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">VIOLATIONDESCRIPTION</property>
+                    <property name="analysis">dimension</property>
+                    <text-property name="displayName">VIOLATIONDESCRIPTION</text-property>
+                    <text-property name="heading">VIOLATIONDESCRIPTION</text-property>
+                </structure>
+            </list-property>
             <list-property name="parameters">
                 <structure>
                     <property name="name">param_1</property>
@@ -157,14 +272,55 @@ where arad.id = ?
                     <property name="isOutput">false</property>
                 </structure>
             </list-property>
-            <structure name="cachedMetaData"/>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">RESULT</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">ID</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">VIOLATIONDESCRIPTION</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
             <property name="dataSource">Data Source</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">RESULT</property>
+                    <property name="nativeName">RESULT</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">2005</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">ID</property>
+                    <property name="nativeName">ID</property>
+                    <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">VIOLATIONDESCRIPTION</property>
+                    <property name="nativeName">VIOLATIONDESCRIPTION</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">2005</property>
+                </structure>
+            </list-property>
             <xml-property name="queryText"><![CDATA[select qr.result as "RESULT",
 qr.id as "ID",
 vg.violationdescription as "VIOLATIONDESCRIPTION"
 from questresult qr
 inner join actresultsauditdoc arad  on arad.id = qr.ACTRESULTSAUDITDOC_ID
-inner join violationgroup vg on vg.QUESTIONS_ID = qr.id
+left join violationgroup vg on vg.QUESTIONS_ID = qr.id
 where arad.id = ?]]></xml-property>
         </oda-data-set>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="inspectors" id="441">
@@ -188,8 +344,35 @@ where arad.id = ?]]></xml-property>
                     <property name="isOutput">false</property>
                 </structure>
             </list-property>
-            <structure name="cachedMetaData"/>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">ID</property>
+                        <property name="dataType">decimal</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">FIO</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
             <property name="dataSource">Data Source</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">ID</property>
+                    <property name="nativeName">ID</property>
+                    <property name="dataType">decimal</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">FIO</property>
+                    <property name="nativeName">FIO</property>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
             <xml-property name="queryText"><![CDATA[select distinct emp.id as "ID", emp.PERSON_FIO as "FIO"
 from questresult qr
 inner join questionsauditinspectors qi on qi.QUEST_ID = qr.id

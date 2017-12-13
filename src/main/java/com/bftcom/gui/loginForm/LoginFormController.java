@@ -5,6 +5,8 @@ import com.bftcom.context.Customization;
 import com.bftcom.dbtools.entity.SystemParameters;
 import com.bftcom.dbtools.utils.AuthentificationUtils;
 import com.bftcom.dbtools.utils.HibernateUtils;
+import com.bftcom.gui.PropertiesAndParameters;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -43,7 +45,7 @@ public class LoginFormController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         session = HibernateUtils.getCurrentSession();
-        Query<SystemParameters> paramQuery = session.createQuery(" FROM SystemParameters where name = :name", SystemParameters.class).setParameter("name", "customization");
+        Query<SystemParameters> paramQuery = session.createQuery(" FROM SystemParameters where name = :name", SystemParameters.class).setParameter("name", PropertiesAndParameters.CUSTOMIZATION.toString());
         List<SystemParameters> params = paramQuery.getResultList();
         if(params.isEmpty()){
             Context.getCurrentContext().setCust(Customization.find(""));
@@ -79,7 +81,9 @@ public class LoginFormController implements Initializable {
                     if (result.get() == ButtonType.CANCEL){
                         we.consume();
                     }
+                    HibernateUtils.getCurrentSession().getTransaction().rollback();
                     HibernateUtils.closeConnection(HibernateUtils.getCurrentSession());
+                    Platform.exit();
                 }
             });
             stage.show();

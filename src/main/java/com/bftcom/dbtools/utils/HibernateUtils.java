@@ -6,17 +6,12 @@ import com.bftcom.dbtools.entity.*;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.c3p0.internal.C3P0ConnectionProvider;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
-import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.event.spi.EventSource;
-import org.hibernate.internal.SessionFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -77,7 +72,7 @@ public class HibernateUtils {
                  SysUser.class, Employee.class, EmployeeGroup.class, ActResultsAuditDoc.class, Questions.class, QuestInspectors.class, ARADInspectors.class, ARADkbk.class, ViolationGroup.class, ViolationGroupKBK.class);
     }
 
-    public static Session getSession(String url){
+    public static Session getSessionByCfg(String url){
         if(cfg == null || url != null){
             generateConfiguration(url);
         }
@@ -90,10 +85,18 @@ public class HibernateUtils {
         return con.getSession();
     }
 
+    public static Session getNewSession(){
+        if(sessionFactory == null){
+            sessionFactory = cfg.buildSessionFactory();
+        }
+
+        return sessionFactory.openSession();
+    }
+
     public static Session getCurrentSession(){
         Context con = Context.getCurrentContext();
         if(con.getSession()  == null ){
-            return getSession(null);
+            return getSessionByCfg(null);
         }
         return con.getSession();
     }

@@ -6,11 +6,11 @@ import com.bftcom.dbtools.annotations.OnLineJoin;
 import com.bftcom.dbtools.entity.SysUser;
 import com.bftcom.dbtools.entity.SystemParameters;
 import com.bftcom.dbtools.utils.HibernateUtils;
+import com.bftcom.gui.PropertiesAndParameters;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.derby.jdbc.EmbeddedDriver;
 import org.hibernate.HibernateException;
-import org.hibernate.QueryException;
 import org.hibernate.Session;
 
 import org.hibernate.Transaction;
@@ -25,7 +25,6 @@ import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -40,58 +39,67 @@ public class DBCreation {
 
 
     public static EmbeddedDriver initJdbcDriver() {
-        try{
+        try {
             log.info("Derby driver initialization!");
-            EmbeddedDriver driverInst = (EmbeddedDriver)Class.forName(HibernateUtils.DERBY_DRIVER_CLASS).newInstance();
+            EmbeddedDriver driverInst = (EmbeddedDriver) Class.forName(HibernateUtils.DERBY_DRIVER_CLASS).newInstance();
             DriverManager.registerDriver(driverInst);
             driver = driverInst;
-            return  driver;
-        } catch (ClassNotFoundException | IllegalAccessException |InstantiationException |SQLException e){
+            return driver;
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException e) {
             log.error("Derby jdbc driver not found or there was error during initialization!");
             throw new RuntimeException(e);
         }
     }
 
 
-    public static void createDB(String url){
+    public static void createDB(String url) {
         try {
             log.info("DataBase creation started!");
-            driver.connect(url+";create=true;user="+HibernateUtils.DERBY_USER_NAME
-                    +";password="+HibernateUtils.DERBY_PSWD, new Properties());
+            driver.connect(url + ";create=true;user=" + HibernateUtils.DERBY_USER_NAME
+                    + ";password=" + HibernateUtils.DERBY_PSWD, new Properties());
             log.info("Data base schema creation started!");
-            Session session = HibernateUtils.getSession(url);
+            Session session = HibernateUtils.getSessionByCfg(url);
             HibernateUtils.closeConnection(session);
 
 
             log.info("DataBase successfully created!");
 
-        } catch (SQLException | HibernateException e){
+        } catch (SQLException | HibernateException e) {
             log.error("DataBase creation failed! See stack trace for more information!");
             e.printStackTrace();
 
         } finally {
-           shutDownByDriver(url);
+            shutDownByDriver(url);
         }
     }
 
-    public static void setCustomizationParam(String customName){
-        log.info("CUSTOMIZATION = "+customName);
-        try(Session session = HibernateUtils.getSession(null)){
+    public static void setCustomizationParam(String customName) {
+        Session session = HibernateUtils.getSessionByCfg(null);
+        try {
+            session.beginTransaction();
             SystemParameters param = new SystemParameters();
-            param.setName("customization");
+            param.setName(PropertiesAndParameters.CUSTOMIZATION.toString());
             param.setValue(customName);
-            HibernateUtils.saveEntity(session,param);
+            session.persist(param);
+            param = new SystemParameters();
+            param.setName(PropertiesAndParameters.PRINT_FORMAT.toString());
+            param.setValue("odt");
+            session.persist(param);
+            session.getTransaction().commit();
             session.close();
+        } catch (HibernateException e) {
+            log.error(e.getLocalizedMessage());
+            session.getTransaction().rollback();
         }
     }
 
 
-    private static void shutDownByDriver(String url){
-        try{
-            log.info("Driver "+ driver);
-            driver.connect(url+"; shutdown=true", new Properties());
-        } catch (SQLException e){
-            if(e.getSQLState().equals("08006")){
+    private static void shutDownByDriver(String url) {
+        try {
+            log.info("Driver " + driver);
+            driver.connect(url + "; shutdown=true", new Properties());
+        } catch (SQLException e) {
+            if (e.getSQLState().equals("08006")) {
                 log.info("DataBase connection is shutdown");
             } else {
                 e.printStackTrace();
@@ -102,11 +110,11 @@ public class DBCreation {
     }
 
 
-    public static Map<String,String> getUploadSql(){
-        Map<String,String> result = new ConcurrentHashMap<>();
+    public static Map<String, String> getUploadSql() {
+        Map<String, String> result = new ConcurrentHashMap<>();
         List<Class> annotatedClasses = HibernateUtils.getAnnotatedClasses();
-        annotatedClasses.stream().filter(entity-> !((Table)entity.getAnnotation(Table.class)).name().matches("SYSUSER|VIOLATIONGROUP|VIOLATIONGROUPKBK")).forEach(entity->{
-            String tableName = ((Table)entity.getAnnotation(Table.class)).name();
+        annotatedClasses.stream().filter(entity -> !((Table) entity.getAnnotation(Table.class)).name().matches("SYSUSER|VIOLATIONGROUP|VIOLATIONGROUPKBK")).forEach(entity -> {
+            String tableName = ((Table) entity.getAnnotation(Table.class)).name();
             OnLineJoin onLineJoin = (OnLineJoin) entity.getAnnotation(OnLineJoin.class);
             Field[] fields = entity.getDeclaredFields();
             StringBuilder select = new StringBuilder("select ");
@@ -115,87 +123,87 @@ public class DBCreation {
             from.append(" from ").append(tableName);
             Map<String, String> columns = new TreeMap<>();
             Map<String, String> links = new TreeMap<>();
-            for(Field field: fields){
-                if(field.getName().equals("id")){
+            for (Field field : fields) {
+                if (field.getName().equals("id")) {
                     continue;
                 }
                 OnLineColumnInfo onlineColInfo = field.getAnnotation(OnLineColumnInfo.class);
-                if(onlineColInfo == null){
+                if (onlineColInfo == null) {
                     continue;
                 }
-                if(onlineColInfo.columnName().isEmpty()){
-                    if(onlineColInfo.joinAlias().isEmpty()){
+                if (onlineColInfo.columnName().isEmpty()) {
+                    if (onlineColInfo.joinAlias().isEmpty()) {
                         columns.put(field.getAnnotation(Column.class).name(), tableName + '.' + field.getAnnotation(Column.class).name());
                     } else {
                         columns.put(field.getAnnotation(Column.class).name(), onlineColInfo.joinAlias() + '.' + field.getAnnotation(Column.class).name());
                     }
-                } else if(field.getAnnotation(JoinColumn.class)!= null){
-                    mapSqlFields(links,onlineColInfo,tableName, field);
+                } else if (field.getAnnotation(JoinColumn.class) != null) {
+                    mapSqlFields(links, onlineColInfo, tableName, field);
                 } else {
                     mapSqlFields(columns, onlineColInfo, tableName, field);
                 }
             }
-            if(columns.size() > 0){
-                select.append(", ").append(String.join(", ",columns.values()));
+            if (columns.size() > 0) {
+                select.append(", ").append(String.join(", ", columns.values()));
             }
-            if(links.size() > 0){
-                select.append(", ").append(String.join(", ",links.values()));
+            if (links.size() > 0) {
+                select.append(", ").append(String.join(", ", links.values()));
             }
-            if(onLineJoin!=null && !onLineJoin.sqlExpression().isEmpty()){
-                from.append(((OnLineJoin)entity.getAnnotation(OnLineJoin.class)).sqlExpression());
+            if (onLineJoin != null && !onLineJoin.sqlExpression().isEmpty()) {
+                from.append(((OnLineJoin) entity.getAnnotation(OnLineJoin.class)).sqlExpression());
             }
-            result.put(tableName,select.append(from).toString());
+            result.put(tableName, select.append(from).toString());
 
         });
         return result;
     }
 
-    protected static void mapSqlFields(Map<String,String> map, OnLineColumnInfo onlineColInfo, String tableName, Field field){
+    protected static void mapSqlFields(Map<String, String> map, OnLineColumnInfo onlineColInfo, String tableName, Field field) {
         Column colAnn = field.getAnnotation(Column.class);
-        if(onlineColInfo.joinAlias().isEmpty()){
-            map.put(colAnn != null ? colAnn.name() : onlineColInfo.columnName(),tableName + '.' + onlineColInfo.columnName());
+        if (onlineColInfo.joinAlias().isEmpty()) {
+            map.put(colAnn != null ? colAnn.name() : onlineColInfo.columnName(), tableName + '.' + onlineColInfo.columnName());
         } else {
             map.put(colAnn != null ? colAnn.name() : onlineColInfo.columnName(), onlineColInfo.joinAlias() + '.' + onlineColInfo.columnName());
         }
     }
 
-    public static void importCsvDataFiles(File csvFilesDir, String url){
+    public static void importCsvDataFiles(File csvFilesDir, String url) {
         log.info("Obtain session");
-        try(Session session = HibernateUtils.getSession(url)){
+        try (Session session = HibernateUtils.getSessionByCfg(url)) {
             List<Class> annotatedClasses = HibernateUtils.getAnnotatedClasses();
-            List<File> csvFiles = (List<File>) FileUtils.listFiles(csvFilesDir, new String[] {"csv"}, false);
-            annotatedClasses.stream().filter(entity-> !((Table)entity.getAnnotation(Table.class)).name().matches("SYSUSER|VIOLATIONGROUP|VIOLATIONGROUPKBK")).forEach(entity->{
-                String tableName = ((Table)entity.getAnnotation(Table.class)).name();
-                File csvFile = findFileFromList(csvFiles,tableName);
-                if(csvFile == null){
+            List<File> csvFiles = (List<File>) FileUtils.listFiles(csvFilesDir, new String[]{"csv"}, false);
+            annotatedClasses.stream().filter(entity -> !((Table) entity.getAnnotation(Table.class)).name().matches("SYSUSER|VIOLATIONGROUP|VIOLATIONGROUPKBK")).forEach(entity -> {
+                String tableName = ((Table) entity.getAnnotation(Table.class)).name();
+                File csvFile = findFileFromList(csvFiles, tableName);
+                if (csvFile == null) {
                     throw new RuntimeException("Require csv file not found!");
                 }
                 ProcedureCall procedure = session.createStoredProcedureCall("SYSCS_UTIL.SYSCS_IMPORT_TABLE");
                 log.info("Create procedure");
-                procedure.registerParameter("SCHEMANAME",String.class, ParameterMode.IN);
-                procedure.registerParameter("TABLENAME",String.class, ParameterMode.IN);
-                procedure.registerParameter("FILENAME",String.class, ParameterMode.IN);
-                procedure.registerParameter("COLUMNDELIMITER",Character.class, ParameterMode.IN);
-                procedure.registerParameter("CHARACTERDELIMITER",Character.class, ParameterMode.IN);
-                procedure.registerParameter("CODESET",String.class, ParameterMode.IN);
-                procedure.registerParameter("REPLACE",Short.class, ParameterMode.IN);
+                procedure.registerParameter("SCHEMANAME", String.class, ParameterMode.IN);
+                procedure.registerParameter("TABLENAME", String.class, ParameterMode.IN);
+                procedure.registerParameter("FILENAME", String.class, ParameterMode.IN);
+                procedure.registerParameter("COLUMNDELIMITER", Character.class, ParameterMode.IN);
+                procedure.registerParameter("CHARACTERDELIMITER", Character.class, ParameterMode.IN);
+                procedure.registerParameter("CODESET", String.class, ParameterMode.IN);
+                procedure.registerParameter("REPLACE", Short.class, ParameterMode.IN);
 
                 log.info("Set parametrs to procedure");
                 procedure.setParameter("SCHEMANAME", HibernateUtils.DERBY_USER_NAME.toUpperCase());
-                procedure.setParameter("COLUMNDELIMITER",';');
-                procedure.setParameter("CHARACTERDELIMITER",'#');
-                procedure.setParameter("CODESET","UTF-8");
-                procedure.setParameter("REPLACE",new Short("0"));
+                procedure.setParameter("COLUMNDELIMITER", ';');
+                procedure.setParameter("CHARACTERDELIMITER", '#');
+                procedure.setParameter("CODESET", "UTF-8");
+                procedure.setParameter("REPLACE", new Short("0"));
 
-                procedure.setParameter("TABLENAME",tableName);
-                procedure.setParameter("FILENAME",csvFile.getAbsolutePath());
+                procedure.setParameter("TABLENAME", tableName);
+                procedure.setParameter("FILENAME", csvFile.getAbsolutePath());
                 Transaction transaction = session.beginTransaction();
                 try {
-                    log.info("Import " + tableName +" from csv");
+                    log.info("Import " + tableName + " from csv");
                     procedure.execute();
                     transaction.commit();
-                    log.info("Import " + tableName +" success!");
-                } catch (PersistenceException e){
+                    log.info("Import " + tableName + " success!");
+                } catch (PersistenceException e) {
                     log.warn("Import " + tableName + " faild!");
                     transaction.rollback();
                     e.printStackTrace();
@@ -206,60 +214,59 @@ public class DBCreation {
         }
     }
 
-    private static File findFileFromList(List<File> csvFiles, String tableName){
-        for(File csvFile: csvFiles){
-            if(FilenameUtils.removeExtension(csvFile.getName()).equals(tableName)){
+    private static File findFileFromList(List<File> csvFiles, String tableName) {
+        for (File csvFile : csvFiles) {
+            if (FilenameUtils.removeExtension(csvFile.getName()).equals(tableName)) {
                 return csvFile;
             }
         }
         return null;
     }
 
-    public static void createUser(BigInteger id, String login,boolean isAdmin){
-        try(Session session = HibernateUtils.getSession(null)){
+    public static void createUser(BigInteger id, String login, boolean isAdmin) {
+        try (Session session = HibernateUtils.getSessionByCfg(null)) {
             SysUser user = new SysUser();
             user.setId(id);
             user.setLogin(login);
             user.setIs_admin(isAdmin);
-            HibernateUtils.saveEntity(session,user);
+            HibernateUtils.saveEntity(session, user);
             session.close();
         }
     }
 
-    public static void setPassword(BigInteger id, String pass){
-        try(Session session = HibernateUtils.getSession(null)){
+    public static void setPassword(BigInteger id, String pass) {
+        try (Session session = HibernateUtils.getSessionByCfg(null)) {
             SysUser user = session.get(SysUser.class, id);
             user.setPsswd(pass);
-            HibernateUtils.saveEntity(session,user);
+            HibernateUtils.saveEntity(session, user);
             HibernateUtils.closeConnection(session);
         }
     }
 
-    public static void importCsvDataFilesTest(){
-        Session session = HibernateUtils.getSession(null);
+    public static void importCsvDataFilesTest() {
+        Session session = HibernateUtils.getSessionByCfg(null);
         log.warn("Obtain session");
         ProcedureCall procedure = session.createStoredProcedureCall("SYSCS_UTIL.SYSCS_IMPORT_TABLE");
         log.warn("Create procedure");
-        procedure.registerParameter("SCHEMANAME",String.class, ParameterMode.IN);
-        procedure.registerParameter("TABLENAME",String.class, ParameterMode.IN);
-        procedure.registerParameter("FILENAME",String.class, ParameterMode.IN);
-        procedure.registerParameter("COLUMNDELIMITER",Character.class, ParameterMode.IN);
-        procedure.registerParameter("CHARACTERDELIMITER",Character.class, ParameterMode.IN);
-        procedure.registerParameter("CODESET",String.class, ParameterMode.IN);
-        procedure.registerParameter("REPLACE",Short.class, ParameterMode.IN);
+        procedure.registerParameter("SCHEMANAME", String.class, ParameterMode.IN);
+        procedure.registerParameter("TABLENAME", String.class, ParameterMode.IN);
+        procedure.registerParameter("FILENAME", String.class, ParameterMode.IN);
+        procedure.registerParameter("COLUMNDELIMITER", Character.class, ParameterMode.IN);
+        procedure.registerParameter("CHARACTERDELIMITER", Character.class, ParameterMode.IN);
+        procedure.registerParameter("CODESET", String.class, ParameterMode.IN);
+        procedure.registerParameter("REPLACE", Short.class, ParameterMode.IN);
 
         log.warn("Set parametrs to procedure");
         procedure.setParameter("SCHEMANAME", HibernateUtils.DERBY_USER_NAME.toUpperCase());
-        procedure.setParameter("COLUMNDELIMITER",';');
-        procedure.setParameter("CHARACTERDELIMITER",'#');
-        procedure.setParameter("CODESET","UTF-8");
-        procedure.setParameter("REPLACE",new Short("0"));
+        procedure.setParameter("COLUMNDELIMITER", ';');
+        procedure.setParameter("CHARACTERDELIMITER", '#');
+        procedure.setParameter("CODESET", "UTF-8");
+        procedure.setParameter("REPLACE", new Short("0"));
 
 
-
-            procedure.setParameter("TABLENAME","ACTRESULTSAUDITDOC");
-            procedure.setParameter("FILENAME","D:\\Repositaries\\bc_lite_offline\\csv_data\\ACTRESULTSAUDITDOC.csv");
-                procedure.execute();
+        procedure.setParameter("TABLENAME", "ACTRESULTSAUDITDOC");
+        procedure.setParameter("FILENAME", "D:\\Repositaries\\bc_lite_offline\\csv_data\\ACTRESULTSAUDITDOC.csv");
+        procedure.execute();
 
     }
 

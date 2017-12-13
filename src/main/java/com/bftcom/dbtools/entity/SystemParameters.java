@@ -21,6 +21,14 @@ public class SystemParameters {
     @Lob
     private String value;
 
+    public SystemParameters() {
+    }
+
+    public SystemParameters(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
+
     public BigInteger getId() {
         return id;
     }
