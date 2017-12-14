@@ -1,5 +1,7 @@
 package com.bftcom.gui.aradForm;
 
+import com.bftcom.context.Context;
+import com.bftcom.context.Customization;
 import com.bftcom.dbtools.entity.*;
 import com.bftcom.dbtools.utils.HibernateUtils;
 import com.bftcom.gui.custom.cell.KeyValueComboBoxTableCell;
@@ -100,6 +102,8 @@ public class ViolationGroupTabController extends AbstractBftTabController {
     private TableColumn account_col;
     @FXML
     private TableColumn budget_col;
+    @FXML
+    private Accordion npa_accr;
 
     private BigInteger quest_id;
     private BigInteger violationGroup_id;
@@ -232,6 +236,9 @@ public class ViolationGroupTabController extends AbstractBftTabController {
     @SuppressWarnings("unchecked")
     public void initialize(ViolationGroup violation, BigInteger quest_id){
         this.quest_id = quest_id;
+        if(Context.getCurrentContext().getCust().equals(Customization.TYUMEN)){
+            npa_accr.setVisible(false);
+        }
         tabName = new Label();
         tabName.setText(violation == null ? "Нарушение" : violation.getViolation().getCaption());
         tabName.setWrapText(true);
