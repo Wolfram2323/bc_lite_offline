@@ -5,7 +5,7 @@ import com.bftcom.context.Customization;
 import com.bftcom.dbtools.entity.SystemParameters;
 import com.bftcom.dbtools.utils.AuthentificationUtils;
 import com.bftcom.dbtools.utils.HibernateUtils;
-import com.bftcom.gui.PropertiesAndParameters;
+import com.bftcom.gui.utils.PropertiesAndParameters;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

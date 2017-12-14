@@ -7,7 +7,7 @@ import com.bftcom.dbtools.entity.SystemParameters;
 import com.bftcom.dbtools.utils.DataSynchronizer;
 import com.bftcom.dbtools.utils.DataUploader;
 import com.bftcom.dbtools.utils.HibernateUtils;
-import com.bftcom.gui.PropertiesAndParameters;
+import com.bftcom.gui.utils.PropertiesAndParameters;
 import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.utils.ReportGenerator;
 import javafx.application.Platform;

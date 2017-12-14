@@ -1,4 +1,4 @@
-package com.bftcom.gui;
+package com.bftcom.gui.utils;
 
 /**
  * Created by k.nikitin on 08.12.2017.

@@ -1,9 +1,8 @@
 package com.bftcom.context;
 
-import com.bftcom.dbtools.entity.SystemParameters;
-import com.bftcom.dbtools.utils.HibernateUtils;
+
 import org.hibernate.Session;
-import org.hibernate.query.Query;
+
 
 import java.math.BigInteger;
 

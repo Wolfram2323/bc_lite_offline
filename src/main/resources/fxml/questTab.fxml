@@ -85,7 +85,7 @@
                             </panes>
                         </Accordion>
                         <TextArea fx:id="caption_field" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" />
-                        <Accordion fx:id="counterInfo_accor" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                        <Accordion fx:id="counterInfo_accor" visible="false" GridPane.columnSpan="2" GridPane.rowIndex="3">
                             <panes>
                                 <TitledPane animated="false" text="Информация о встречной проверке">
                                     <content>
@@ -119,7 +119,7 @@
                             </panes>
                         </Accordion>
                         <Label text="Встречная проверка:" GridPane.rowIndex="2" />
-                        <CheckBox fx:id="counter_audit_cb" disable="true" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <CheckBox fx:id="counter_audit_cb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                     </children>
                 </GridPane>
             </content>

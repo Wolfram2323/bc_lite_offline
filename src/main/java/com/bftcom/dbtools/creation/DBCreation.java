@@ -6,7 +6,7 @@ import com.bftcom.dbtools.annotations.OnLineJoin;
 import com.bftcom.dbtools.entity.SysUser;
 import com.bftcom.dbtools.entity.SystemParameters;
 import com.bftcom.dbtools.utils.HibernateUtils;
-import com.bftcom.gui.PropertiesAndParameters;
+import com.bftcom.gui.utils.PropertiesAndParameters;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.derby.jdbc.EmbeddedDriver;

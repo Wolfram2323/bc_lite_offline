@@ -1,7 +1,7 @@
 package com.bftcom.gui.loginForm;
 
+
 import com.bftcom.context.OfflineVersion;
-import com.bftcom.dbtools.creation.DBCreation;
 import com.bftcom.gui.utils.Message;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -9,7 +9,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.File;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 /**
  * Created by k.nikitin on 03.11.2016.
@@ -28,31 +33,24 @@ public class LoginForm extends Application {
         primaryStage.show();
     }
 
-    public void findDerby(OfflineVersion version){
-        File home = new File("./offlineDataBase");
-        File[] resultSearch = home.listFiles((pathname, fileName) -> {
-            return fileName.startsWith("derby_");
-        });
-        if(resultSearch == null || resultSearch.length == 0){
-            RuntimeException e = new RuntimeException("База данных не найдена!");
+    public void findDerby(OfflineVersion version) {
+        try {
+            Stream<Path> derbyDirs = Files.find(Paths.get("./"), 6, ((path, attr) -> path.getFileName().toString().equals("derby_" + version.toString())));
+            Path derbyDir = derbyDirs.findFirst().orElseThrow(() -> {
+                RuntimeException e = new RuntimeException("База данных не найдена!");
+                e.printStackTrace();
+                Message.throwExceptionForJavaFX(e, "Не удалось найти базу данных для подключения", "Скопируйтее базу данных, полученную с онлайн клиента " +
+                        "в корневую директорию оффлайн клиента", true);
+                return e;
+            });
+
+            System.setProperty("derby.system.home", derbyDir.toAbsolutePath().toString());
+
+        } catch (IOException e) {
             e.printStackTrace();
-            Message.throwExceptionForJavaFX(e, "Не удалось найти базу данных для подключения", "Скопируйтее базу данных, полученную с онлайн клиента " +
+            Message.throwExceptionForJavaFX(e, "Не удалось найти базу данных для подключения. Ошибка при поиске.", "Скопируйтее базу данных, полученную с онлайн клиента " +
                     "в корневую директорию оффлайн клиента", true);
-
         }
-        for(File derbyDir : resultSearch) {
-            String derbyName = derbyDir.getName();
-            if(derbyName.substring("derby_".length()).equals(version.toString())){{
-                System.setProperty("derby.system.home", derbyDir.getAbsolutePath());
-                return;
-            }
-        }
-            RuntimeException e = new RuntimeException("База данных не найдена!");
-            e.printStackTrace();
-            Message.throwExceptionForJavaFX(e, "Не удалось найти базу данных для подключения требуемой версии", "Скопируйтее базу данных версии " + version.toString()
-                    + ", полученную с онлайн клиента в корневую директорию оффлайн клиента", true);
-    }
-
     }
 
 }
