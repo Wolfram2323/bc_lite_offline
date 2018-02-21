@@ -2,6 +2,7 @@ package com.bftcom.gui.aradForm;
 
 import com.bftcom.context.Context;
 import com.bftcom.dbtools.entity.ActResultsAuditDoc;
+import com.bftcom.gui.Customizable;
 import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.utils.GuiUtils;
 
@@ -28,7 +29,7 @@ import org.w3c.dom.Document;
 /**
  * Created by k.nikitin on 06.11.2016.
  */
-public class BaseFieldsTitledPaneController extends AbstractBftTitledPaneController {
+public class BaseFieldsTitledPaneController extends AbstractBftTitledPaneController implements Customizable {
 
     @FXML
     private TextField docNumber_field;
@@ -79,6 +80,7 @@ public class BaseFieldsTitledPaneController extends AbstractBftTitledPaneControl
     @SuppressWarnings("unchecked")
     @Override
     public void initialize(ActResultsAuditDoc arad){
+        processCustom();
         GuiUtils.textAndDateFieldSetUp(arad, this, Collections.singletonList("actSigning_field"));
         switch (arad.getActSigning()){
             case 1: actSigning_field.setText("Подписан Объектом контроля");break;

@@ -1,6 +1,7 @@
 package com.bftcom.gui.aradForm;
 
 import com.bftcom.dbtools.entity.ActResultsAuditDoc;
+import com.bftcom.gui.Customizable;
 import com.bftcom.gui.utils.Message;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +12,7 @@ import java.io.IOException;
 /**
  * Created by k.nikitin on 12.11.2016.
  */
-public class QuestionsTitledPaneController extends AbstractBftTitledPaneController {
+public class QuestionsTitledPaneController extends AbstractBftTitledPaneController implements Customizable {
     @FXML
     private TabPane question_TabPane;
 
@@ -30,6 +31,7 @@ public class QuestionsTitledPaneController extends AbstractBftTitledPaneControll
 
     @Override
     public void initialize(ActResultsAuditDoc arad) {
+        processCustom();
         question_TabPane.getStyleClass().add("vTabPane");
         arad.getQuestions().forEach(row->{
             QuestTabController questController = new QuestTabController();

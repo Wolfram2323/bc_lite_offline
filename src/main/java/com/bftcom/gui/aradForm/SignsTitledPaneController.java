@@ -5,6 +5,7 @@ import com.bftcom.dbtools.entity.ARADInspectors;
 import com.bftcom.dbtools.entity.ActResultsAuditDoc;
 import com.bftcom.dbtools.entity.EmployeeGroup;
 import com.bftcom.dbtools.utils.HibernateUtils;
+import com.bftcom.gui.Customizable;
 import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.referenceList.ReferenceListController;
 import com.bftcom.gui.tableViewStoreObj.AradInspectorsTVbject;
@@ -34,7 +35,7 @@ import java.util.List;
 /**
  * Created by k.nikitin on 07.11.2016.
  */
-public class SignsTitledPaneController extends AbstractBftTitledPaneController {
+public class SignsTitledPaneController extends AbstractBftTitledPaneController implements Customizable {
     @FXML
     private TextField insp_head_fio_field;
     @FXML
@@ -51,6 +52,15 @@ public class SignsTitledPaneController extends AbstractBftTitledPaneController {
     private TextField accountantfio_field;
     @FXML
     private TextField accountantapp_field;
+
+    @FXML
+    private Label insp_head_fio_lbl;
+    @FXML
+    private Label insp_head_appointment_lbl;
+    @FXML
+    private Label deputy_head_fio_lbl;
+    @FXML
+    private Label deputy_head_appointment_lbl;
 
     @FXML
     private TableView signs_tbl;
@@ -90,6 +100,7 @@ public class SignsTitledPaneController extends AbstractBftTitledPaneController {
     @Override
     @SuppressWarnings("unchecked")
     public void initialize(ActResultsAuditDoc arad) {
+        processCustom();
         GuiUtils.textAndDateFieldSetUp(arad,this,new ArrayList<>());
         inspData = FXCollections.observableArrayList();
         id_col.setCellValueFactory(new PropertyValueFactory<AradInspectorsTVbject,Long>("id"));

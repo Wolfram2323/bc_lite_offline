@@ -1,6 +1,7 @@
 package com.bftcom.context;
 
 
+import com.bftcom.customizator.Custom;
 import org.hibernate.Session;
 
 
@@ -14,6 +15,7 @@ public class Context {
     private Session session;
     private boolean isAdmin;
     private Customization cust;
+    private Custom custom;
     private BigInteger user_id;
 
 
@@ -55,5 +57,13 @@ public class Context {
 
     public void setCust(Customization cust) {
         this.cust = cust;
+    }
+
+    public Custom getCustom() {
+        return custom;
+    }
+
+    public void setCustom(Custom custom) {
+        this.custom = custom;
     }
 }

@@ -1,12 +1,12 @@
 package com.bftcom.gui.aradForm;
 
 import com.bftcom.context.Context;
-import com.bftcom.context.Customization;
 import com.bftcom.dbtools.entity.ActResultsAuditDoc;
 import com.bftcom.dbtools.entity.SystemParameters;
 import com.bftcom.dbtools.utils.DataSynchronizer;
 import com.bftcom.dbtools.utils.DataUploader;
 import com.bftcom.dbtools.utils.HibernateUtils;
+import com.bftcom.gui.ReportPrint;
 import com.bftcom.gui.utils.PropertiesAndParameters;
 import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.utils.ReportGenerator;
@@ -40,7 +40,7 @@ import java.util.*;
 /**
  * Created by k.nikitin on 06.11.2016.
  */
-public class ActResultsAuditDocFormController implements Initializable {
+public class ActResultsAuditDocFormController implements Initializable, ReportPrint {
     @FXML
     private Accordion mainAccordion;
     @FXML
@@ -71,10 +71,8 @@ public class ActResultsAuditDocFormController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
+            processCustom();
             setUpPrintBtn();
-            if (Context.getCurrentContext().getCust().equals(Customization.TYUMEN)) {
-                impBtn.setVisible(false);
-            }
             BaseFieldsTitledPaneController baseFieldsController = new BaseFieldsTitledPaneController();
             mainAccordion.getPanes().add(0, baseFieldsController);
             AradKbkTitledPaneController aradKbkController = new AradKbkTitledPaneController();
@@ -245,6 +243,7 @@ public class ActResultsAuditDocFormController implements Initializable {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.CANCEL) {
                     we.consume();
+                    return;
                 }
                 HibernateUtils.closeConnection(HibernateUtils.getCurrentSession());
             }
@@ -254,7 +253,8 @@ public class ActResultsAuditDocFormController implements Initializable {
     }
 
     @FXML
-    private void printDoc(ActionEvent event) {
+    @Override
+    public void printDoc(ActionEvent event) {
         print_btn.setDisable(true);
         Session session = HibernateUtils.getNewSession();
         SystemParameters outputFormat = session.createQuery("FROM SystemParameters where name =:name", SystemParameters.class).
@@ -291,20 +291,6 @@ public class ActResultsAuditDocFormController implements Initializable {
 
 
     public void setUpPrintBtn() {
-        switch (Context.getCurrentContext().getCust()) {
-            case TYUMEN:
-                MenuItem item = new MenuItem();
-                item.setText("Справка");
-                item.getProperties().put(PropertiesAndParameters.REPORT_TEMPLATE, "/reportTemplates/referenceAct.rptdesign");
-                item.setOnAction(this::printDoc);
-                print_btn.getItems().add(item);
-                item = new MenuItem();
-                item.setText("Акт встречной проверки");
-                item.getProperties().put(PropertiesAndParameters.REPORT_TEMPLATE, "/reportTemplates/counterAuditAct.rptdesign");
-                item.setOnAction(this::printDoc);
-                print_btn.getItems().add(item);
-                break;
-        }
         Session session = HibernateUtils.getCurrentSession();
         Query<SystemParameters> paramQuery = session.createQuery(" FROM SystemParameters where name = :name", SystemParameters.class).setParameter("name", PropertiesAndParameters.PRINT_FORMAT.toString());
         java.util.List<SystemParameters> params = paramQuery.getResultList();

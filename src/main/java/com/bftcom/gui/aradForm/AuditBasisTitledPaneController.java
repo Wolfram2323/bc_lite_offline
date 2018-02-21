@@ -1,6 +1,7 @@
 package com.bftcom.gui.aradForm;
 
 import com.bftcom.dbtools.entity.ActResultsAuditDoc;
+import com.bftcom.gui.Customizable;
 import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.utils.GuiUtils;
 import javafx.fxml.FXML;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Created by k.nikitin on 07.11.2016.
  */
-public class AuditBasisTitledPaneController extends AbstractBftTitledPaneController {
+public class AuditBasisTitledPaneController extends AbstractBftTitledPaneController implements Customizable {
 
     @FXML
     private TextField auditBasis_field;
@@ -42,6 +43,7 @@ public class AuditBasisTitledPaneController extends AbstractBftTitledPaneControl
 
     @Override
     public void initialize(ActResultsAuditDoc arad) {
+        processCustom();
         GuiUtils.textAndDateFieldSetUp(arad,this, new ArrayList<>());
     }
 

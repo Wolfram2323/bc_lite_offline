@@ -4,6 +4,7 @@ import com.bftcom.context.Context;
 import com.bftcom.context.Customization;
 import com.bftcom.dbtools.entity.*;
 import com.bftcom.dbtools.utils.HibernateUtils;
+import com.bftcom.gui.Customizable;
 import com.bftcom.gui.custom.cell.KeyValueComboBoxTableCell;
 import com.bftcom.gui.custom.cell.NumberTextFieldTableCell;
 import com.bftcom.gui.custom.combobox.StoreObject;
@@ -41,7 +42,7 @@ import java.util.*;
 /**
  * Created by k.nikitin on 12.11.2016.
  */
-public class ViolationGroupTabController extends AbstractBftTabController {
+public class ViolationGroupTabController extends AbstractBftTabController implements Customizable {
     @FXML
     private Tab violTab;
     @FXML
@@ -235,10 +236,8 @@ public class ViolationGroupTabController extends AbstractBftTabController {
 
     @SuppressWarnings("unchecked")
     public void initialize(ViolationGroup violation, BigInteger quest_id){
+        processCustom();
         this.quest_id = quest_id;
-        if(Context.getCurrentContext().getCust().equals(Customization.TYUMEN)){
-            npa_accr.setVisible(false);
-        }
         tabName = new Label();
         tabName.setText(violation == null ? "Нарушение" : violation.getViolation().getCaption());
         tabName.setWrapText(true);

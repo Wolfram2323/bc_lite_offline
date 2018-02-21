@@ -193,7 +193,7 @@ public class DBCreation {
                 procedure.setParameter("COLUMNDELIMITER", ';');
                 procedure.setParameter("CHARACTERDELIMITER", '#');
                 procedure.setParameter("CODESET", "UTF-8");
-                procedure.setParameter("REPLACE", new Short("0"));
+                procedure.setParameter("REPLACE", Short.valueOf("0"));
 
                 procedure.setParameter("TABLENAME", tableName);
                 procedure.setParameter("FILENAME", csvFile.getAbsolutePath());
@@ -261,7 +261,7 @@ public class DBCreation {
         procedure.setParameter("COLUMNDELIMITER", ';');
         procedure.setParameter("CHARACTERDELIMITER", '#');
         procedure.setParameter("CODESET", "UTF-8");
-        procedure.setParameter("REPLACE", new Short("0"));
+        procedure.setParameter("REPLACE", Short.valueOf("0"));
 
 
         procedure.setParameter("TABLENAME", "ACTRESULTSAUDITDOC");

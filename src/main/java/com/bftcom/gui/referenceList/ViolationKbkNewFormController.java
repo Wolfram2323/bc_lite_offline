@@ -2,6 +2,7 @@ package com.bftcom.gui.referenceList;
 
 import com.bftcom.dbtools.entity.KBKDetail;
 import com.bftcom.dbtools.utils.HibernateUtils;
+import com.bftcom.gui.Customizable;
 import com.bftcom.gui.aradForm.ViolationGroupTabController;
 import com.bftcom.gui.tableViewStoreObj.DoubleStringConverter;
 import com.bftcom.gui.tableViewStoreObj.KbkDetailTVObject;
@@ -28,7 +29,7 @@ import java.util.ResourceBundle;
 /**
  * Created by k.nikitin on 14.11.2016.
  */
-public class ViolationKbkNewFormController implements Initializable {
+public class ViolationKbkNewFormController implements Initializable, Customizable {
     @FXML
     private TextField amount_field;
     @FXML
@@ -101,6 +102,7 @@ public class ViolationKbkNewFormController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        processCustom();
 
     }
     public void setParentController(ViolationGroupTabController controller){

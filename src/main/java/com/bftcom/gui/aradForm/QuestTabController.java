@@ -7,6 +7,7 @@ import com.bftcom.dbtools.entity.ActResultsAuditDoc;
 import com.bftcom.dbtools.entity.Questions;
 import com.bftcom.dbtools.entity.ViolationGroup;
 import com.bftcom.dbtools.utils.HibernateUtils;
+import com.bftcom.gui.Customizable;
 import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.tableViewStoreObj.EmployeeGroupTVObject;
 import com.bftcom.gui.utils.GuiUtils;
@@ -32,7 +33,7 @@ import java.util.Arrays;
 /**
  * Created by k.nikitin on 12.11.2016.
  */
-public class QuestTabController extends AbstractBftTabController {
+public class QuestTabController extends AbstractBftTabController implements Customizable {
     @FXML
     private Tab quest_Tab;
     @FXML
@@ -106,6 +107,7 @@ public class QuestTabController extends AbstractBftTabController {
     }
 
     public void initialize(Questions quest) {
+        processCustom();
         Label tabName = new Label();
         tabName.setText(quest.getCaption());
         tabName.setWrapText(true);
@@ -121,16 +123,9 @@ public class QuestTabController extends AbstractBftTabController {
 
         GuiUtils.textAndDateFieldSetUp(quest, this, null);
 
-        if (Context.getCurrentContext().getCust().equals(Customization.TYUMEN)) {
-            counter_audit_cb.setVisible(true);
-            if (quest.getCounter_audit().equals(1)) {
-                counterInfo_accor.setVisible(true);
-            }
-        } else {
-            counter_audit_cb.setVisible(false);
-            counterInfo_accor.setVisible(false);
+        if (quest.getCounter_audit().equals(1)) {
+            counterInfo_accor.setVisible(true);
         }
-
 
         if (quest.getResolved() != null) {
             resolved_cb.setSelected(GuiUtils.IntegerToBoolean(quest.getResolved()));

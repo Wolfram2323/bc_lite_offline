@@ -5,6 +5,7 @@ import com.bftcom.dbtools.entity.ARADkbk;
 import com.bftcom.dbtools.entity.ActResultsAuditDoc;
 import com.bftcom.dbtools.entity.KBKDetail;
 import com.bftcom.dbtools.utils.HibernateUtils;
+import com.bftcom.gui.Customizable;
 import com.bftcom.gui.custom.cell.NumberTextFieldTableCell;
 import com.bftcom.gui.utils.Message;
 import com.bftcom.gui.referenceList.ReferenceListController;
@@ -36,7 +37,7 @@ import java.util.List;
 /**
  * Created by k.nikitin on 06.11.2016.
  */
-public class AradKbkTitledPaneController extends AbstractBftTitledPaneController {
+public class AradKbkTitledPaneController extends AbstractBftTitledPaneController implements Customizable {
     @FXML
     private TableView aradKbk_tbl;
     @FXML
@@ -95,6 +96,7 @@ public class AradKbkTitledPaneController extends AbstractBftTitledPaneController
     @Override
     @SuppressWarnings("unchecked")
     public void initialize(ActResultsAuditDoc arad) {
+        processCustom();
         ObservableList<AradKbkTVObject> kbkData = FXCollections.observableArrayList();
         id_col.setCellValueFactory(new PropertyValueFactory<AradKbkTVObject,Long>("id"));
         kbkdetail_id_col.setCellValueFactory(new PropertyValueFactory<AradKbkTVObject,Long>("kbkdetail_id"));

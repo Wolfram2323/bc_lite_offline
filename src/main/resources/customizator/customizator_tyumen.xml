@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom name="TYUMEN">
+    <form controlClass="ActResultsAuditDocFormController">
+        <control fxid="impBtn">
+            <action type="hide" value="true"/>
+        </control>
+        <control fxid="print_btn">
+            <action type="add_Report" params="{&quot;caption&quot;: &quot;Справка&quot;, &quot;template&quot;: &quot;/reportTemplates/referenceAct.rptdesign&quot;}"/>
+            <action type="add_Report" params="{&quot;caption&quot;: &quot;Акт встречной проверки&quot;, &quot;template&quot;: &quot;/reportTemplates/counterAuditAct.rptdesign&quot;}"/>
+        </control>
+    </form>
+    <form controlClass="SignsTitledPaneController">
+        <control fxid="insp_head_fio_lbl">
+            <action type="rename" value="Руководитель группы инспекторов:"/>
+        </control>
+        <control fxid="insp_head_appointment_lbl">
+            <action type="rename" value="Должность руководителя группы инспекторов:"/>
+            <action type="wrap_text" value="true"/>
+        </control>
+        <control fxid="deputy_head_fio_field">
+            <action type="hide" value="true" params="{&quot;fullHide&quot;: true}"/>
+        </control>
+        <control fxid="deputy_head_appointment_field">
+            <action type="hide" value="true" params="{&quot;fullHide&quot;: true}"/>
+        </control>
+    </form>
+    <form controlClass="QuestTabController">
+        <control fxid="counter_audit_cb">
+            <action type="hide" value="false"/>
+        </control>
+    </form>
+    <form controlClass="ViolationGroupTabController">
+        <control fxid="npa_accr">
+            <action type="hide" value="true" params="{&quot;fullHide&quot;: true}"/>
+        </control>
+    </form>
+</custom>

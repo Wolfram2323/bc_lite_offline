@@ -95,7 +95,7 @@ public class HibernateUtils {
 
     public static Session getCurrentSession(){
         Context con = Context.getCurrentContext();
-        if(con.getSession()  == null ){
+        if(con.getSession()  == null || !con.getSession().isOpen() ){
             return getSessionByCfg(null);
         }
         return con.getSession();
